@@ -25,8 +25,12 @@ public:
 	void DrawGUI();
 
 private:
-
+	//Functions
 	void CreateMainMenu();
+
+private:
+	//Variables
+	bool want_to_quit = false;
 };
 
 #endif // _MODULEGUI_H_
