@@ -1,11 +1,6 @@
 #include "Application.h"
 #include "ModuleGUI.h"
 
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_sdl.h"
-
-
-
 
 ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -17,7 +12,9 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init()
 {
-	return false;
+	bool ret = true;
+	ImGui_ImplSdl_Init(App->window->window);
+	return ret;
 }
 
 update_status ModuleGUI::PreUpdate(float dt)
