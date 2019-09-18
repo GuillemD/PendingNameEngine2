@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
     <ClCompile Include="glmath.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -43,11 +41,18 @@
     <ClCompile Include="ImGui\imgui_impl_sdl.cpp">
       <Filter>External Libraries\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleGUI.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
     <ClInclude Include="glmath.h" />
-    <ClInclude Include="Globals.h" />
     <ClInclude Include="ModuleCamera3D.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -306,6 +311,15 @@
     <ClInclude Include="SDL\include\SDL_video.h">
       <Filter>External Libraries\SDL\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleGUI.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -328,6 +342,9 @@
     </Filter>
     <Filter Include="External Libraries\SDL\lib">
       <UniqueIdentifier>{4163811c-734a-4dd5-aaed-0e390fbabec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{450117c1-9a67-4205-a683-fb56798dd03a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
