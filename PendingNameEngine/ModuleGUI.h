@@ -28,9 +28,12 @@ private:
 	//Functions
 	void CreateMainMenu();
 
+	void ShowDemoWindow();
+
 private:
 	//Variables
 	bool want_to_quit = false;
+	bool show_demo_window = false;
 };
 
 #endif // _MODULEGUI_H_

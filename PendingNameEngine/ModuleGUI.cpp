@@ -85,6 +85,7 @@ void ModuleGUI::CreateMainMenu()
 		if (ImGui::BeginMenu("Miscellaneous")) {
 			if (ImGui::MenuItem("ImGui Demo Window")) {
 				
+				show_demo_window = !show_demo_window;
 			}
 			if (ImGui::MenuItem("Random Number Generator")) {
 				
@@ -112,4 +113,10 @@ void ModuleGUI::CreateMainMenu()
 		}
 		ImGui::EndMainMenuBar();
 	}
+	if (show_demo_window)ShowDemoWindow();
+}
+
+void ModuleGUI::ShowDemoWindow()
+{
+	ImGui::ShowTestWindow();
 }
