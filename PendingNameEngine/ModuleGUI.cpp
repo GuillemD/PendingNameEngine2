@@ -26,12 +26,14 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	//create main menu
+	CreateMainMenu();
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleGUI::PostUpdate(float dt)
 {
+	
+	ImGui::Render();
 	return UPDATE_CONTINUE;
 }
 
@@ -42,4 +44,59 @@ bool ModuleGUI::CleanUp()
 	ImGui_ImplSdl_Shutdown();
 
 	return ret;
+}
+
+void ModuleGUI::CreateMainMenu()
+{
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("File")) {
+
+			if (ImGui::MenuItem("Quit")) {
+			
+			}
+			ImGui::EndMenu();
+
+		}
+		if (ImGui::BeginMenu("Options")) {
+
+			if (ImGui::MenuItem("Panels")) {
+				
+			}
+			if (ImGui::MenuItem("Meshes")) {
+				
+			}
+			
+			ImGui::EndMenu();
+
+		}
+		if (ImGui::BeginMenu("Miscellaneous")) {
+			if (ImGui::MenuItem("ImGui Demo Window")) {
+				
+			}
+			if (ImGui::MenuItem("Random Number Generator")) {
+				
+			}
+			if (ImGui::MenuItem("Object Collisions")) {
+				//TODO: When implementing MathGeoLib, put here the object creation + collision checks
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help")) {
+
+			if (ImGui::MenuItem("Engine documentation")) {
+				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/wiki", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("Latest Release")) {
+				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/releases", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("Report Bugs")) {
+				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/issues", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("About")) {
+				
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
 }

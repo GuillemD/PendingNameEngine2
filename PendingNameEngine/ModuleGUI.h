@@ -21,6 +21,10 @@ public:
 	update_status PostUpdate(float dt);
 
 	bool CleanUp();
+
+private:
+
+	void CreateMainMenu();
 };
 
 #endif // _MODULEGUI_H_
