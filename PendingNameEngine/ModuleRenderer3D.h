@@ -21,6 +21,9 @@ public:
 
 	void OnResize(int width, int height);
 
+	void DisableLights();
+	void EnableLights();
+
 public:
 
 	Light lights[MAX_LIGHTS];

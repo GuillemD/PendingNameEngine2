@@ -32,8 +32,7 @@ update_status ModuleGUI::Update(float dt)
 
 update_status ModuleGUI::PostUpdate(float dt)
 {
-	
-	ImGui::Render();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -44,6 +43,12 @@ bool ModuleGUI::CleanUp()
 	ImGui_ImplSdl_Shutdown();
 
 	return ret;
+}
+
+void ModuleGUI::DrawGUI()
+{
+	App->renderer3D->DisableLights();
+	ImGui::Render();
 }
 
 void ModuleGUI::CreateMainMenu()

@@ -22,6 +22,8 @@ public:
 
 	bool CleanUp();
 
+	void DrawGUI();
+
 private:
 
 	void CreateMainMenu();
