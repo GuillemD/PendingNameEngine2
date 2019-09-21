@@ -92,6 +92,9 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_extras.hpp" />
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_random.hpp" />
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_uint128.hpp" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="SDL\include\begin_code.h" />
     <ClInclude Include="SDL\include\close_code.h" />

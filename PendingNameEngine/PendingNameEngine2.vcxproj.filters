@@ -320,6 +320,15 @@
     <ClInclude Include="ModuleGUI.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_extras.hpp">
+      <Filter>External Libraries\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_random.hpp">
+      <Filter>External Libraries\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG_cpp_0.98\include\pcg_uint128.hpp">
+      <Filter>External Libraries\PCG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -345,6 +354,9 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{450117c1-9a67-4205-a683-fb56798dd03a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\PCG">
+      <UniqueIdentifier>{1320c510-9f82-4921-b902-d7f8d9f2abc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
