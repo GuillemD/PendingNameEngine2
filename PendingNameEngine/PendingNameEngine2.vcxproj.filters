@@ -320,15 +320,6 @@
     <ClInclude Include="ModuleGUI.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="PCG_cpp_0.98\include\pcg_extras.hpp">
-      <Filter>External Libraries\PCG</Filter>
-    </ClInclude>
-    <ClInclude Include="PCG_cpp_0.98\include\pcg_random.hpp">
-      <Filter>External Libraries\PCG</Filter>
-    </ClInclude>
-    <ClInclude Include="PCG_cpp_0.98\include\pcg_uint128.hpp">
-      <Filter>External Libraries\PCG</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
