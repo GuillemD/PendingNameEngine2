@@ -50,6 +50,9 @@
     <ClCompile Include="ModuleGUI.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="PCG_c_basic\pcg_basic.c">
+      <Filter>External Libraries\PCG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -319,6 +322,12 @@
     </ClInclude>
     <ClInclude Include="ModuleGUI.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG_c_basic\pcg_basic.h">
+      <Filter>External Libraries\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG_c_basic\pcg_variants.h">
+      <Filter>External Libraries\PCG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

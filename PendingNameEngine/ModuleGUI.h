@@ -4,9 +4,10 @@
 #include "Module.h"
 #include "Globals.h"
 
-
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
+
+#include "PCG_c_basic/pcg_basic.h"
 
 
 class ModuleGUI : public Module
@@ -31,14 +32,19 @@ private:
 	void CreateMainMenu();
 
 	void ShowDemoWindow();
+	void ShowRNG();
 
 public:
-	
+	pcg32_random_t seed = PCG32_INITIALIZER;
+	int input_min = 0; int input_max = 0;
+	int rand_bounded_int = 0;
+	float rand_float = 0.0f;
 
 private:
 	//Variables
 	bool want_to_quit = false;
 	bool show_demo_window = false;
+	bool show_rng = false;
 };
 
 #endif // _MODULEGUI_H_

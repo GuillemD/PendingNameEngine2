@@ -88,7 +88,7 @@ void ModuleGUI::CreateMainMenu()
 				show_demo_window = !show_demo_window;
 			}
 			if (ImGui::MenuItem("Random Number Generator")) {
-				
+				show_rng = !show_rng;
 			}
 			if (ImGui::MenuItem("Object Collisions")) {
 				//TODO: When implementing MathGeoLib, put here the object creation + collision checks
@@ -114,9 +114,48 @@ void ModuleGUI::CreateMainMenu()
 		ImGui::EndMainMenuBar();
 	}
 	if (show_demo_window)ShowDemoWindow();
+	if (show_rng)ShowRNG();
 }
 
 void ModuleGUI::ShowDemoWindow()
 {
 	ImGui::ShowTestWindow();
+}
+
+void ModuleGUI::ShowRNG()
+{
+	ImGui::InputInt("Insert first int", &input_min);
+	ImGui::InputInt("Insert second int", &input_max);
+
+	if (input_min == input_max)
+	{
+		rand_bounded_int = input_max = input_min;
+	}
+	else
+	{
+		if (input_min > input_max)
+		{
+
+			if (ImGui::Button("Generate random between given ints"))
+			{
+				//Swap<int>(input_min, input_max);
+				rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
+			}
+			ImGui::Text("%i", rand_bounded_int);
+		}
+		else
+		{
+			if (ImGui::Button("Generate random between given ints"))
+			{
+				rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
+			}
+			ImGui::Text("%i", rand_bounded_int);
+		}
+	}
+
+	if (ImGui::Button("Generate float between 0.0 and 1.0"))
+	{
+		rand_float = ldexp(pcg32_random_r(&seed), -32);
+	}
+	ImGui::Text("%f", rand_float);
 }
