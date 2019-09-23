@@ -39,7 +39,7 @@ private:
 	void ShowConsole();
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
-	int input_min = 0; int input_max = 0;
+	int input_min = 0; int input_max = 100;
 	int rand_bounded_int = 0;
 	float rand_float = 0.0f;
 

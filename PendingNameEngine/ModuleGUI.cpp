@@ -138,45 +138,55 @@ void ModuleGUI::CreateMainMenu()
 
 void ModuleGUI::ShowDemoWindow()
 {
-	ImGui::ShowTestWindow();
+	ImGui::ShowTestWindow(&show_demo_window);
 }
 
 void ModuleGUI::ShowRNG()
 {
-	ImGui::InputInt("Insert first int", &input_min);
-	ImGui::InputInt("Insert second int", &input_max);
+	ImGui::SetNextWindowSize(ImVec2(500, 230));
+	if (ImGui::Begin("Random Number Generator", &show_rng))
+	{
+		ImGui::Text("Min Value");
+		ImGui::InputInt("", &input_min);
+		ImGui::Spacing();
+		ImGui::Text("Max Value");
+		ImGui::InputInt("", &input_max);
+		ImGui::Spacing();
 
-	if (input_min == input_max)
-	{
-		rand_bounded_int = input_max = input_min;
-	}
-	else
-	{
-		if (input_min > input_max)
+		if (input_min == input_max)
 		{
-
-			if (ImGui::Button("Generate random between given ints"))
-			{
-				//Swap<int>(input_min, input_max);
-				rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
-			}
-			ImGui::Text("%i", rand_bounded_int);
+			rand_bounded_int = input_max = input_min;
 		}
 		else
 		{
-			if (ImGui::Button("Generate random between given ints"))
+			if (input_min > input_max)
 			{
-				rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
-			}
-			ImGui::Text("%i", rand_bounded_int);
-		}
-	}
 
-	if (ImGui::Button("Generate float between 0.0 and 1.0"))
-	{
-		rand_float = ldexp(pcg32_random_r(&seed), -32);
+				if (ImGui::Button("Random Integer"))
+				{
+					Swap<int>(input_min, input_max);
+					rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
+				}
+				ImGui::Text("%i", rand_bounded_int);
+			}
+			else
+			{
+				if (ImGui::Button("Random Integer"))
+				{
+					rand_bounded_int = (" %i", (int)pcg32_boundedrand_r(&seed, input_max) + input_min);
+				}
+				ImGui::Text("%i", rand_bounded_int);
+			}
+		}
+
+		if (ImGui::Button("Random float (0.0,1.0)"))
+		{
+			rand_float = ldexp(pcg32_random_r(&seed), -32);
+		}
+		ImGui::Text("%f", rand_float);
 	}
-	ImGui::Text("%f", rand_float);
+	ImGui::End();
+	
 }
 
 void ModuleGUI::ShowConsole()
