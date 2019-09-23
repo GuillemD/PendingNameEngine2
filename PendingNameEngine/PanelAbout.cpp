@@ -28,7 +28,7 @@ void PanelAbout::Draw()
 		if (ImGui::CollapsingHeader("LICENSE"))
 		{
 			ImGui::Text("MIT License");
-			ImGui::Text("Copyright(c) 2018 Asier Arellano Moreno and Guillem Dominguez Ruiz de Villa");
+			ImGui::Text("Copyright(c) 2019 Asier Arellano Moreno and Guillem Dominguez Ruiz de Villa");
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy of this");
 			ImGui::Text("software and associated documentation files(the 'Software'), to deal in the");
 			ImGui::Text("Software without restriction, including without limitation the rights to use, copy,");
@@ -55,15 +55,15 @@ void PanelAbout::Draw()
 		SDL_VERSION(&v_compiled);
 		if (ImGui::SmallButton("SDL"))
 		{
-
+			App->OpenBrowser("https://www.libsdl.org/");
 		}
 		ImGui::SameLine();
-		ImGui::Text(" %d.%d.%d", v_compiled.major, v_compiled.minor, v_compiled.patch);
+		ImGui::Text("%d.%d.%d", v_compiled.major, v_compiled.minor, v_compiled.patch);
 
 		//IMGUI
 		if (ImGui::SmallButton("ImGui"))
 		{
-
+			App->OpenBrowser("https://github.com/ocornut/imgui");
 		}
 		ImGui::SameLine();
 		ImGui::Text("%s", ImGui::GetVersion());
@@ -71,7 +71,7 @@ void PanelAbout::Draw()
 		//MATHGEOLIB
 		if (ImGui::SmallButton("MathGeoLib"))
 		{
-
+			App->OpenBrowser("https://github.com/juj/MathGeoLib");
 		}
 		ImGui::SameLine();
 		ImGui::Text("1.64");
@@ -79,10 +79,8 @@ void PanelAbout::Draw()
 		//PCG
 		if (ImGui::SmallButton("PCG RNG Minimal C Edition"))
 		{
-
+			App->OpenBrowser("http://www.pcg-random.org/");
 		}
-		
-		
 		
 	}
 	ImGui::End();
