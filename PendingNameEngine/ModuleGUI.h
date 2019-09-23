@@ -12,7 +12,6 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 
 class PanelConsole;
-class PanelAbout;
 class Panel;
 
 
@@ -51,7 +50,6 @@ public:
 
 	//tmp needs to be moved somewhere else
 	PanelConsole* console = nullptr;
-	PanelAbout* about = nullptr;
 	std::vector<AABB> aabb_array;
 
 
@@ -60,6 +58,7 @@ private:
 	bool want_to_quit = false;
 	bool show_demo_window = false;
 	bool show_rng = false;
+	bool show_about = false;
 	
 
 };

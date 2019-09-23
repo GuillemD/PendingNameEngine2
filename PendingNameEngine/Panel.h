@@ -4,6 +4,7 @@
 #include "ImGui/imgui.h"
 #include <string>
 #include "Globals.h"
+#include "Application.h"
 
 class Panel
 {

@@ -1,5 +1,6 @@
 #ifndef _MODULE_H_
 #define _MODULE_H_
+#include "Application.h"
 
 class Application;
 
