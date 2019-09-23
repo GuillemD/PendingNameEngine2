@@ -26,6 +26,10 @@ private:
 	float	dt;
 	std::list<Module*> list_modules; 
 
+	std::string app_name;
+	std::string org_name;
+	std::string app_version;
+
 public:
 
 	Application();
@@ -34,6 +38,16 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+
+	void OpenBrowser(const char* url);
+	void OpenFile(const char* path);
+	const char* GetVersion() const;
+	void SetVersion(const char* version) { app_version = version; }
+	const char* GetAppName() const;
+	void SetAppName(const char* name) { app_name = name; }
+	const char* GetOrgName() const;
+	void SetOrgName(const char* org) { org_name = org; }
+	
 	
 
 private:
@@ -42,5 +56,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
-extern Application* app;
+extern Application* App;
 #endif //_APPLICATION_H_

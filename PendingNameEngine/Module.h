@@ -48,5 +48,4 @@ public:
 	}
 };
 
-//external Application* App;
 #endif //_MODULE_H_

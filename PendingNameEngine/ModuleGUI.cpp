@@ -119,7 +119,7 @@ void ModuleGUI::CreateMainMenu()
 
 		}
 
-		if (ImGui::BeginMenu("Miscellaneous")) {
+		if (ImGui::BeginMenu("Misc.")) {
 			if (ImGui::MenuItem("ImGui Demo Window")) {
 				
 				show_demo_window = !show_demo_window;
@@ -132,13 +132,16 @@ void ModuleGUI::CreateMainMenu()
 		if (ImGui::BeginMenu("Help")) {
 
 			if (ImGui::MenuItem("Engine documentation")) {
-				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/wiki", NULL, NULL, SW_SHOWNORMAL);
+				
+				App->OpenBrowser("https://github.com/GuillemD/PendingNameEngine2/wiki");
 			}
 			if (ImGui::MenuItem("Latest Release")) {
-				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/releases", NULL, NULL, SW_SHOWNORMAL);
+
+				App->OpenBrowser("https://github.com/GuillemD/PendingNameEngine2/releases");
 			}
 			if (ImGui::MenuItem("Report a bug")) {
-				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/issues", NULL, NULL, SW_SHOWNORMAL);
+
+				App->OpenBrowser("https://github.com/GuillemD/PendingNameEngine2/issues");
 			}
 			if (ImGui::MenuItem("About")) {
 				about->active = !about->active;

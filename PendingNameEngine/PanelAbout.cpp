@@ -22,7 +22,7 @@ void PanelAbout::Draw()
 {
 	if (ImGui::Begin("About", &active))
 	{
-		ImGui::Text("PendingNameEngine2 made by Asier Arellano and Guillem Dominguez for academic purposes"); //App->getversion
+		ImGui::Text("PendingNameEngine2 v %s made by Asier Arellano and Guillem Dominguez for academic purposes", App->GetVersion()); 
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("LICENSE"))

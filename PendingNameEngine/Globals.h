@@ -64,6 +64,7 @@ enum update_status
 #define VSYNC true
 #define TITLE "PendingName Engine 2"
 #define ORGANISATION "CITM (UPC)"
+#define VERSION "0.1.0"
 
 #define BLUE ImVec4(0,0,1,1)
 #define RED ImVec4(1,0,0,1)

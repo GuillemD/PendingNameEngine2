@@ -36,6 +36,10 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	SetAppName(TITLE);
+	SetOrgName(ORGANISATION);
+	SetVersion(VERSION);
+
 	// Call Init() in all modules
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
 	{
@@ -109,3 +113,29 @@ void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
 }
+
+void Application::OpenBrowser(const char * url)
+{
+	ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void Application::OpenFile(const char * path)
+{
+	ShellExecute(NULL, NULL, path, NULL, NULL, SW_SHOW);
+}
+
+const char * Application::GetVersion() const
+{
+	return app_version.c_str();
+}
+
+const char * Application::GetAppName() const
+{
+	return app_name.c_str();
+}
+
+const char * Application::GetOrgName() const
+{
+	return org_name.c_str();
+}
+
