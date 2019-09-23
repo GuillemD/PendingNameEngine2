@@ -9,8 +9,10 @@
 
 #include "PCG_c_basic/pcg_basic.h"
 
-#include "Console.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
+class PanelConsole;
+class Panel;
 
 
 class ModuleGUI : public Module
@@ -46,7 +48,7 @@ public:
 
 
 	//tmp needs to be moved somewhere else
-	Console* console;
+	PanelConsole* console = nullptr;
 	std::vector<AABB> aabb_array;
 
 
@@ -55,7 +57,7 @@ private:
 	bool want_to_quit = false;
 	bool show_demo_window = false;
 	bool show_rng = false;
-	bool show_console = true;
+	
 
 };
 

@@ -1,8 +1,10 @@
-#ifndef __Panels__
-#define __Panels__
+#ifndef _PANEL_H_
+#define _PANEL_H_
 
 #include "ImGui/imgui.h"
 #include <string>
+#include "Globals.h"
+
 class Panel
 {
 public:

@@ -1,18 +1,17 @@
-#include "Console.h"
+#include "PanelConsole.h"
 
 
-
-Console::Console()
+PanelConsole::PanelConsole()
 {
 	height = 100;
 	width = 500;
 	ConsoleText.append("Console started.\n");
 }
 
-void Console::Draw()
+void PanelConsole::Draw()
 {
 	
-		ImGui::Begin("Console");
+		ImGui::Begin("Console", &active);
 		if (ImGui::Button("Clear Console")) {
 			EmptyConsole();
 		}
@@ -27,17 +26,17 @@ void Console::Draw()
 	
 }
 
-void Console::EmptyConsole()
+void PanelConsole::EmptyConsole()
 {
 	ConsoleText.empty();
 }
 
-void Console::ConsoleLog(char * txt)
+void PanelConsole::ConsoleLog(char * txt)
 {
 	ConsoleText.append(txt);
 }
 
 
-Console::~Console()
+PanelConsole::~PanelConsole()
 {
 }

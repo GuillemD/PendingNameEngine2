@@ -1,14 +1,16 @@
-#pragma once
+#ifndef _PANELCONSOLE_H_
+#define _PANELCONSOLE_H_
+
 #include "Panel.h"
-class Console :
+class PanelConsole :
 	public Panel
 {
 public:
-	Console();
+	PanelConsole();
 	
-	~Console();
+	~PanelConsole();
 
-	void Draw();
+	void Draw() override;
 	void EmptyConsole();
 	void ConsoleLog(char* txt);
 public:
@@ -16,3 +18,4 @@ public:
 	bool ScrollToBottom = true;
 };
 
+#endif //_PANELCONSOLE_H_

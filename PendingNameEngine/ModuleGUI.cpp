@@ -1,6 +1,9 @@
 #include "Application.h"
 #include "ModuleGUI.h"
 
+#include "PanelConsole.h"
+
+
 
 ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -13,11 +16,16 @@ ModuleGUI::~ModuleGUI()
 bool ModuleGUI::Init()
 {
 	bool ret = true;
+
 	ImGui_ImplSdl_Init(App->window->window);
-	console = new Console();
-	console->SetActive();
+
+	//Panels
+	console = new PanelConsole();
+	
+	
 	//Resetting variables
 	want_to_quit = false;
+	console->SetActive();
 
 	return ret;
 }
@@ -80,7 +88,7 @@ void ModuleGUI::CreateMainMenu()
 				
 			}
 			if (ImGui::MenuItem("Console")) {
-				show_console = !show_console;
+				console->active = !console->active;
 			}
 			ImGui::EndMenu();
 
@@ -108,9 +116,6 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::MenuItem("Random Number Generator")) {
 				show_rng = !show_rng;
 			}
-			if (ImGui::MenuItem("Object Collisions")) {
-				//TODO: When implementing MathGeoLib, put here the object creation + collision checks
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help")) {
@@ -133,7 +138,7 @@ void ModuleGUI::CreateMainMenu()
 	}
 	if (show_demo_window)ShowDemoWindow();
 	if (show_rng)ShowRNG();
-	if (show_console)ShowConsole();
+	if (console->isActive())ShowConsole();
 }
 
 void ModuleGUI::ShowDemoWindow()
