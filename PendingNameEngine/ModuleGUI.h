@@ -9,6 +9,9 @@
 
 #include "PCG_c_basic/pcg_basic.h"
 
+#include "Console.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+
 
 class ModuleGUI : public Module
 {
@@ -33,18 +36,27 @@ private:
 
 	void ShowDemoWindow();
 	void ShowRNG();
-
+	void ShowConsole();
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
 	int input_min = 0; int input_max = 0;
 	int rand_bounded_int = 0;
 	float rand_float = 0.0f;
 
+
+
+	//tmp needs to be moved somewhere else
+	Console* console;
+	std::vector<AABB> aabb_array;
+
+
 private:
 	//Variables
 	bool want_to_quit = false;
 	bool show_demo_window = false;
 	bool show_rng = false;
+	bool show_console = true;
+
 };
 
 #endif // _MODULEGUI_H_

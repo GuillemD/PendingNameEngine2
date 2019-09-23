@@ -14,7 +14,8 @@ bool ModuleGUI::Init()
 {
 	bool ret = true;
 	ImGui_ImplSdl_Init(App->window->window);
-
+	console = new Console();
+	console->SetActive();
 	//Resetting variables
 	want_to_quit = false;
 
@@ -73,15 +74,32 @@ void ModuleGUI::CreateMainMenu()
 		if (ImGui::BeginMenu("Options")) {
 
 			if (ImGui::MenuItem("Panels")) {
-				
+				//("I clicked the Panels button!\n");
 			}
 			if (ImGui::MenuItem("Meshes")) {
 				
 			}
-			
+			if (ImGui::MenuItem("Console")) {
+				show_console = !show_console;
+			}
 			ImGui::EndMenu();
 
 		}
+
+
+		if (ImGui::BeginMenu("Geometry")) {
+
+			if (ImGui::MenuItem("Generate Geometry")) {
+
+			}
+			if (ImGui::MenuItem("Check colisions")) {
+
+			}
+
+			ImGui::EndMenu();
+
+		}
+
 		if (ImGui::BeginMenu("Miscellaneous")) {
 			if (ImGui::MenuItem("ImGui Demo Window")) {
 				
@@ -115,6 +133,7 @@ void ModuleGUI::CreateMainMenu()
 	}
 	if (show_demo_window)ShowDemoWindow();
 	if (show_rng)ShowRNG();
+	if (show_console)ShowConsole();
 }
 
 void ModuleGUI::ShowDemoWindow()
@@ -158,4 +177,9 @@ void ModuleGUI::ShowRNG()
 		rand_float = ldexp(pcg32_random_r(&seed), -32);
 	}
 	ImGui::Text("%f", rand_float);
+}
+
+void ModuleGUI::ShowConsole()
+{
+	console->Draw();
 }

@@ -42,5 +42,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
-
+extern Application* app;
 #endif //_APPLICATION_H_
