@@ -65,4 +65,9 @@ enum update_status
 #define TITLE "PendingName Engine 2"
 #define ORGANISATION "CITM (UPC)"
 
+#define BLUE ImVec4(0,0,1,1)
+#define RED ImVec4(1,0,0,1)
+#define GREEN ImVec4(0,1,0,1)
+#define WHITE ImVec4(1,1,1,1)
+
 #endif //_GLOBALS_H_

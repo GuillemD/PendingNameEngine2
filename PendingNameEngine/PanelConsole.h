@@ -7,6 +7,7 @@ class PanelConsole :
 {
 public:
 	PanelConsole();
+	PanelConsole(const char* _name);
 	
 	~PanelConsole();
 

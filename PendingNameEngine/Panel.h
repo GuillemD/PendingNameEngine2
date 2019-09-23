@@ -20,7 +20,8 @@ public:
 	int GetPosX() { return pos_x; }
 	int GetPosY() { return pos_y; }
 	bool isActive() { return active; }
-	void SetActive() { active = !active; }
+	void SetActive() { active = true; }
+	void SetInactive() { active = false; }
 
 public:
 	int height = 10;

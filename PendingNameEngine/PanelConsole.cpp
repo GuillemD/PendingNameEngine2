@@ -5,7 +5,15 @@ PanelConsole::PanelConsole()
 {
 	height = 100;
 	width = 500;
-	ConsoleText.append("Console started.\n");
+	ConsoleLog("Console started.\n");
+}
+
+PanelConsole::PanelConsole(const char * _name)
+{
+	height = 100;
+	width = 500;
+	ConsoleLog("Console started.\n");
+	PanelName = _name;
 }
 
 void PanelConsole::Draw()

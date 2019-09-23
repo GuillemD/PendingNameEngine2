@@ -2,6 +2,7 @@
 #include "ModuleGUI.h"
 
 #include "PanelConsole.h"
+#include "PanelAbout.h"
 
 
 
@@ -20,7 +21,8 @@ bool ModuleGUI::Init()
 	ImGui_ImplSdl_Init(App->window->window);
 
 	//Panels
-	console = new PanelConsole();
+	console = new PanelConsole("Console");
+	about = new PanelAbout("About");
 	
 	
 	//Resetting variables
@@ -81,15 +83,24 @@ void ModuleGUI::CreateMainMenu()
 		}
 		if (ImGui::BeginMenu("Options")) {
 
-			if (ImGui::MenuItem("Panels")) {
-				//("I clicked the Panels button!\n");
+			if (ImGui::BeginMenu("Panels")) {
+				
+				//ImGui::Checkbox("Configuration", );
+				//ImGui::Checkbox("Inspector", );
+				ImGui::Checkbox("Console", &console->active);
+				ImGui::Separator();
+
+				if (ImGui::SmallButton("Hide all"))
+				{
+					if (console->isActive()) console->SetInactive();
+					if (about->isActive()) about->SetInactive();
+				}
+				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Meshes")) {
 				
 			}
-			if (ImGui::MenuItem("Console")) {
-				console->active = !console->active;
-			}
+			
 			ImGui::EndMenu();
 
 		}
@@ -126,11 +137,11 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::MenuItem("Latest Release")) {
 				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/releases", NULL, NULL, SW_SHOWNORMAL);
 			}
-			if (ImGui::MenuItem("Report Bugs")) {
+			if (ImGui::MenuItem("Report a bug")) {
 				ShellExecuteA(NULL, "open", "https://github.com/GuillemD/PendingNameEngine2/issues", NULL, NULL, SW_SHOWNORMAL);
 			}
 			if (ImGui::MenuItem("About")) {
-				
+				about->active = !about->active;
 			}
 			ImGui::EndMenu();
 		}
@@ -139,6 +150,7 @@ void ModuleGUI::CreateMainMenu()
 	if (show_demo_window)ShowDemoWindow();
 	if (show_rng)ShowRNG();
 	if (console->isActive())ShowConsole();
+	if (about->isActive())ShowAbout();
 }
 
 void ModuleGUI::ShowDemoWindow()
@@ -197,4 +209,9 @@ void ModuleGUI::ShowRNG()
 void ModuleGUI::ShowConsole()
 {
 	console->Draw();
+}
+
+void ModuleGUI::ShowAbout()
+{
+	about->Draw();
 }
