@@ -6,7 +6,7 @@ configuration:
 build:
   verbosity: minimal
 before_package:
-- ps: Copy-Item C:\projects\PendingNameEngine2\$env:CONFIGURATION\PendingNameEngine2.exe C:\projects\PendingNameEngine2\PendingNameEngine\Game\.
+- ps: Copy-Item C:\projects\PendingNameEngine2\PendingNameEngine\$env:CONFIGURATION\PendingNameEngine2.exe C:\projects\PendingNameEngine2\PendingNameEngine\Game\.
 artifacts:
 - path: PendingNameEngine\Game
   name: PendingNameEngine2
