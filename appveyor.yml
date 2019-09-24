@@ -1,0 +1,26 @@
+version: 1.0.{build}
+configuration:
+- Debug
+- Release
+build:
+  verbosity: minimal
+before_package:
+- ps: Copy-Item C:\projects\PendingNameEngine2\$env:CONFIGURATION\PendingNameEngine2.exe C:\projects\PendingNameEngine2\PendingNameEngine\Game\.
+artifacts:
+- path: PendingNameEngine\Game
+  name: PendingNameEngine2
+  type: WebDeployPackage
+deploy:
+- provider: GitHub
+  description: Auto-generated release
+  auth_token:
+    secure: NXSm71oD3e4FNjxy6tEbQzA/TmPGN8UZdbo/yDZwJcsix3UO7KoLqeVWxDufJqAd8qo1PVVjMploN646ud0wnpq6Hj34zACG4PKPZkbwVAE=
+  draft: true
+notifications:
+- provider: Email
+  to:
+  - gdrdvilla@gmail.com
+  - axiermopc@gmail.com
+  on_build_success: false
+  on_build_failure: true
+  on_build_status_changed: false
