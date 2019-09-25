@@ -3,22 +3,21 @@
 
 PanelConsole::PanelConsole()
 {
-	height = 100;
-	width = 500;
+	
 	ConsoleLog("Console started.\n");
+	PanelName = "Console";
 }
 
 PanelConsole::PanelConsole(const char * _name)
 {
-	height = 100;
-	width = 500;
+	
 	ConsoleLog("Console started.\n");
 	PanelName = _name;
 }
 
 void PanelConsole::Draw()
 {
-	
+		ImGui::SetNextWindowSize(ImVec2(300, 350));
 		ImGui::Begin("Console", &active);
 		if (ImGui::Button("Clear Console")) {
 			EmptyConsole();

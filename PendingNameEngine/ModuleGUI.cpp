@@ -2,6 +2,7 @@
 #include "ModuleGUI.h"
 
 #include "PanelConsole.h"
+#include "PanelConfiguration.h"
 
 
 ModuleGUI::ModuleGUI(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -20,11 +21,13 @@ bool ModuleGUI::Init()
 
 	//Panels
 	console = new PanelConsole("Console");
+	config = new PanelConfig("Configuration");
 	
 	
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
+	config->SetActive();
 
 	return ret;
 }
@@ -82,13 +85,14 @@ void ModuleGUI::CreateMainMenu()
 
 			if (ImGui::BeginMenu("Panels")) {
 				
-				//ImGui::Checkbox("Configuration", );
+				ImGui::Checkbox("Configuration", &config->active );
 				//ImGui::Checkbox("Inspector", );
 				ImGui::Checkbox("Console", &console->active);
 				ImGui::Separator();
 
 				if (ImGui::SmallButton("Hide all"))
 				{
+					if (config->isActive()) config->SetInactive();
 					if (console->isActive()) console->SetInactive();
 				}
 				ImGui::EndMenu();
@@ -150,6 +154,7 @@ void ModuleGUI::CreateMainMenu()
 	if (show_rng)ShowRNG();
 	if (show_about)ShowAbout();
 	if (console->isActive())ShowConsole();
+	if (config->isActive())ShowConfig();
 	
 }
 
@@ -287,4 +292,9 @@ void ModuleGUI::ShowAbout()
 
 	}
 	ImGui::End();
+}
+
+void ModuleGUI::ShowConfig()
+{
+	config->Draw();
 }

@@ -12,6 +12,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 
 class PanelConsole;
+class PanelConfig;
 class Panel;
 
 
@@ -40,6 +41,8 @@ private:
 	void ShowRNG();
 	void ShowConsole();
 	void ShowAbout();
+	void ShowConfig();
+
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
 	int input_min = 0; int input_max = 100;
@@ -47,9 +50,10 @@ public:
 	float rand_float = 0.0f;
 
 
+	PanelConsole* console = nullptr;
+	PanelConfig* config = nullptr;
 
 	//tmp needs to be moved somewhere else
-	PanelConsole* console = nullptr;
 	std::vector<AABB> aabb_array;
 
 
