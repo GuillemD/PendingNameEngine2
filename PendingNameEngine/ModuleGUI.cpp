@@ -240,9 +240,10 @@ void ModuleGUI::ShowAbout()
 			ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 
 		}
-		ImGui::Separator();
+		
 		ImGui::TextColored(GREEN, "External Libraries: \n \n");
-
+		ImGui::Columns(2, "libraries");
+		ImGui::Separator();
 		//SDL
 		SDL_version v_compiled;
 		SDL_VERSION(&v_compiled);
@@ -250,30 +251,39 @@ void ModuleGUI::ShowAbout()
 		{
 			App->OpenBrowser("https://www.libsdl.org/");
 		}
-		ImGui::SameLine();
+		ImGui::NextColumn();
 		ImGui::Text("%d.%d.%d", v_compiled.major, v_compiled.minor, v_compiled.patch);
+		ImGui::NextColumn();
 
 		//IMGUI
 		if (ImGui::SmallButton("ImGui"))
 		{
 			App->OpenBrowser("https://github.com/ocornut/imgui");
 		}
-		ImGui::SameLine();
+		ImGui::NextColumn();
 		ImGui::Text("%s", ImGui::GetVersion());
+		ImGui::NextColumn();
 
 		//MATHGEOLIB
 		if (ImGui::SmallButton("MathGeoLib"))
 		{
 			App->OpenBrowser("https://github.com/juj/MathGeoLib");
 		}
-		ImGui::SameLine();
+		ImGui::NextColumn();
 		ImGui::Text("1.64");
+		ImGui::NextColumn();
 
 		//PCG
-		if (ImGui::SmallButton("PCG RNG Minimal C Edition"))
+		if (ImGui::SmallButton("PCG RNG"))
 		{
 			App->OpenBrowser("http://www.pcg-random.org/");
 		}
+		ImGui::NextColumn();
+		ImGui::Text("Minimal C Edition");
+		ImGui::NextColumn();
+
+
+		ImGui::Separator();
 
 	}
 	ImGui::End();
