@@ -1,6 +1,6 @@
 #ifndef _MODULE_H_
 #define _MODULE_H_
-#include "Application.h"
+#include "Globals.h"
 
 class Application;
 
@@ -10,9 +10,9 @@ private :
 	bool enabled;
 
 public:
-	Application* App;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent)
+
+	Module(bool start_enabled = true) 
 	{}
 
 	virtual ~Module()
@@ -48,5 +48,7 @@ public:
 		return true; 
 	}
 };
+
+extern Application* App;
 
 #endif //_MODULE_H_

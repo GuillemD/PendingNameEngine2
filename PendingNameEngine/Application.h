@@ -6,19 +6,20 @@
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModuleGUI.h"
+
 
 class Application
 {
 public:
 	ModuleWindow* window;
 	ModuleInput* input;
-	
+	ModuleGUI* gui;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
-	ModuleGUI* gui;
+	
 
 private:
 
@@ -29,6 +30,22 @@ private:
 	std::string app_name;
 	std::string org_name;
 	std::string app_version;
+
+	std::vector<float>	fps_buffer;
+	std::vector<float>	ms_buffer;
+	std::vector<float>	memory_buffer;
+
+	uint total_frame_count = 0;
+	uint this_sec_frame_count = 0;
+	uint last_sec_frame_count = 0;
+	Uint32 last_sec_ms = 0;
+
+	Timer last_second_frame_timer;
+	Timer ms_since_start;
+
+	float average_fps = -1.0f;
+
+	bool vsync = VSYNC;
 
 public:
 
@@ -47,6 +64,8 @@ public:
 	void SetAppName(const char* name) { app_name = name; }
 	const char* GetOrgName() const;
 	void SetOrgName(const char* org) { org_name = org; }
+
+	void ShowApplicationConfig();
 	
 	
 
@@ -56,5 +75,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
-extern Application* App;
+
 #endif //_APPLICATION_H_

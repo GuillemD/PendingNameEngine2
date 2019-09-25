@@ -9,7 +9,7 @@
 class ModuleCamera3D : public Module
 {
 public:
-	ModuleCamera3D(Application* app, bool start_enabled = true);
+	ModuleCamera3D(bool start_enabled = true);
 	~ModuleCamera3D();
 
 	bool Start();
@@ -22,7 +22,7 @@ public:
 	float* GetViewMatrix();
 
 private:
-	float maxDistanceToVehicle = 25.0f;
+	
 	void CalculateViewMatrix();
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 	bool isPlaying = false;

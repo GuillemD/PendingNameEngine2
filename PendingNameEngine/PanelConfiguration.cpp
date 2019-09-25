@@ -20,7 +20,7 @@ void PanelConfig::Draw()
 	ImGui::SetNextWindowSize(ImVec2(500, 500));
 	if (ImGui::Begin(PanelName.c_str(), &active, NULL))
 	{
-
+		App->ShowApplicationConfig();
 	}
 	ImGui::End();
 }
