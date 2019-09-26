@@ -158,6 +158,9 @@
     <ClCompile Include="PanelConfiguration.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -623,6 +626,7 @@
     <ClInclude Include="PanelConfiguration.h">
       <Filter>Panels</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
