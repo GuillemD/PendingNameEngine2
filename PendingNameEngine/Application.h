@@ -11,6 +11,9 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
 
+#define FPSBUFFER_SIZE 100
+#define MSBUFFER_SIZE 100
+
 class Application
 {
 public:
@@ -33,15 +36,15 @@ private:
 
 	std::vector<float>	fps_buffer;
 	std::vector<float>	ms_buffer;
-	std::vector<float>	memory_buffer;
+
 
 	uint total_frame_count = 0;
 	uint this_sec_frame_count = 0;
 	uint last_sec_frame_count = 0;
-	Uint32 last_sec_ms = 0;
+	uint last_sec_ms = 0;
 
-	Timer last_second_frame_timer;
-	Timer ms_since_start;
+	Timer last_sec_frame_timer;
+	Timer ms_since_start; 
 
 	float average_fps = -1.0f;
 

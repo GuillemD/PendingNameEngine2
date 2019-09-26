@@ -42,6 +42,14 @@ bool Application::Init()
 	SetOrgName(ORGANISATION);
 	SetVersion(VERSION);
 
+	//Resetting FPS BUFFER
+	fps_buffer.resize(FPSBUFFER_SIZE);
+
+	for (int i = 0; i < fps_buffer.size(); i++)
+	{
+		fps_buffer[i] = 0;
+	}
+
 	// Call Init() in all modules
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
 	{
@@ -49,7 +57,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	CONSOLELOG("Application Start --------------");
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
 	{
 		ret = (*item)->Start();
@@ -95,23 +103,25 @@ update_status Application::Update()
 		if (ret == UPDATE_CONTINUE)
 			ret = (*item)->PostUpdate(dt);
 	}
-
+	
 	//APPLICATION CONFIGURATION WINDOW
-	this_sec_frame_count++;// We add 1 each time we update, 1 time per frame
-	total_frame_count++;//This one is used for calculating our average fps, so we add 1 each time also.
+	++this_sec_frame_count;// We add 1 each time we update, 1 time per frame
+	++total_frame_count;//This one is used for calculating our average fps, so we add 1 each time also.
 	//its important to do this before, otherwise we would show 1 less fps.
 
-	average_fps = total_frame_count / (ms_since_start.Read() / 1000.f);
+	
 
-	if (last_second_frame_timer.Read() >= 1000) { // Basically if a whole 1000ms(1s) has passed restart the frame timer.
-		last_second_frame_timer.Start();
-		last_sec_frame_count = this_sec_frame_count; //We store this second frames in the previous one
-		this_sec_frame_count = 0;					// and then we restart the frame count
+	if (last_sec_frame_timer.Read() >= 1000) { // Basically if a whole 1000ms(1s) has passed restart the frame timer.
+		last_sec_frame_timer.Start();
+		this_sec_frame_count = last_sec_frame_count; //We store this second frames in the previous one
+		last_sec_frame_count = 0;					// and then we restart the frame count
+
 	}
 
-	// We will only show 30 bars in our histogram
+	average_fps = float(total_frame_count) / (ms_since_start.Read() / 1000.f);
 
-	if (fps_buffer.size() >= 100)
+
+	if (fps_buffer.size() >= FPSBUFFER_SIZE)
 	{
 		for (int a = 0; a <= fps_buffer.size() - 2; a++)
 		{
@@ -119,7 +129,7 @@ update_status Application::Update()
 		}
 		fps_buffer.pop_back();
 	}
-	if (ms_buffer.size() >= 100)
+	if (ms_buffer.size() >= MSBUFFER_SIZE)
 	{
 		for (int a = 0; a <= ms_buffer.size() - 2; a++)
 		{
@@ -131,7 +141,7 @@ update_status Application::Update()
 	last_sec_ms = ms_timer.Read();
 	ms_buffer.push_back((float)last_sec_ms);
 	if (last_sec_ms) fps_buffer.push_back((float)(1000 / last_sec_ms));
-
+	
 	FinishUpdate();
 	return ret;
 }
@@ -140,6 +150,8 @@ bool Application::CleanUp()
 {
 	bool ret = true;
 
+	fps_buffer.clear();
+	ms_buffer.clear();
 	for (std::list<Module*>::reverse_iterator item = list_modules.rbegin(); item != list_modules.rend(); item++)
 	{
 		ret = (*item)->CleanUp();
@@ -206,11 +218,49 @@ void Application::ShowApplicationConfig()
 			}
 		}
 
-		sprintf_s(title, 30, "Frames per second: %.1f", App->fps_buffer[App->fps_buffer.size() - 1]);
-		ImGui::PlotHistogram("", &App->fps_buffer[0], App->fps_buffer.size(), 0, title, 0.0f, 120.0f, ImVec2(310, 100));
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		sprintf_s(title, 30, "Frames per second: %.1f", fps_buffer[fps_buffer.size()-1]);
 
-		sprintf_s(title, 30, "ms: %.1f", App->ms_buffer[App->ms_buffer.size() - 1]);
-		ImGui::PlotHistogram("", &App->ms_buffer[0], App->ms_buffer.size(), 0, title, 0.0f, 120.0f, ImVec2(310, 100));
+		float highest_fps = 0;
+		for (int i = 0; i < fps_buffer.size(); i++)
+		{
+			if (fps_buffer[i] > highest_fps)
+				highest_fps = fps_buffer[i];
+		}
+		float mean_fps = 0;
+		int count_fps = 0;
+		for (int j = 0; j < fps_buffer.size(); j++)
+		{
+			if (fps_buffer[j] != 0)
+			{
+				mean_fps += fps_buffer[j];
+				count_fps++;
+			}
+		}
+		mean_fps /= count_fps;
+
+		ImGui::PlotHistogram("", &fps_buffer[0], FPSBUFFER_SIZE, 0, title, 0.0f, (highest_fps- mean_fps)+mean_fps+(highest_fps*0.3f), ImVec2(size.x, 100));
+
+		sprintf_s(title, 30, "ms: %.1f", ms_buffer[ms_buffer.size() - 1]);
+
+		float highest_ms = 0;
+		for (int i = 0; i < ms_buffer.size(); i++)
+		{
+			if (ms_buffer[i] > highest_ms)
+				highest_ms = ms_buffer[i];
+		}
+		float mean_ms = 0;
+		int count_ms = 0;
+		for (int j = 0; j < ms_buffer.size(); j++)
+		{
+			if (ms_buffer[j] != 0)
+			{
+				mean_fps += ms_buffer[j];
+				count_ms++;
+			}
+		}
+		mean_fps /= count_ms;
+		ImGui::PlotHistogram("", &ms_buffer[0], MSBUFFER_SIZE, 0, title, 0.0f, (highest_ms - mean_ms) + mean_ms + (highest_ms*0.3f), ImVec2(size.x, 100));
 	}
 	
 }
