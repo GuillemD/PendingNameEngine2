@@ -116,8 +116,9 @@ void ModuleGUI::CreateMainMenu()
 				else CONSOLELOG("Geometry Creator closed.");
 				
 			}
-			if (ImGui::MenuItem("Check colisions")) {
-
+			if (ImGui::MenuItem("Check AABB collisions")) {
+				CONSOLELOG("Checking AABB collisions...");
+				App->scene->CheckAABBCollisions();
 			}
 
 			ImGui::EndMenu();
