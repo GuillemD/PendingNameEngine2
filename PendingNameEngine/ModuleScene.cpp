@@ -44,3 +44,17 @@ bool ModuleScene::CleanUp()
 {
 	return true;
 }
+
+void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z)
+{
+	if (min_x < max_x &&min_y < max_y&&min_z < max_z) {
+		AABB* tmp = new AABB(float3(min_x, min_y, min_z), float3(max_x, max_y, max_z));
+		boxes.push_back(tmp);
+		CONSOLELOG("Created AABB with coordinates Minimum Coordinates: %d , %d , %d . Maximum Coordinates: %d , %d , %d .", min_x, min_y, min_z, max_x, max_y, max_z);
+
+
+	} else CONSOLELOG("Error creating an AABB with those coordinates, is any minimum coordinate higher than the maximum one?")
+
+
+	int test = 0;
+}

@@ -19,6 +19,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	
+	void CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z);
+
+
 public:
 
 	std::vector<AABB*> boxes;

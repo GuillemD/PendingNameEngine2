@@ -42,6 +42,7 @@ private:
 	void ShowConsole();
 	void ShowAbout();
 	void ShowConfig();
+	void ShowGeometryCreator();
 
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
@@ -57,13 +58,17 @@ public:
 	std::vector<AABB> aabb_array;
 
 
+
+	int min_x = 0; int min_y = 0; int min_z = 0;
+	int max_x = 0; int max_y = 0; int max_z = 0;
+
 private:
 	//Variables
 	bool want_to_quit = false;
 	bool show_demo_window = false;
 	bool show_rng = false;
 	bool show_about = false;
-	
+	bool geometry_creator = false;
 
 };
 

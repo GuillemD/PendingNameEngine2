@@ -109,7 +109,12 @@ void ModuleGUI::CreateMainMenu()
 		if (ImGui::BeginMenu("Geometry")) {
 
 			if (ImGui::MenuItem("Generate Geometry")) {
-				CONSOLELOG("GEOMETRY GENERATED");
+				geometry_creator = !geometry_creator;
+				if (geometry_creator) {
+					CONSOLELOG("Geoetry Creator opened.");
+				}
+				else CONSOLELOG("Geometry Creator closed.");
+				
 			}
 			if (ImGui::MenuItem("Check colisions")) {
 
@@ -150,6 +155,7 @@ void ModuleGUI::CreateMainMenu()
 		}
 		ImGui::EndMainMenuBar();
 	}
+	if (geometry_creator)ShowGeometryCreator();
 	if (show_demo_window)ShowDemoWindow();
 	if (show_rng)ShowRNG();
 	if (show_about)ShowAbout();
@@ -160,8 +166,14 @@ void ModuleGUI::CreateMainMenu()
 
 void ModuleGUI::ShowDemoWindow()
 {
+
+	
+	
 	ImGui::ShowTestWindow(&show_demo_window);
+	
 }
+
+
 
 void ModuleGUI::ShowRNG()
 {
@@ -297,4 +309,28 @@ void ModuleGUI::ShowAbout()
 void ModuleGUI::ShowConfig()
 {
 	config->Draw();
+}
+
+void ModuleGUI::ShowGeometryCreator()
+{
+	
+	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
+		ImGui::Text("Minimum coordinates");
+		ImGui::SliderInt("Min X", &min_x, -50, 50);
+		ImGui::SliderInt("Min Y", &min_y, -50, 50);
+		ImGui::SliderInt("Min Z", &min_z, -50, 50);
+
+		ImGui::Separator();
+
+		ImGui::Text("Minimum coordinates");
+		ImGui::SliderInt("Max X", &max_x, -50, 50);	
+		ImGui::SliderInt("Max Y", &max_y, -50, 50);
+		ImGui::SliderInt("Max Z", &max_z, -50, 50);
+
+
+		if (ImGui::Button("Create AABB")) {
+			App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+		}
+	}
+	ImGui::End();
 }
