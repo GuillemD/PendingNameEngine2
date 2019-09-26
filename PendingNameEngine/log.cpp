@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleGUI.h"
+#include "PanelConsole.h"
 void log(const char file[], int line, const char* format, ...)
 {
 	static char tmp_string[4096];
@@ -31,7 +31,8 @@ void consolelog(const char file[], int line, const char* format, ...)
 	va_end(ap);
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 	
-	//app->gui->console->ConsoleLog(tmp_string2);
+	App->gui->console->ConsoleLog(tmp_string2);
+	//App->gui->console();
 	
 }
 

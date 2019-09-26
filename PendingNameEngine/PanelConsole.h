@@ -14,6 +14,9 @@ public:
 	void Draw() override;
 	void EmptyConsole();
 	void ConsoleLog(char* txt);
+
+
+
 public:
 	ImGuiTextBuffer ConsoleText;
 	bool ScrollToBottom = true;

@@ -109,7 +109,7 @@ void ModuleGUI::CreateMainMenu()
 		if (ImGui::BeginMenu("Geometry")) {
 
 			if (ImGui::MenuItem("Generate Geometry")) {
-
+				CONSOLELOG("GEOMETRY GENERATED");
 			}
 			if (ImGui::MenuItem("Check colisions")) {
 
