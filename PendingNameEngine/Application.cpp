@@ -265,3 +265,39 @@ void Application::ShowApplicationConfig()
 	
 }
 
+void Application::ShowHardwareConfig()
+{
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		SDL_version v_compiled;
+		SDL_VERSION(&v_compiled);
+		ImGui::Text("SDL version: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d.%d.%d", v_compiled.major, v_compiled.minor, v_compiled.patch);
+		ImGui::Separator();
+
+		ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetCPUCount());
+		ImGui::Text("Cache: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d kb", SDL_GetCPUCacheLineSize());
+		ImGui::Text("RAM: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetSystemRAM());
+		ImGui::Separator();
+		ImGui::Columns(3, "caps");
+		ImGui::Text("Caps: ");
+		if (SDL_Has3DNow()) ImGui::TextColored(YELLOW, "3DNow");
+		if (SDL_HasAVX()) ImGui::TextColored(YELLOW, "AVX");
+		if (SDL_HasAltiVec()) ImGui::TextColored(YELLOW, "AltiVec");
+		if (SDL_HasMMX()) ImGui::TextColored(YELLOW, "MMX");
+		ImGui::NextColumn();
+
+		if (SDL_HasRDTSC()) ImGui::TextColored(YELLOW, "RDTSC");
+		if (SDL_HasSSE()) ImGui::TextColored(YELLOW, "SSE");
+		if (SDL_HasSSE2()) ImGui::TextColored(YELLOW, "SSE2");
+		ImGui::NextColumn();
+
+		if (SDL_HasSSE3()) ImGui::TextColored(YELLOW, "SSE3"); 
+		if (SDL_HasSSE41()) ImGui::TextColored(YELLOW, "SSE41");
+		if (SDL_HasSSE42()) ImGui::TextColored(YELLOW, "SSE42");
+		ImGui::Separator();
+	
+
+		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
+	}
+}
+

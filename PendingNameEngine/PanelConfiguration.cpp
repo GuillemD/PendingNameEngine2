@@ -21,6 +21,7 @@ void PanelConfig::Draw()
 	if (ImGui::Begin(PanelName.c_str(), &active, NULL))
 	{
 		App->ShowApplicationConfig();
+		App->ShowHardwareConfig();
 	}
 	ImGui::End();
 }

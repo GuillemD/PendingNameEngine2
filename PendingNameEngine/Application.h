@@ -69,6 +69,7 @@ public:
 	void SetOrgName(const char* org) { org_name = org; }
 
 	void ShowApplicationConfig();
+	void ShowHardwareConfig();
 	
 	
 
