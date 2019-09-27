@@ -22,6 +22,7 @@ void PanelConfig::Draw()
 	{
 		App->ShowApplicationConfig();
 		App->ShowHardwareConfig();
+		App->input->ShowInputConfig();
 	}
 	ImGui::End();
 }

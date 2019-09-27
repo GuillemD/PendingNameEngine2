@@ -60,6 +60,7 @@ public:
 		return mouse_y_motion;
 	}
 
+	void ShowInputConfig();
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
