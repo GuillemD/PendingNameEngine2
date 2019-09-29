@@ -260,9 +260,14 @@ void ModuleGUI::ShowAbout()
 
 		}
 		
-		ImGui::TextColored(GREEN, "External Libraries: \n \n");
+		ImGui::TextColored(GREEN, "External Libraries: \n");
 		ImGui::Columns(2, "libraries");
 		ImGui::Separator();
+		ImGui::Text("Name");
+		ImGui::NextColumn();
+		ImGui::Text("Version");
+		ImGui::Separator();
+		ImGui::NextColumn();
 		//SDL
 		SDL_version v_compiled;
 		SDL_VERSION(&v_compiled);
@@ -301,7 +306,16 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("Minimal C Edition");
 		ImGui::NextColumn();
 
+		//Parson (JSON)
+		if (ImGui::SmallButton("Parson"))
+		{
+			App->OpenBrowser("http://kgabis.github.io/parson/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("");
+		ImGui::NextColumn();
 
+		ImGui::Columns(1);
 		ImGui::Separator();
 
 	}

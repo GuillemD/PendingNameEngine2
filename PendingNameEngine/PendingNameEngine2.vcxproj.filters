@@ -161,6 +161,9 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>External Libraries\Parson</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -629,6 +632,9 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Parson\parson.h">
+      <Filter>External Libraries\Parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -678,6 +684,9 @@
     </Filter>
     <Filter Include="Panels">
       <UniqueIdentifier>{788a595c-c99f-432a-940a-897a8224b1e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\Parson">
+      <UniqueIdentifier>{6bec7ffd-d854-42b7-a27e-413b2982051b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
