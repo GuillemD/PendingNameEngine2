@@ -50,6 +50,8 @@ private:
 
 	bool vsync = VSYNC;
 
+	bool want_to_save_config = false;
+
 public:
 
 	Application();
@@ -70,14 +72,16 @@ public:
 
 	void ShowApplicationConfig();
 	void ShowHardwareConfig();
-	
-	
+
 
 private:
 
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	void SaveConfig();
+
 };
 
 #endif //_APPLICATION_H_

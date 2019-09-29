@@ -13,6 +13,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled)
 
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+	name = "Camera3D";
 }
 
 ModuleCamera3D::~ModuleCamera3D()

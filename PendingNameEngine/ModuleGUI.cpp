@@ -7,28 +7,35 @@
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
+	name = "GUI";
 }
 
 ModuleGUI::~ModuleGUI()
 {
 }
 
-bool ModuleGUI::Init()
+bool ModuleGUI::Init(JSON_Object* conf)
 {
 	bool ret = true;
 
-	ImGui_ImplSdl_Init(App->window->window);
 
 	//Panels
 	console = new PanelConsole("Console");
 	config = new PanelConfig("Configuration");
-	
-	
+
+
+	return ret;
+}
+
+bool ModuleGUI::Start()
+{
+	bool ret = true;
+
+	ImGui_ImplSdl_Init(App->window->window);
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
 	config->SetActive();
-
 	return ret;
 }
 
@@ -75,6 +82,14 @@ void ModuleGUI::CreateMainMenu()
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 
+			if (ImGui::MenuItem("Load Config"))
+			{
+
+			}
+			if (ImGui::MenuItem("Save Config"))
+			{
+
+			}
 			if (ImGui::MenuItem("Quit")) {
 				want_to_quit = true;
 			}
@@ -167,11 +182,7 @@ void ModuleGUI::CreateMainMenu()
 
 void ModuleGUI::ShowDemoWindow()
 {
-
-	
-	
 	ImGui::ShowTestWindow(&show_demo_window);
-	
 }
 
 

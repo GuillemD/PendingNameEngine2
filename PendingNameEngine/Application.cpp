@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Parson/parson.h"
 
 Application::Application()
 {
@@ -42,6 +43,11 @@ bool Application::Init()
 	SetOrgName(ORGANISATION);
 	SetVersion(VERSION);
 
+	JSON_Object* config = json_value_get_object(json_parse_file("config.json"));
+
+	if (!json_object_get_object(config, "App"))
+		config = json_value_get_object(json_parse_file("config.json"));
+
 	//Resetting FPS BUFFER
 	fps_buffer.resize(FPSBUFFER_SIZE);
 
@@ -53,7 +59,7 @@ bool Application::Init()
 	// Call Init() in all modules
 	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
 	{
-		ret = (*item)->Init();
+		ret = (*item)->Init(json_object_get_object(config, (*item)->name));
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -78,6 +84,11 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	if (want_to_save_config)
+	{
+		SaveConfig();
+		want_to_save_config = false;
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -303,5 +314,31 @@ void Application::ShowHardwareConfig()
 		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
 		//ADD VRAM usage as a bonus
 	}
+}
+
+void Application::SaveConfig()
+{
+	JSON_Value* config = json_parse_file("config.json");
+
+	JSON_Value* app_config = json_value_init_object();
+
+	JSON_Object* app_config_object = json_object(app_config);
+
+	json_object_set_string(app_config_object, "app_name", App->GetAppName());
+	json_object_set_string(app_config_object, "org", App->GetOrgName());
+
+	json_object_set_value(json_object(config), "App", app_config);
+
+	std::list<Module*>::iterator module_it = list_modules.begin();
+
+	while (module_it != list_modules.end())
+	{
+		JSON_Value* module_config = json_value_init_object();
+		(*module_it)->Save(json_object(module_config));
+		json_object_set_value(json_object(config), (*module_it)->name, module_config);
+		module_it++;
+	}
+	json_serialize_to_file(config, "config.json");
+
 }
 
