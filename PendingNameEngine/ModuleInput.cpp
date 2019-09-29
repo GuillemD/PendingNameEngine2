@@ -93,8 +93,11 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	bool quit = false;
 	SDL_Event e;
-	while(SDL_PollEvent(&e))
+	while(SDL_PollEvent(&e) != 0)
 	{
+
+		ImGui_ImplSdl_ProcessEvent(&e);
+
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
@@ -178,9 +181,9 @@ void ModuleInput::PrintInputLog(uint key, uint state)
 	static const char* states[] = { "IDLE", "DOWN", "REPEAT", "UP" };
 
 	if (key < 1000)
-		sprintf_s(entry, 512, "Kybrd: %02u - %s\n", key, states[state]);
+		sprintf_s(entry, 512, "Kybrd: %03u - %s\n", key, states[state]);
 	else
-		sprintf_s(entry, 512, "Mouse: %02u - %s\n", key - 1000, states[state]);
+		sprintf_s(entry, 512, "Mouse: %03u - %s\n", key - 1000, states[state]);
 
 	AddInputToBuffer(entry);
 }

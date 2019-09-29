@@ -262,7 +262,8 @@ void Application::ShowApplicationConfig()
 		mean_fps /= count_ms;
 		ImGui::PlotHistogram("", &ms_buffer[0], MSBUFFER_SIZE, 0, title, 0.0f, (highest_ms - mean_ms) + mean_ms + (highest_ms*0.3f), ImVec2(size.x, 100));
 	}
-	
+	//TODO
+	//ADD memory consumption graphics and info
 }
 
 void Application::ShowHardwareConfig()
@@ -294,10 +295,13 @@ void Application::ShowHardwareConfig()
 		if (SDL_HasSSE3()) ImGui::TextColored(YELLOW, "SSE3"); 
 		if (SDL_HasSSE41()) ImGui::TextColored(YELLOW, "SSE41");
 		if (SDL_HasSSE42()) ImGui::TextColored(YELLOW, "SSE42");
+
+		ImGui::Columns(1);
 		ImGui::Separator();
 	
-
+		//TODO
 		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
+		//ADD VRAM usage as a bonus
 	}
 }
 
