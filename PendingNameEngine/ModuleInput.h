@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "ImGui/imgui.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -61,6 +62,9 @@ public:
 	}
 
 	void ShowInputConfig();
+	void PrintInputLog(uint key, uint state);
+	void AddInputToBuffer(const char* entry);
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -70,5 +74,7 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+	ImGuiTextBuffer input_log_buf;
+	bool scroll_log = false;
 };
 #endif // _MODULEINPUT_H_

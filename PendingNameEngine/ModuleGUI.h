@@ -32,6 +32,7 @@ public:
 	bool CleanUp();
 
 	void DrawGUI();
+	
 
 private:
 	//Functions

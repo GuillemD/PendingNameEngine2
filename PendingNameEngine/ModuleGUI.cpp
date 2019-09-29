@@ -233,7 +233,8 @@ void ModuleGUI::ShowAbout()
 {
 	if (ImGui::Begin("About", &show_about))
 	{
-		ImGui::Text("PendingNameEngine2 v %s made by Asier Arellano and Guillem Dominguez for academic purposes", App->GetVersion());
+		ImGui::Text("PendingNameEngine2 v %s ", App->GetVersion());
+		ImGui::Text(" by Asier Arellano and Guillem Dominguez");
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("LICENSE"))
@@ -335,3 +336,5 @@ void ModuleGUI::ShowGeometryCreator()
 	}
 	ImGui::End();
 }
+
+

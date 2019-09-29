@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ImGui/imgui.h"
+
 
 #define MAX_KEYS 300
 
@@ -39,53 +41,55 @@ bool ModuleInput::Init()
 update_status ModuleInput::PreUpdate(float dt)
 {
 	SDL_PumpEvents();
-
+	mouse_x_motion = mouse_y_motion = 0;
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	
 	for(int i = 0; i < MAX_KEYS; ++i)
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
-				keyboard[i] = KEY_DOWN;
-			else
+			if (keyboard[i] == KEY_IDLE)
+			{
+				keyboard[i] = KEY_DOWN; //Print KEY Log
+				PrintInputLog(i, KEY_DOWN);
+			}
+			else if(keyboard[i] != KEY_REPEAT)
+			{
+				PrintInputLog(i, KEY_REPEAT);
 				keyboard[i] = KEY_REPEAT;
+			}
+				
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
 				keyboard[i] = KEY_UP;
+				PrintInputLog(i, KEY_UP);
+			}
 			else
 				keyboard[i] = KEY_IDLE;
 		}
 	}
 
-	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
 	mouse_z = 0;
 
 	for(int i = 0; i < 5; ++i)
 	{
-		if(buttons & SDL_BUTTON(i))
+		
+		if (mouse_buttons[i] == KEY_DOWN)
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
-				mouse_buttons[i] = KEY_DOWN;
-			else
-				mouse_buttons[i] = KEY_REPEAT;
+			PrintInputLog(1000 + i, KEY_DOWN);
+			PrintInputLog(1000 + i, KEY_REPEAT);
+			mouse_buttons[i] = KEY_REPEAT;
 		}
-		else
+		if (mouse_buttons[i] == KEY_UP)
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
-				mouse_buttons[i] = KEY_UP;
-			else
-				mouse_buttons[i] = KEY_IDLE;
+			mouse_buttons[i] = KEY_IDLE;
+			PrintInputLog(1000 + i, KEY_UP);
 		}
+		
 	}
-
-	mouse_x_motion = mouse_y_motion = 0;
-
 
 	bool quit = false;
 	SDL_Event e;
@@ -98,12 +102,19 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
-
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			mouse_x_motion = e.motion.xrel;
+			mouse_y_motion = e.motion.yrel;
+			mouse_x = e.motion.x;
+			mouse_y = e.motion.y;
 			break;
+			
+			case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[e.button.button - 1] = KEY_DOWN;
+			break;
+
+			case SDL_MOUSEBUTTONUP:
+			mouse_buttons[e.button.button - 1] = KEY_UP;
+			break; 
 
 			case SDL_QUIT:
 			quit = true;
@@ -135,6 +146,7 @@ void ModuleInput::ShowInputConfig()
 {
 	if (ImGui::CollapsingHeader("Input"))
 	{
+		
 		ImGui::Columns(3, "mouse info");
 		ImGui::Text("Mouse Position: ");
 		ImGui::TextColored(YELLOW, "X: %d", App->input->mouse_x);
@@ -147,5 +159,34 @@ void ModuleInput::ShowInputConfig()
 		ImGui::Text("Mouse Wheel: ");
 		ImGui::TextColored(YELLOW, "%d", App->input->mouse_z);
 		
+		ImGui::Columns(1);
+		ImGui::Separator();
+		
+		ImGui::BeginChild("Input Log");
+		ImGui::TextUnformatted(input_log_buf.begin());
+		if (scroll_log)
+			ImGui::SetScrollHere(1.0f);
+		scroll_log = false;
+		ImGui::EndChild();
 	}
+	
+}
+
+void ModuleInput::PrintInputLog(uint key, uint state)
+{
+	static char entry[512];
+	static const char* states[] = { "IDLE", "DOWN", "REPEAT", "UP" };
+
+	if (key < 1000)
+		sprintf_s(entry, 512, "Kybrd: %02u - %s\n", key, states[state]);
+	else
+		sprintf_s(entry, 512, "Mouse: %02u - %s\n", key - 1000, states[state]);
+
+	AddInputToBuffer(entry);
+}
+
+void ModuleInput::AddInputToBuffer(const char * entry)
+{
+	input_log_buf.append(entry);
+	scroll_log = true;
 }

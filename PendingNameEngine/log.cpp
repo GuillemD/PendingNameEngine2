@@ -32,7 +32,7 @@ void consolelog(const char file[], int line, const char* format, ...)
 	sprintf_s(tmp_string2, 4096, "%s \n",tmp_string);
 	
 	App->gui->console->ConsoleLog(tmp_string2);
-	//App->gui->console();
+	
 	
 }
 
