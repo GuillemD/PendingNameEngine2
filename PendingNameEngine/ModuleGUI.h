@@ -23,7 +23,7 @@ public:
 	ModuleGUI(bool start_enabled = true);
 	~ModuleGUI();
 
-	bool Init(JSON_Object* config);
+	bool Init();
 	bool Start();
 
 	update_status PreUpdate(float dt);

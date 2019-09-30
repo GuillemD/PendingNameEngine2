@@ -1,7 +1,7 @@
 #ifndef _MODULE_H_
 #define _MODULE_H_
 #include "Globals.h"
-#include "Parson/parson.h"
+
 
 class Application;
 
@@ -20,7 +20,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init(JSON_Object* conf) 
+	virtual bool Init() 
 	{
 		return true; 
 	}
@@ -52,7 +52,7 @@ public:
 
 	const char* GetName() const { return name; }
 
-	virtual void Save(JSON_Object* config){}
+	virtual void Save(){}
 };
 
 extern Application* App;

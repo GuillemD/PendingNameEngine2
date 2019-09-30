@@ -50,7 +50,7 @@ private:
 
 	bool vsync = VSYNC;
 
-	bool want_to_save_config = false;
+	//bool want_to_save_config = false;
 
 public:
 
@@ -80,7 +80,7 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	void SaveConfig();
+	//void SaveConfig();
 
 };
 

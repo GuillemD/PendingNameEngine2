@@ -16,7 +16,7 @@ ModuleScene::~ModuleScene()
 {
 }
 
-bool ModuleScene::Init(JSON_Object* conf)
+bool ModuleScene::Init()
 {
 	return true;
 }

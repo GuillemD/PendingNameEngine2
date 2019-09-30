@@ -14,7 +14,7 @@ ModuleGUI::~ModuleGUI()
 {
 }
 
-bool ModuleGUI::Init(JSON_Object* conf)
+bool ModuleGUI::Init()
 {
 	bool ret = true;
 
@@ -317,13 +317,13 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("Minimal C Edition");
 		ImGui::NextColumn();
 
-		//Parson (JSON)
-		if (ImGui::SmallButton("Parson"))
+		//rapidjson (JSON parser)
+		if (ImGui::SmallButton("rapidjson"))
 		{
-			App->OpenBrowser("http://kgabis.github.io/parson/");
+			App->OpenBrowser("http://rapidjson.org/");
 		}
 		ImGui::NextColumn();
-		ImGui::Text("");
+		ImGui::Text("v1.1");
 		ImGui::NextColumn();
 
 		ImGui::Columns(1);

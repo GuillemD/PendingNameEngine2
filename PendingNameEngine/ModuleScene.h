@@ -12,7 +12,7 @@ public:
 
 
 
-	bool Init(JSON_Object* conf);
+	bool Init();
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);

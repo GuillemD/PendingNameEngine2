@@ -161,9 +161,6 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Parson\parson.c">
-      <Filter>External Libraries\Parson</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -632,8 +629,65 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Parson\parson.h">
-      <Filter>External Libraries\Parson</Filter>
+    <ClInclude Include="rapidjson\allocators.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\document.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodedstream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodings.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filereadstream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filewritestream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\fwd.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\istreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorybuffer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorystream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\ostreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\pointer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\prettywriter.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\rapidjson.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\reader.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\schema.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stringbuffer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\writer.h">
+      <Filter>External Libraries\rapidjson</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -685,8 +739,8 @@
     <Filter Include="Panels">
       <UniqueIdentifier>{788a595c-c99f-432a-940a-897a8224b1e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="External Libraries\Parson">
-      <UniqueIdentifier>{6bec7ffd-d854-42b7-a27e-413b2982051b}</UniqueIdentifier>
+    <Filter Include="External Libraries\rapidjson">
+      <UniqueIdentifier>{17755aa4-3776-42d4-bce2-2d6e02b464b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
