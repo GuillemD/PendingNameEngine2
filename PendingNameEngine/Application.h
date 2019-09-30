@@ -11,6 +11,11 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
 
+#include "rapidjson\rapidjson.h"
+#include "rapidjson\document.h"
+#include "rapidjson\filereadstream.h"
+#include "rapidjson\filewritestream.h"
+
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
 
@@ -50,7 +55,7 @@ private:
 
 	bool vsync = VSYNC;
 
-	//bool want_to_save_config = false;
+	bool want_to_save_config = false;
 
 public:
 
@@ -80,7 +85,7 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	//void SaveConfig();
+	//bool SaveConfig();
 
 };
 

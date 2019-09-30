@@ -66,10 +66,16 @@ enum update_status
 #define ORGANISATION "CITM (UPC)"
 #define VERSION "0.1.0"
 
+//ImGui
 #define BLUE ImVec4(0,0,1,1)
 #define RED ImVec4(1,0,0,1)
 #define GREEN ImVec4(0,1,0,1)
 #define WHITE ImVec4(1,1,1,1)
 #define YELLOW ImVec4(1,1,0,1)
+
+//rapidjson
+#define RJSON_MAJOR_COMPILED 1
+#define RJSON_MINOR_COMPILED 1
+#define RJSON_PATCH_COMPILED 0
 
 #endif //_GLOBALS_H_
