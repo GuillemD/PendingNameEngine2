@@ -314,6 +314,7 @@
     <Library Include="SDL\libx86\SDL2main.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Game\config.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />
     <None Include="MathGeoLib\include\Math\Matrix.inl" />

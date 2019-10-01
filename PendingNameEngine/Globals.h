@@ -62,7 +62,7 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "PendingName Engine 2"
+#define TITLE "PendingNameEngine2"
 #define ORGANISATION "CITM (UPC)"
 #define VERSION "0.1.0"
 

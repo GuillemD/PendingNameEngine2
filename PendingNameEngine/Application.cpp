@@ -79,11 +79,11 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	/*if (want_to_save_config)
+	if (want_to_save_config)
 	{
 		SaveConfig();
 		want_to_save_config = false;
-	}*/
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -311,9 +311,37 @@ void Application::ShowHardwareConfig()
 	}
 }
 
-/*void Application::SaveConfig()
+bool Application::SaveConfig()
 {
-	
+	bool ret = true;
 
-}*/
+	FILE* fp = fopen("config.json", "wb"); //writebinary
+	char writeBuffer[65536];
+	Document doc;
+	char readBuffer[65536];
+	doc.Parse(readBuffer);
+	doc.SetObject();
+	FileWriteStream os(fp, readBuffer, sizeof(readBuffer));
+
+	Document::AllocatorType& alloc = doc.GetAllocator();
+
+	Value app(kObjectType);
+
+	app.AddMember("app_name", TITLE, alloc);
+	app.AddMember("organization", ORGANISATION, alloc);
+	doc.AddMember("App", app, alloc);
+
+	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)
+	{
+		ret = (*it)->Save(doc, os); 
+	}
+
+	Writer<FileWriteStream> writer(os);
+	doc.Accept(writer);
+	fclose(fp);
+
+	CONSOLELOG("App config saved correctly!");
+
+	return ret;
+}
 

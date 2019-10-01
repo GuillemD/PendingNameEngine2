@@ -742,6 +742,9 @@
     <Filter Include="External Libraries\rapidjson">
       <UniqueIdentifier>{17755aa4-3776-42d4-bce2-2d6e02b464b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{839ac164-d99f-4e62-a223-6cda2bb12379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\libx86\SDL2.lib">
@@ -760,6 +763,9 @@
     </None>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>External Libraries\MathGeoLib\Math</Filter>
+    </None>
+    <None Include="Game\config.json">
+      <Filter>config</Filter>
     </None>
   </ItemGroup>
 </Project>

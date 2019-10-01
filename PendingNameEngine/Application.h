@@ -55,7 +55,7 @@ private:
 
 	bool vsync = VSYNC;
 
-	bool want_to_save_config = false;
+	
 
 public:
 
@@ -78,6 +78,7 @@ public:
 	void ShowApplicationConfig();
 	void ShowHardwareConfig();
 
+	bool want_to_save_config = false;
 
 private:
 
@@ -85,7 +86,7 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	//bool SaveConfig();
+	bool SaveConfig();
 
 };
 

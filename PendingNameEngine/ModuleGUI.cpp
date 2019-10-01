@@ -88,7 +88,7 @@ void ModuleGUI::CreateMainMenu()
 			}
 			if (ImGui::MenuItem("Save Config"))
 			{
-
+				App->want_to_save_config = true;
 			}
 			if (ImGui::MenuItem("Quit")) {
 				want_to_quit = true;
@@ -323,7 +323,7 @@ void ModuleGUI::ShowAbout()
 			App->OpenBrowser("http://rapidjson.org/");
 		}
 		ImGui::NextColumn();
-		ImGui::Text("v1.1");
+		ImGui::Text("%d.%d.%d", RJSON_MAJOR_COMPILED,RJSON_MINOR_COMPILED, RJSON_PATCH_COMPILED);
 		ImGui::NextColumn();
 
 		ImGui::Columns(1);
