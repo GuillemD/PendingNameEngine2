@@ -80,43 +80,12 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	if (want_to_save_config)
-	{
-		SaveConfig();
-		want_to_save_config = false;
-	}
-}
-
-// Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::Update()
-{
-	update_status ret = UPDATE_CONTINUE;
-	PrepareUpdate();
-	
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->PreUpdate(dt);
-	}
-
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->Update(dt);
-	}
-
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->PostUpdate(dt);
-	}
-	
 	//APPLICATION CONFIGURATION WINDOW
 	++this_sec_frame_count;// We add 1 each time we update, 1 time per frame
 	++total_frame_count;//This one is used for calculating our average fps, so we add 1 each time also.
 	//its important to do this before, otherwise we would show 1 less fps.
 
-	
+
 
 	if (last_sec_frame_timer.Read() >= 1000) { // Basically if a whole 1000ms(1s) has passed restart the frame timer.
 		last_sec_frame_timer.Start();
@@ -148,7 +117,38 @@ update_status Application::Update()
 	last_sec_ms = ms_timer.Read();
 	ms_buffer.push_back((float)last_sec_ms);
 	if (last_sec_ms) fps_buffer.push_back((float)(1000 / last_sec_ms));
+
+	if (want_to_save_config)
+	{
+		SaveConfig();
+		want_to_save_config = false;
+	}
+}
+
+// Call PreUpdate, Update and PostUpdate on all modules
+update_status Application::Update()
+{
+	update_status ret = UPDATE_CONTINUE;
+	PrepareUpdate();
 	
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->PreUpdate(dt);
+	}
+
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->Update(dt);
+	}
+
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->PostUpdate(dt);
+	}
+
 	FinishUpdate();
 	return ret;
 }
@@ -201,20 +201,18 @@ void Application::ShowApplicationConfig()
 {
 	if(ImGui::CollapsingHeader("Application"))
 	{
-		char title[30];
+		static char name_tmp[100] = TITLE;
+		if (ImGui::InputText("App Name", name_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
+			App->SetAppName(name_tmp);
 
-		ImGui::Text("App name: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetAppName());
+		static char org_tmp[100] = ORGANISATION;
+		if (ImGui::InputText("Organization", org_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
+			App->SetOrgName(org_tmp);
 
-		ImGui::Text("Org name: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetOrgName());
+		static char vs_tmp[20] = VERSION;
+		if (ImGui::InputText("Version", vs_tmp, 20, ImGuiInputTextFlags_AutoSelectAll))
+			App->SetVersion(vs_tmp);
 
-		ImGui::Text("Version: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetVersion());
-		ImGui::Separator();
 
 		if (ImGui::Checkbox("Vsync", &vsync)) {
 			if (vsync) {
@@ -224,7 +222,7 @@ void Application::ShowApplicationConfig()
 				SDL_GL_SetSwapInterval(0);
 			}
 		}
-
+		char title[30];
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		sprintf_s(title, 30, "Frames per second: %.1f", fps_buffer[fps_buffer.size()-1]);
 
@@ -245,7 +243,7 @@ void Application::ShowApplicationConfig()
 			}
 		}
 		mean_fps /= count_fps;
-
+		
 		ImGui::PlotHistogram("", &fps_buffer[0], FPSBUFFER_SIZE, 0, title, 0.0f, (highest_fps- mean_fps)+mean_fps+(highest_fps*0.3f), ImVec2(size.x, 100));
 
 		sprintf_s(title, 30, "ms: %.1f", ms_buffer[ms_buffer.size() - 1]);
@@ -372,19 +370,25 @@ bool Application::SaveConfig()
 	bool ret = true;
 
 	FILE* fp = fopen("config.json", "wb"); //writebinary
-	char writeBuffer[65536];
 	Document doc;
-	char readBuffer[65536];
-	doc.Parse(readBuffer);
+	char writeBuffer[65536];
+	doc.Parse(writeBuffer);
 	doc.SetObject();
-	FileWriteStream os(fp, readBuffer, sizeof(readBuffer));
+	FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
 	Document::AllocatorType& alloc = doc.GetAllocator();
 
 	Value app(kObjectType);
+	Value name_tmp;
+	name_tmp.SetString(app_name.c_str(), alloc);
+	Value org_tmp;
+	org_tmp.SetString(org_name.c_str(), alloc);
+	Value version_tmp;
+	version_tmp.SetString(app_version.c_str(), alloc);
 
-	app.AddMember("app_name", TITLE, alloc);
-	app.AddMember("organization", ORGANISATION, alloc);
+	app.AddMember("app_name", name_tmp , alloc);
+	app.AddMember("organization", org_tmp, alloc);
+	app.AddMember("version", version_tmp, alloc);
 	doc.AddMember("App", app, alloc);
 
 	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)

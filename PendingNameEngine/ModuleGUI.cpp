@@ -48,6 +48,8 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
+	if(show_save_popup)ShowSavePopUp();
+
 	if (want_to_quit)
 		return UPDATE_STOP;
 
@@ -91,7 +93,7 @@ void ModuleGUI::CreateMainMenu()
 				App->want_to_save_config = true;
 			}
 			if (ImGui::MenuItem("Quit")) {
-				want_to_quit = true;
+				show_save_popup = true;
 			}
 			ImGui::EndMenu();
 
@@ -360,6 +362,31 @@ void ModuleGUI::ShowGeometryCreator()
 		}
 	}
 	ImGui::End();
+}
+
+void ModuleGUI::ShowSavePopUp()
+{
+	ImGui::Begin("Exit?");
+	ImGui::Text("Save changes before exitting?");
+	if (ImGui::Button("Save", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+		App->want_to_save_config = true;
+		want_to_quit = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Dont Save", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+		want_to_quit = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancel", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+	}
+	ImGui::End();
+	
 }
 
 
