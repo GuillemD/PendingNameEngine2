@@ -16,6 +16,8 @@
 #include "rapidjson\filereadstream.h"
 #include "rapidjson\filewritestream.h"
 
+#include "DeviceId/DeviceId.h"
+
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
 
@@ -55,10 +57,14 @@ private:
 
 	bool vsync = VSYNC;
 
-	float total_vram = .0f;
+	float budget_vram = .0f;
 	float current_vram = .0f;
 	float available_vram = .0f;
 	float reserved_vram = .0f;
+
+	uint gpu_vendor = 0;
+	uint gpu_device = 0;
+	char* gpu_brand = "";
 	
 
 public:
@@ -82,8 +88,6 @@ public:
 	void ShowApplicationConfig();
 	void ShowHardwareConfig();
 
-	void VRAMUsage();
-
 	bool want_to_save_config = false;
 
 private:
@@ -93,6 +97,8 @@ private:
 	void FinishUpdate();
 
 	bool SaveConfig();
+	void VRAMUsage();
+	char* ConvertWStrToChar(std::wstring& wStr) const;
 
 };
 

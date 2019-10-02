@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "DeviceId/DeviceId.h"
+
 
 
 Application::Application()
@@ -285,7 +285,7 @@ void Application::ShowHardwareConfig()
 
 		ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetCPUCount());
 		ImGui::Text("Cache: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d kb", SDL_GetCPUCacheLineSize());
-		ImGui::Text("RAM: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetSystemRAM());
+		ImGui::Text("RAM: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d Gb", SDL_GetSystemRAM());
 		ImGui::Separator();
 		ImGui::Columns(3, "caps");
 		ImGui::Text("Caps: ");
@@ -309,43 +309,62 @@ void Application::ShowHardwareConfig()
 
 		VRAMUsage();
 		
-		//TODO
-		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
-		
 	}
 }
 
 void Application::VRAMUsage() 
 {
 	
-	uint64_t t_vram, c_vram, a_vram, r_vram;
+	uint64_t b_vram, c_vram, a_vram, r_vram;
 
-	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &t_vram, &c_vram, &a_vram, &r_vram))
+	uint vendor, device;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor, &device, &brand, &b_vram, &c_vram, &a_vram, &r_vram))
 	{
-		total_vram = (float)t_vram / (1024.0f * 1024.0f);
+		gpu_vendor = vendor;
+		gpu_device = device;
+		gpu_brand = ConvertWStrToChar(brand);
+		budget_vram = (float)b_vram / (1024.0f * 1024.0f);
 		current_vram = (float)c_vram / (1024.0f * 1024.0f);
 		available_vram = (float)a_vram / (1024.0f * 1024.0f);
 		reserved_vram = (float)r_vram / (1024.0f * 1024.0f);
 	}
+	ImGui::Text("GPU: Vendor"); ImGui::SameLine(); 
+	ImGui::TextColored(YELLOW, "%u", gpu_vendor); ImGui::SameLine(); 
+	ImGui::Text("Device"); ImGui::SameLine(); 
+	ImGui::TextColored(YELLOW, "%u", gpu_device);
 
-	ImGui::Text("VRAM");
+	ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", gpu_brand );
+
 	ImGui::Separator();
-	ImGui::Text("Total:");
+	ImGui::Text("Budget VRAM:");
 	ImGui::SameLine();
-	ImGui::TextColored(YELLOW, "%.2f Mb", total_vram);
-	ImGui::SameLine();	
-	ImGui::Text("Current:");
+	ImGui::TextColored(YELLOW, "%.2f Mb", budget_vram);
+	
+	ImGui::Text("Current VRAM:");
 	ImGui::SameLine();
 	ImGui::TextColored(YELLOW, "%.2f Mb", current_vram);
-	ImGui::SameLine();
-	ImGui::Text("Available:");
+	
+	ImGui::Text("Available VRAM:");
 	ImGui::SameLine();
 	ImGui::TextColored(YELLOW, "%.2f Mb", available_vram);
-	ImGui::SameLine();
-	ImGui::Text("Reserved:");
+	
+	ImGui::Text("Reserved VRAM:");
 	ImGui::SameLine();
 	ImGui::TextColored(YELLOW, "%.2f Mb", reserved_vram);
 
+}
+
+char* Application::ConvertWStrToChar(std::wstring & wStr) const
+{
+	const wchar_t *str = wStr.c_str();
+	size_t size = wcslen(str) * 2 + 2;
+	char * dest = new char[size];
+	size_t c_size;
+	wcstombs_s(&c_size, dest, size, str, size);
+
+	return dest;
 }
 
 bool Application::SaveConfig()
