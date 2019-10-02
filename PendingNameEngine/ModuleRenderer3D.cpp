@@ -71,7 +71,9 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 		else {
-			CONSOLELOG("Open GL initialized correctly. :) Version: %s .", glGetString(GL_VERSION));
+			CONSOLELOG("Open GL initialized correctly. :) \n Version: %s \n Vendor: %s .\n Renderer: %s .\n GLSL: %s .", glGetString(GL_VERSION),
+			glGetString(GL_VENDOR),glGetString(GL_RENDERER), glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 		}
 
 		//Initialize Modelview Matrix
