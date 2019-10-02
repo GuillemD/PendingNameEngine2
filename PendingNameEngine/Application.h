@@ -55,6 +55,10 @@ private:
 
 	bool vsync = VSYNC;
 
+	float total_vram = .0f;
+	float current_vram = .0f;
+	float available_vram = .0f;
+	float reserved_vram = .0f;
 	
 
 public:
@@ -77,6 +81,8 @@ public:
 
 	void ShowApplicationConfig();
 	void ShowHardwareConfig();
+
+	void VRAMUsage();
 
 	bool want_to_save_config = false;
 

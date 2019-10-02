@@ -78,6 +78,8 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="DeviceId\DeviceId.h" />
+    <ClInclude Include="DeviceId\dxgi1_4.h" />
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
@@ -256,6 +258,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="DeviceId\DeviceId.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
@@ -314,6 +317,7 @@
     <Library Include="SDL\libx86\SDL2main.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DeviceId\readme.md" />
     <None Include="Game\config.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />

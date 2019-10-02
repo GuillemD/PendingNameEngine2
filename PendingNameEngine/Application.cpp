@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "DeviceId/DeviceId.h"
 
 
 Application::Application()
@@ -270,6 +271,7 @@ void Application::ShowApplicationConfig()
 	}
 	//TODO
 	//ADD memory consumption graphics and info
+
 }
 
 void Application::ShowHardwareConfig()
@@ -304,11 +306,46 @@ void Application::ShowHardwareConfig()
 
 		ImGui::Columns(1);
 		ImGui::Separator();
-	
+
+		VRAMUsage();
+		
 		//TODO
 		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
-		//ADD VRAM usage as a bonus
+		
 	}
+}
+
+void Application::VRAMUsage() 
+{
+	
+	uint64_t t_vram, c_vram, a_vram, r_vram;
+
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &t_vram, &c_vram, &a_vram, &r_vram))
+	{
+		total_vram = (float)t_vram / (1024.0f * 1024.0f);
+		current_vram = (float)c_vram / (1024.0f * 1024.0f);
+		available_vram = (float)a_vram / (1024.0f * 1024.0f);
+		reserved_vram = (float)r_vram / (1024.0f * 1024.0f);
+	}
+
+	ImGui::Text("VRAM");
+	ImGui::Separator();
+	ImGui::Text("Total:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", total_vram);
+	ImGui::SameLine();	
+	ImGui::Text("Current:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", current_vram);
+	ImGui::SameLine();
+	ImGui::Text("Available:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", available_vram);
+	ImGui::SameLine();
+	ImGui::Text("Reserved:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", reserved_vram);
+
 }
 
 bool Application::SaveConfig()

@@ -161,6 +161,9 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceId\DeviceId.cpp">
+      <Filter>External Libraries\DeviceId</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -689,6 +692,12 @@
     <ClInclude Include="rapidjson\writer.h">
       <Filter>External Libraries\rapidjson</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceId\DeviceId.h">
+      <Filter>External Libraries\DeviceId</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceId\dxgi1_4.h">
+      <Filter>External Libraries\DeviceId</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -745,6 +754,9 @@
     <Filter Include="config">
       <UniqueIdentifier>{839ac164-d99f-4e62-a223-6cda2bb12379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External Libraries\DeviceId">
+      <UniqueIdentifier>{fa402334-5446-43fe-8a7b-077168467342}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\libx86\SDL2.lib">
@@ -766,6 +778,9 @@
     </None>
     <None Include="Game\config.json">
       <Filter>config</Filter>
+    </None>
+    <None Include="DeviceId\readme.md">
+      <Filter>External Libraries\DeviceId</Filter>
     </None>
   </ItemGroup>
 </Project>
