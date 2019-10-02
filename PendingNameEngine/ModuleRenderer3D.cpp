@@ -11,7 +11,7 @@
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib,"glew-2.1.0/lib/Release/Win32/glew32.lib") /*link glew lib */
+#pragma comment (lib,"glew-2.1.0/glewlib/Release/Win32/glew32.lib") /*link glew lib */
 
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled)
@@ -69,6 +69,9 @@ bool ModuleRenderer3D::Init()
 		{
 			CONSOLELOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
+		}
+		else {
+			CONSOLELOG("Open GL initialized correctly. :) Version: %s .", glGetString(GL_VERSION));
 		}
 
 		//Initialize Modelview Matrix
