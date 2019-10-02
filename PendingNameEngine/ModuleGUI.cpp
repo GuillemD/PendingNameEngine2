@@ -86,7 +86,7 @@ void ModuleGUI::CreateMainMenu()
 
 			if (ImGui::MenuItem("Load Config"))
 			{
-
+				App->want_to_load_config = true;
 			}
 			if (ImGui::MenuItem("Save Config"))
 			{

@@ -89,6 +89,7 @@ public:
 	void ShowHardwareConfig();
 
 	bool want_to_save_config = false;
+	bool want_to_load_config = false;
 
 private:
 
@@ -97,6 +98,7 @@ private:
 	void FinishUpdate();
 
 	bool SaveConfig();
+	bool LoadConfig();
 	void VRAMUsage();
 	char* ConvertWStrToChar(std::wstring& wStr) const;
 

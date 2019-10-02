@@ -44,6 +44,10 @@ bool Application::Init()
 	SetOrgName(ORGANISATION);
 	SetVersion(VERSION);
 
+	LoadConfig();
+
+	SDL_SetWindowTitle(App->window->window, app_name.c_str()); //Set app name as window title
+
 	//Resetting FPS BUFFER
 	fps_buffer.resize(FPSBUFFER_SIZE);
 
@@ -123,6 +127,11 @@ void Application::FinishUpdate()
 		SaveConfig();
 		want_to_save_config = false;
 	}
+	if (want_to_load_config)
+	{
+		LoadConfig();
+		want_to_load_config = false;
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -201,15 +210,22 @@ void Application::ShowApplicationConfig()
 {
 	if(ImGui::CollapsingHeader("Application"))
 	{
-		static char name_tmp[100] = TITLE;
+		static char name_tmp[100];
+		strcpy_s(name_tmp, 100, GetAppName());
 		if (ImGui::InputText("App Name", name_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
+		{
 			App->SetAppName(name_tmp);
+			SDL_SetWindowTitle(App->window->window, app_name.c_str());
+		}
+			
 
-		static char org_tmp[100] = ORGANISATION;
+		static char org_tmp[100];
+		strcpy_s(org_tmp, 100, GetOrgName());
 		if (ImGui::InputText("Organization", org_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
 			App->SetOrgName(org_tmp);
 
-		static char vs_tmp[20] = VERSION;
+		static char vs_tmp[20];
+		strcpy_s(vs_tmp, 20, GetVersion());
 		if (ImGui::InputText("Version", vs_tmp, 20, ImGuiInputTextFlags_AutoSelectAll))
 			App->SetVersion(vs_tmp);
 
@@ -400,7 +416,36 @@ bool Application::SaveConfig()
 	doc.Accept(writer);
 	fclose(fp);
 
-	CONSOLELOG("App config saved correctly!");
+	CONSOLELOG("Configuration saved correctly!");
+
+	return ret;
+}
+
+bool Application::LoadConfig()
+{
+	bool ret = true;
+	FILE* fp = fopen("config.json", "rb"); // readbinary
+	Document doc;
+	char readBuffer[65536];
+	FileReadStream os(fp, readBuffer, sizeof(readBuffer));
+
+	
+	doc.ParseStream(os);
+	doc.IsObject();
+	
+	
+	SetAppName(doc["App"]["app_name"].GetString());
+	SetOrgName(doc["App"]["organization"].GetString());
+	SetVersion(doc["App"]["version"].GetString());
+
+
+	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)
+	{
+		//ret = (*it)->Load(&doc); TODO
+	}
+	
+
+	fclose(fp);
 
 	return ret;
 }
