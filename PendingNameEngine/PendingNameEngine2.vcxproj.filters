@@ -635,6 +635,18 @@
     <ClInclude Include="Parson\parson.h">
       <Filter>External Libraries\Parson</Filter>
     </ClInclude>
+    <ClInclude Include="glew-2.1.0\include\GL\eglew.h">
+      <Filter>External Libraries\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew-2.1.0\include\GL\glew.h">
+      <Filter>External Libraries\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew-2.1.0\include\GL\glxew.h">
+      <Filter>External Libraries\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew-2.1.0\include\GL\wglew.h">
+      <Filter>External Libraries\Glew</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -687,6 +699,9 @@
     </Filter>
     <Filter Include="External Libraries\Parson">
       <UniqueIdentifier>{6bec7ffd-d854-42b7-a27e-413b2982051b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\Glew">
+      <UniqueIdentifier>{5f380787-3ccf-404d-8591-167431bbf33d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
