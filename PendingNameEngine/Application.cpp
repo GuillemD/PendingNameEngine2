@@ -1,6 +1,6 @@
 #include "Application.h"
 
-
+#include "mmgr/mmgr.h"
 
 Application::Application()
 {
@@ -282,10 +282,28 @@ void Application::ShowApplicationConfig()
 		}
 		mean_fps /= count_ms;
 		ImGui::PlotHistogram("", &ms_buffer[0], MSBUFFER_SIZE, 0, title, 0.0f, (highest_ms - mean_ms) + mean_ms + (highest_ms*0.3f), ImVec2(size.x, 100));
-	}
-	//TODO
-	//ADD memory consumption graphics and info
 
+		//memory
+		sMStats st = m_getMemoryStatistics();
+		static int speed = 0;
+		static std::vector<float> mem(100);
+		if (++speed > 20)
+		{
+			speed = 0;
+			if (mem.size() == 100)
+			{
+				for (uint i = 0; i < 100 - 1; ++i)
+					mem[i] = mem[i + 1];
+
+				mem[100 - 1] = (float)st.totalReportedMemory;
+			}
+			else
+				mem.push_back((float)st.totalReportedMemory);
+		}
+
+		ImGui::PlotHistogram("", &mem[0], mem.size(), 0, "Memory consumption", 0.0f, (float)st.peakReportedMemory * 1.2f, ImVec2(size.x,100));
+	}
+	
 }
 
 void Application::ShowHardwareConfig()
