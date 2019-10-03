@@ -285,11 +285,11 @@ void Application::ShowApplicationConfig()
 
 		//memory
 		sMStats st = m_getMemoryStatistics();
-		static int speed = 0;
+		static int tick = 0;
 		static std::vector<float> mem(100);
-		if (++speed > 20)
+		if (++tick > 10)
 		{
-			speed = 0;
+			tick = 0;
 			if (mem.size() == 100)
 			{
 				for (uint i = 0; i < 100 - 1; ++i)
@@ -302,6 +302,16 @@ void Application::ShowApplicationConfig()
 		}
 
 		ImGui::PlotHistogram("", &mem[0], mem.size(), 0, "Memory consumption", 0.0f, (float)st.peakReportedMemory * 1.2f, ImVec2(size.x,100));
+
+		ImGui::Text("Total Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalActualMemory);
+		ImGui::Text("Peak Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.peakReportedMemory);
+		ImGui::Text("Peak Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, " %u", st.peakActualMemory);
+		ImGui::Text("Accumulated Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedActualMemory);
+		ImGui::Text("Total Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.peakAllocUnitCount);
+		ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedAllocUnitCount);
 	}
 	
 }

@@ -161,11 +161,11 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceId\DeviceId.cpp">
-      <Filter>External Libraries\gpudetect</Filter>
-    </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>External Libraries\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>External Libraries\gpudetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -695,17 +695,17 @@
     <ClInclude Include="rapidjson\writer.h">
       <Filter>External Libraries\rapidjson</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceId\DeviceId.h">
-      <Filter>External Libraries\gpudetect</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceId\dxgi1_4.h">
-      <Filter>External Libraries\gpudetect</Filter>
-    </ClInclude>
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>External Libraries\mmgr</Filter>
     </ClInclude>
     <ClInclude Include="mmgr\nommgr.h">
       <Filter>External Libraries\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>External Libraries\gpudetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>External Libraries\gpudetect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -790,9 +790,6 @@
     </None>
     <None Include="Game\config.json">
       <Filter>config</Filter>
-    </None>
-    <None Include="DeviceId\readme.md">
-      <Filter>External Libraries\gpudetect</Filter>
     </None>
   </ItemGroup>
 </Project>

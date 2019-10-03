@@ -16,7 +16,7 @@
 #include "rapidjson\filereadstream.h"
 #include "rapidjson\filewritestream.h"
 
-#include "DeviceId/DeviceId.h"
+#include "gpudetect/DeviceId.h"
 
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
