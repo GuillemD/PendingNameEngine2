@@ -164,6 +164,9 @@
     <ClCompile Include="DeviceId\DeviceId.cpp">
       <Filter>External Libraries\gpudetect</Filter>
     </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -698,6 +701,12 @@
     <ClInclude Include="DeviceId\dxgi1_4.h">
       <Filter>External Libraries\gpudetect</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -756,6 +765,9 @@
     </Filter>
     <Filter Include="External Libraries\gpudetect">
       <UniqueIdentifier>{fa402334-5446-43fe-8a7b-077168467342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\mmgr">
+      <UniqueIdentifier>{f2409df0-9936-413e-836e-ce4f6840c77d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
