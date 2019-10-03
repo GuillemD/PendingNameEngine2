@@ -56,11 +56,6 @@ enum update_status
 // Configuration -----------
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 950
-#define SCREEN_SIZE 1
-#define WIN_FULLSCREEN false
-#define WIN_RESIZABLE true
-#define WIN_BORDERLESS false
-#define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "PendingNameEngine2"
 #define ORGANISATION "CITM (UPC)"

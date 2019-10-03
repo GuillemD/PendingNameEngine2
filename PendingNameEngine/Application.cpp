@@ -46,7 +46,7 @@ bool Application::Init()
 
 	LoadConfig();
 
-	SDL_SetWindowTitle(App->window->window, app_name.c_str()); //Set app name as window title
+	App->window->SetTitle(app_name.c_str()); //Set app name as window title
 
 	//Resetting FPS BUFFER
 	fps_buffer.resize(FPSBUFFER_SIZE);
@@ -215,7 +215,7 @@ void Application::ShowApplicationConfig()
 		if (ImGui::InputText("App Name", name_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
 		{
 			App->SetAppName(name_tmp);
-			SDL_SetWindowTitle(App->window->window, app_name.c_str());
+			App->window->SetTitle(app_name.c_str());
 		}
 			
 

@@ -328,6 +328,11 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("%d.%d.%d", RJSON_MAJOR_COMPILED,RJSON_MINOR_COMPILED, RJSON_PATCH_COMPILED);
 		ImGui::NextColumn();
 
+		//gpudetect
+		
+
+		//mmgr
+
 		ImGui::Columns(1);
 		ImGui::Separator();
 
