@@ -165,7 +165,19 @@ void ModuleWindow::ShowWindowConfig()
 		}
 		ImGui::NextColumn();
 
-		//Desplegable amb default screen resolutions
+		if (ImGui::Button("1280x1024"))
+		{
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("1366x768"))
+		{
+
+		}
+		if (ImGui::Button("1440x900"))
+		{
+
+		}
 
 		ImGui::Columns(1);
 		ImGui::Separator();

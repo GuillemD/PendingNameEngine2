@@ -329,10 +329,16 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//gpudetect
-		
+		if (ImGui::SmallButton("gpudetect"))
+		{
+			App->OpenBrowser("https://github.com/GameTechDev/gpudetect");
+		}
 
 		//mmgr
-
+		if (ImGui::SmallButton("mmgr"))
+		{
+			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
+		}
 		ImGui::Columns(1);
 		ImGui::Separator();
 
