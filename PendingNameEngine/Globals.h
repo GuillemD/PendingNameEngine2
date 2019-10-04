@@ -54,22 +54,23 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_WIDTH 1100
-#define SCREEN_HEIGHT 800
-#define SCREEN_SIZE 1
-#define WIN_FULLSCREEN false
-#define WIN_RESIZABLE true
-#define WIN_BORDERLESS false
-#define WIN_FULLSCREEN_DESKTOP false
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 950
 #define VSYNC true
-#define TITLE "PendingName Engine 2"
+#define TITLE "PendingNameEngine2"
 #define ORGANISATION "CITM (UPC)"
 #define VERSION "0.1.0"
 
+//ImGui
 #define BLUE ImVec4(0,0,1,1)
 #define RED ImVec4(1,0,0,1)
 #define GREEN ImVec4(0,1,0,1)
 #define WHITE ImVec4(1,1,1,1)
 #define YELLOW ImVec4(1,1,0,1)
+
+//rapidjson
+#define RJSON_MAJOR_COMPILED 1
+#define RJSON_MINOR_COMPILED 1
+#define RJSON_PATCH_COMPILED 0
 
 #endif //_GLOBALS_H_

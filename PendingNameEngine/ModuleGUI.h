@@ -24,6 +24,7 @@ public:
 	~ModuleGUI();
 
 	bool Init();
+	bool Start();
 
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
@@ -44,6 +45,7 @@ private:
 	void ShowAbout();
 	void ShowConfig();
 	void ShowGeometryCreator();
+	void ShowSavePopUp();
 
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
@@ -66,6 +68,7 @@ public:
 private:
 	//Variables
 	bool want_to_quit = false;
+	bool show_save_popup = false;
 	bool show_demo_window = false;
 	bool show_rng = false;
 	bool show_about = false;

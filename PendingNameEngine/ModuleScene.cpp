@@ -4,6 +4,7 @@
 
 ModuleScene::ModuleScene()
 {
+	name = "Scene";
 }
 
 ModuleScene::ModuleScene(bool start_enabled)

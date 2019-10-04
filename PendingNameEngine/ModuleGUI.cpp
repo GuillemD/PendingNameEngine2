@@ -7,6 +7,7 @@
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
+	name = "GUI";
 }
 
 ModuleGUI::~ModuleGUI()
@@ -17,18 +18,24 @@ bool ModuleGUI::Init()
 {
 	bool ret = true;
 
-	ImGui_ImplSdl_Init(App->window->window);
 
 	//Panels
 	console = new PanelConsole("Console");
 	config = new PanelConfig("Configuration");
-	
-	
+
+
+	return ret;
+}
+
+bool ModuleGUI::Start()
+{
+	bool ret = true;
+
+	ImGui_ImplSdl_Init(App->window->window);
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
 	config->SetActive();
-
 	return ret;
 }
 
@@ -41,6 +48,8 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
+	if(show_save_popup)ShowSavePopUp();
+
 	if (want_to_quit)
 		return UPDATE_STOP;
 
@@ -75,8 +84,16 @@ void ModuleGUI::CreateMainMenu()
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File")) {
 
+			if (ImGui::MenuItem("Load Config"))
+			{
+				App->want_to_load_config = true;
+			}
+			if (ImGui::MenuItem("Save Config"))
+			{
+				App->want_to_save_config = true;
+			}
 			if (ImGui::MenuItem("Quit")) {
-				want_to_quit = true;
+				show_save_popup = true;
 			}
 			ImGui::EndMenu();
 
@@ -168,11 +185,7 @@ void ModuleGUI::CreateMainMenu()
 
 void ModuleGUI::ShowDemoWindow()
 {
-
-	
-	
 	ImGui::ShowTestWindow(&show_demo_window);
-	
 }
 
 
@@ -307,15 +320,26 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("Minimal C Edition");
 		ImGui::NextColumn();
 
-		//Parson (JSON)
-		if (ImGui::SmallButton("Parson"))
+		//rapidjson (JSON parser)
+		if (ImGui::SmallButton("rapidjson"))
 		{
-			App->OpenBrowser("http://kgabis.github.io/parson/");
+			App->OpenBrowser("http://rapidjson.org/");
 		}
 		ImGui::NextColumn();
-		ImGui::Text("");
+		ImGui::Text("%d.%d.%d", RJSON_MAJOR_COMPILED,RJSON_MINOR_COMPILED, RJSON_PATCH_COMPILED);
 		ImGui::NextColumn();
 
+		//gpudetect
+		if (ImGui::SmallButton("gpudetect"))
+		{
+			App->OpenBrowser("https://github.com/GameTechDev/gpudetect");
+		}
+
+		//mmgr
+		if (ImGui::SmallButton("mmgr"))
+		{
+			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
+		}
 		ImGui::Columns(1);
 		ImGui::Separator();
 
@@ -350,6 +374,31 @@ void ModuleGUI::ShowGeometryCreator()
 		}
 	}
 	ImGui::End();
+}
+
+void ModuleGUI::ShowSavePopUp()
+{
+	ImGui::Begin("Exit?");
+	ImGui::Text("Save changes before exitting?");
+	if (ImGui::Button("Save", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+		App->want_to_save_config = true;
+		want_to_quit = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Dont Save", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+		want_to_quit = true;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancel", ImVec2(120, 0)))
+	{
+		show_save_popup = false;
+	}
+	ImGui::End();
+	
 }
 
 

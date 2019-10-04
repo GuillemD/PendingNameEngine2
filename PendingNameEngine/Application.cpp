@@ -1,5 +1,7 @@
 #include "Application.h"
 
+#include "mmgr/mmgr.h"
+
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -42,6 +44,10 @@ bool Application::Init()
 	SetOrgName(ORGANISATION);
 	SetVersion(VERSION);
 
+	LoadConfig();
+
+	App->window->SetTitle(app_name.c_str()); //Set app name as window title
+
 	//Resetting FPS BUFFER
 	fps_buffer.resize(FPSBUFFER_SIZE);
 
@@ -78,38 +84,12 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-}
-
-// Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::Update()
-{
-	update_status ret = UPDATE_CONTINUE;
-	PrepareUpdate();
-	
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->PreUpdate(dt);
-	}
-
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->Update(dt);
-	}
-
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
-	{
-		if (ret == UPDATE_CONTINUE)
-			ret = (*item)->PostUpdate(dt);
-	}
-	
 	//APPLICATION CONFIGURATION WINDOW
 	++this_sec_frame_count;// We add 1 each time we update, 1 time per frame
 	++total_frame_count;//This one is used for calculating our average fps, so we add 1 each time also.
 	//its important to do this before, otherwise we would show 1 less fps.
 
-	
+
 
 	if (last_sec_frame_timer.Read() >= 1000) { // Basically if a whole 1000ms(1s) has passed restart the frame timer.
 		last_sec_frame_timer.Start();
@@ -141,7 +121,43 @@ update_status Application::Update()
 	last_sec_ms = ms_timer.Read();
 	ms_buffer.push_back((float)last_sec_ms);
 	if (last_sec_ms) fps_buffer.push_back((float)(1000 / last_sec_ms));
+
+	if (want_to_save_config)
+	{
+		SaveConfig();
+		want_to_save_config = false;
+	}
+	if (want_to_load_config)
+	{
+		LoadConfig();
+		want_to_load_config = false;
+	}
+}
+
+// Call PreUpdate, Update and PostUpdate on all modules
+update_status Application::Update()
+{
+	update_status ret = UPDATE_CONTINUE;
+	PrepareUpdate();
 	
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->PreUpdate(dt);
+	}
+
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->Update(dt);
+	}
+
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		if (ret == UPDATE_CONTINUE)
+			ret = (*item)->PostUpdate(dt);
+	}
+
 	FinishUpdate();
 	return ret;
 }
@@ -194,20 +210,25 @@ void Application::ShowApplicationConfig()
 {
 	if(ImGui::CollapsingHeader("Application"))
 	{
-		char title[30];
+		static char name_tmp[100];
+		strcpy_s(name_tmp, 100, GetAppName());
+		if (ImGui::InputText("App Name", name_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
+		{
+			App->SetAppName(name_tmp);
+			App->window->SetTitle(app_name.c_str());
+		}
+			
 
-		ImGui::Text("App name: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetAppName());
+		static char org_tmp[100];
+		strcpy_s(org_tmp, 100, GetOrgName());
+		if (ImGui::InputText("Organization", org_tmp, 100, ImGuiInputTextFlags_AutoSelectAll))
+			App->SetOrgName(org_tmp);
 
-		ImGui::Text("Org name: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetOrgName());
+		static char vs_tmp[20];
+		strcpy_s(vs_tmp, 20, GetVersion());
+		if (ImGui::InputText("Version", vs_tmp, 20, ImGuiInputTextFlags_AutoSelectAll))
+			App->SetVersion(vs_tmp);
 
-		ImGui::Text("Version: ");
-		ImGui::SameLine();
-		ImGui::TextColored(GREEN, "%s", App->GetVersion());
-		ImGui::Separator();
 
 		if (ImGui::Checkbox("Vsync", &vsync)) {
 			if (vsync) {
@@ -217,7 +238,7 @@ void Application::ShowApplicationConfig()
 				SDL_GL_SetSwapInterval(0);
 			}
 		}
-
+		char title[30];
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		sprintf_s(title, 30, "Frames per second: %.1f", fps_buffer[fps_buffer.size()-1]);
 
@@ -238,7 +259,7 @@ void Application::ShowApplicationConfig()
 			}
 		}
 		mean_fps /= count_fps;
-
+		
 		ImGui::PlotHistogram("", &fps_buffer[0], FPSBUFFER_SIZE, 0, title, 0.0f, (highest_fps- mean_fps)+mean_fps+(highest_fps*0.3f), ImVec2(size.x, 100));
 
 		sprintf_s(title, 30, "ms: %.1f", ms_buffer[ms_buffer.size() - 1]);
@@ -261,9 +282,38 @@ void Application::ShowApplicationConfig()
 		}
 		mean_fps /= count_ms;
 		ImGui::PlotHistogram("", &ms_buffer[0], MSBUFFER_SIZE, 0, title, 0.0f, (highest_ms - mean_ms) + mean_ms + (highest_ms*0.3f), ImVec2(size.x, 100));
+
+		//memory
+		sMStats st = m_getMemoryStatistics();
+		static int tick = 0;
+		static std::vector<float> mem(100);
+		if (++tick > 10)
+		{
+			tick = 0;
+			if (mem.size() == 100)
+			{
+				for (uint i = 0; i < 100 - 1; ++i)
+					mem[i] = mem[i + 1];
+
+				mem[100 - 1] = (float)st.totalReportedMemory;
+			}
+			else
+				mem.push_back((float)st.totalReportedMemory);
+		}
+
+		ImGui::PlotHistogram("", &mem[0], mem.size(), 0, "Memory consumption", 0.0f, (float)st.peakReportedMemory * 1.2f, ImVec2(size.x,100));
+
+		ImGui::Text("Total Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalReportedMemory);
+		ImGui::Text("Total Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalActualMemory);
+		ImGui::Text("Peak Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.peakReportedMemory);
+		ImGui::Text("Peak Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, " %u", st.peakActualMemory);
+		ImGui::Text("Accumulated Reported Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedReportedMemory);
+		ImGui::Text("Accumulated Actual Memory: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedActualMemory);
+		ImGui::Text("Total Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.totalAllocUnitCount);
+		ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.peakAllocUnitCount);
+		ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%u", st.accumulatedAllocUnitCount);
 	}
-	//TODO
-	//ADD memory consumption graphics and info
+	
 }
 
 void Application::ShowHardwareConfig()
@@ -277,7 +327,7 @@ void Application::ShowHardwareConfig()
 
 		ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetCPUCount());
 		ImGui::Text("Cache: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d kb", SDL_GetCPUCacheLineSize());
-		ImGui::Text("RAM: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", SDL_GetSystemRAM());
+		ImGui::Text("RAM: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d Gb", SDL_GetSystemRAM());
 		ImGui::Separator();
 		ImGui::Columns(3, "caps");
 		ImGui::Text("Caps: ");
@@ -298,10 +348,133 @@ void Application::ShowHardwareConfig()
 
 		ImGui::Columns(1);
 		ImGui::Separator();
-	
-		//TODO
-		//ADD GRAPHICS CARD MODEL AND VENDOR WHEN GLEW IS INCLUDED
-		//ADD VRAM usage as a bonus
+
+		VRAMUsage();
+		
 	}
+}
+
+void Application::VRAMUsage() 
+{
+	
+	uint64_t b_vram, c_vram, a_vram, r_vram;
+
+	uint vendor, device;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor, &device, &brand, &b_vram, &c_vram, &a_vram, &r_vram))
+	{
+		gpu_vendor = vendor;
+		gpu_device = device;
+		gpu_brand = ConvertWStrToChar(brand);
+		budget_vram = (float)b_vram / (1024.0f * 1024.0f);
+		current_vram = (float)c_vram / (1024.0f * 1024.0f);
+		available_vram = (float)a_vram / (1024.0f * 1024.0f);
+		reserved_vram = (float)r_vram / (1024.0f * 1024.0f);
+	}
+	ImGui::Text("GPU: Vendor"); ImGui::SameLine(); 
+	ImGui::TextColored(YELLOW, "%u", gpu_vendor); ImGui::SameLine(); 
+	ImGui::Text("Device"); ImGui::SameLine(); 
+	ImGui::TextColored(YELLOW, "%u", gpu_device);
+
+	ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", gpu_brand );
+
+	ImGui::Separator();
+	ImGui::Text("Budget VRAM:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", budget_vram);
+	
+	ImGui::Text("Current VRAM:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", current_vram);
+	
+	ImGui::Text("Available VRAM:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", available_vram);
+	
+	ImGui::Text("Reserved VRAM:");
+	ImGui::SameLine();
+	ImGui::TextColored(YELLOW, "%.2f Mb", reserved_vram);
+
+}
+
+char* Application::ConvertWStrToChar(std::wstring & wStr) const
+{
+	const wchar_t *str = wStr.c_str();
+	size_t size = wcslen(str) * 2 + 2;
+	char * dest = new char[size];
+	size_t c_size;
+	wcstombs_s(&c_size, dest, size, str, size);
+
+	return dest;
+}
+
+bool Application::SaveConfig()
+{
+	bool ret = true;
+
+	FILE* fp = fopen("config.json", "wb"); //writebinary
+	Document doc;
+	char writeBuffer[65536];
+	doc.Parse(writeBuffer);
+	doc.SetObject();
+	FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+	Document::AllocatorType& alloc = doc.GetAllocator();
+
+	Value app(kObjectType);
+	Value name_tmp;
+	name_tmp.SetString(app_name.c_str(), alloc);
+	Value org_tmp;
+	org_tmp.SetString(org_name.c_str(), alloc);
+	Value version_tmp;
+	version_tmp.SetString(app_version.c_str(), alloc);
+
+	app.AddMember("app_name", name_tmp , alloc);
+	app.AddMember("organization", org_tmp, alloc);
+	app.AddMember("version", version_tmp, alloc);
+	doc.AddMember("App", app, alloc);
+
+	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)
+	{
+		ret = (*it)->Save(doc, os); 
+	}
+
+	Writer<FileWriteStream> writer(os);
+	doc.Accept(writer);
+	fclose(fp);
+
+	CONSOLELOG("Configuration saved correctly!");
+
+	return ret;
+}
+
+bool Application::LoadConfig()
+{
+	bool ret = true;
+	FILE* fp = fopen("config.json", "rb"); // readbinary
+	Document doc;
+	char readBuffer[65536];
+	FileReadStream os(fp, readBuffer, sizeof(readBuffer));
+
+	
+	doc.ParseStream(os);
+	doc.IsObject();
+	
+	
+	SetAppName(doc["App"]["app_name"].GetString());
+	SetOrgName(doc["App"]["organization"].GetString());
+	SetVersion(doc["App"]["version"].GetString());
+
+
+	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)
+	{
+		//ret = (*it)->Load(&doc); TODO
+	}
+	
+
+	fclose(fp);
+
+	return ret;
 }
 

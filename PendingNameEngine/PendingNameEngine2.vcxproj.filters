@@ -161,8 +161,11 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Parson\parson.c">
-      <Filter>External Libraries\Parson</Filter>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>External Libraries\gpudetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -632,8 +635,77 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Parson\parson.h">
-      <Filter>External Libraries\Parson</Filter>
+    <ClInclude Include="rapidjson\allocators.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\document.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodedstream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodings.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filereadstream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filewritestream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\fwd.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\istreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorybuffer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorystream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\ostreamwrapper.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\pointer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\prettywriter.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\rapidjson.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\reader.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\schema.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stream.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stringbuffer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\writer.h">
+      <Filter>External Libraries\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>External Libraries\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>External Libraries\gpudetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>External Libraries\gpudetect</Filter>
     </ClInclude>
     <ClInclude Include="glew-2.1.0\include\GL\eglew.h">
       <Filter>External Libraries\Glew</Filter>
@@ -697,8 +769,17 @@
     <Filter Include="Panels">
       <UniqueIdentifier>{788a595c-c99f-432a-940a-897a8224b1e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="External Libraries\Parson">
-      <UniqueIdentifier>{6bec7ffd-d854-42b7-a27e-413b2982051b}</UniqueIdentifier>
+    <Filter Include="External Libraries\rapidjson">
+      <UniqueIdentifier>{17755aa4-3776-42d4-bce2-2d6e02b464b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{839ac164-d99f-4e62-a223-6cda2bb12379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\gpudetect">
+      <UniqueIdentifier>{fa402334-5446-43fe-8a7b-077168467342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\mmgr">
+      <UniqueIdentifier>{f2409df0-9936-413e-836e-ce4f6840c77d}</UniqueIdentifier>
     </Filter>
     <Filter Include="External Libraries\Glew">
       <UniqueIdentifier>{5f380787-3ccf-404d-8591-167431bbf33d}</UniqueIdentifier>
@@ -721,6 +802,9 @@
     </None>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>External Libraries\MathGeoLib\Math</Filter>
+    </None>
+    <None Include="Game\config.json">
+      <Filter>config</Filter>
     </None>
   </ItemGroup>
 </Project>

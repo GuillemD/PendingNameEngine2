@@ -11,6 +11,13 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
 
+#include "rapidjson\rapidjson.h"
+#include "rapidjson\document.h"
+#include "rapidjson\filereadstream.h"
+#include "rapidjson\filewritestream.h"
+
+#include "gpudetect/DeviceId.h"
+
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
 
@@ -50,6 +57,16 @@ private:
 
 	bool vsync = VSYNC;
 
+	float budget_vram = .0f;
+	float current_vram = .0f;
+	float available_vram = .0f;
+	float reserved_vram = .0f;
+
+	uint gpu_vendor = 0;
+	uint gpu_device = 0;
+	char* gpu_brand = "";
+	
+
 public:
 
 	Application();
@@ -70,14 +87,21 @@ public:
 
 	void ShowApplicationConfig();
 	void ShowHardwareConfig();
-	
-	
+
+	bool want_to_save_config = false;
+	bool want_to_load_config = false;
 
 private:
 
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	bool SaveConfig();
+	bool LoadConfig();
+	void VRAMUsage();
+	char* ConvertWStrToChar(std::wstring& wStr) const;
+
 };
 
 #endif //_APPLICATION_H_

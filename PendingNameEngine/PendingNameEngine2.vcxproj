@@ -82,6 +82,10 @@
     <ClInclude Include="glew-2.1.0\include\GL\glew.h" />
     <ClInclude Include="glew-2.1.0\include\GL\glxew.h" />
     <ClInclude Include="glew-2.1.0\include\GL\wglew.h" />
+    <ClInclude Include="gpudetect\DeviceId.h" />
+    <ClInclude Include="gpudetect\dxgi1_4.h" />
+    <ClInclude Include="mmgr\mmgr.h" />
+    <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
@@ -162,10 +166,29 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Panel.h" />
-    <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="PCG_c_basic\pcg_basic.h" />
     <ClInclude Include="PCG_c_basic\pcg_variants.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="rapidjson\allocators.h" />
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="rapidjson\document.h" />
+    <ClInclude Include="rapidjson\encodedstream.h" />
+    <ClInclude Include="rapidjson\encodings.h" />
+    <ClInclude Include="rapidjson\filereadstream.h" />
+    <ClInclude Include="rapidjson\filewritestream.h" />
+    <ClInclude Include="rapidjson\fwd.h" />
+    <ClInclude Include="rapidjson\istreamwrapper.h" />
+    <ClInclude Include="rapidjson\memorybuffer.h" />
+    <ClInclude Include="rapidjson\memorystream.h" />
+    <ClInclude Include="rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="rapidjson\pointer.h" />
+    <ClInclude Include="rapidjson\prettywriter.h" />
+    <ClInclude Include="rapidjson\rapidjson.h" />
+    <ClInclude Include="rapidjson\reader.h" />
+    <ClInclude Include="rapidjson\schema.h" />
+    <ClInclude Include="rapidjson\stream.h" />
+    <ClInclude Include="rapidjson\stringbuffer.h" />
+    <ClInclude Include="rapidjson\writer.h" />
     <ClInclude Include="SDL\include\begin_code.h" />
     <ClInclude Include="SDL\include\close_code.h" />
     <ClInclude Include="SDL\include\SDL.h" />
@@ -241,6 +264,8 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="gpudetect\DeviceId.cpp" />
+    <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
@@ -290,7 +315,6 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Panel.cpp" />
-    <ClCompile Include="Parson\parson.c" />
     <ClCompile Include="PCG_c_basic\pcg_basic.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -300,6 +324,7 @@
     <Library Include="SDL\libx86\SDL2main.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Game\config.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />
     <None Include="MathGeoLib\include\Math\Matrix.inl" />
