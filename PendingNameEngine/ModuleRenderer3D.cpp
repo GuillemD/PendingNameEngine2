@@ -2,12 +2,10 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
-
 #include "glew-2.1.0/include/GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -37,6 +35,12 @@ bool ModuleRenderer3D::Init()
 	}
 	else {
 		CONSOLELOG("Created OpenGL Context");
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	}
 	
 	//initialize glew
@@ -48,7 +52,7 @@ bool ModuleRenderer3D::Init()
 		ret = false;
 	}
 	else {
-		CONSOLELOG("Glew initialized properly. :) Version: %s", glewGetString(GLEW_VERSION));
+		CONSOLELOG("Glew initialized properly. :) \n ~ Version: %s", glewGetString(GLEW_VERSION));
 	}
 
 
@@ -71,7 +75,7 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 		else {
-			CONSOLELOG("Open GL initialized correctly. :) \n Version: %s \n Vendor: %s .\n Renderer: %s .\n GLSL: %s .", glGetString(GL_VERSION),
+			CONSOLELOG("Open GL initialized correctly. :) \n ~ Version: %s \n ~ Vendor: %s .\n ~ Renderer: %s .\n ~ GLSL: %s .", glGetString(GL_VERSION),
 			glGetString(GL_VENDOR),glGetString(GL_RENDERER), glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		}
@@ -104,12 +108,20 @@ bool ModuleRenderer3D::Init()
 		}
 		
 
+
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glClearDepth(1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		EnableLights();
 
+		EnableLights();
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+
+		glEnable(GL_TEXTURE_2D);
 	}
 
 	// Projection matrix for
@@ -126,7 +138,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
-
+	
 	// light 0 on cam pos
 	/*lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
@@ -136,14 +148,72 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+//Update: Draw?
+
+
+
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	
+	//axis
+	{
+
+		glLineWidth(2.0f);
+
+		glBegin(GL_LINES);
+
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
+		glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
+
+		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+		glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+		glVertex3f(0.0f, 1.15f, 0.0f); glVertex3f(0.0f, 1.05f, 0.0f);
+
+		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
+		glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
+		glVertex3f(-0.05f, -0.1f, 1.05f); glVertex3f(0.05f, -0.1f, 1.05f);
+
+		glEnd();
+
+		glLineWidth(1.0f);
+	}
+
+	//Grid
+	{
+
+		glLineWidth(1.0f);
+
+		glBegin(GL_LINES);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		float d = 10.0f;
+
+		for (float i = -d; i <= d; i += 1.0f)
+		{
+			glVertex3f(i, 0.0f, -d);
+			glVertex3f(i, 0.0f, d);
+			glVertex3f(-d, 0.0f, i);
+			glVertex3f(d, 0.0f, i);
+		}
+
+		glEnd();
+	}
+
+
 	App->gui->DrawGUI();
 
 	EnableLights();
 
+	//App->level->Draw();
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }

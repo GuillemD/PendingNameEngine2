@@ -133,6 +133,7 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::MenuItem("Random Number Generator")) {
 				show_rng = !show_rng;
 			}
+			
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help")) {
