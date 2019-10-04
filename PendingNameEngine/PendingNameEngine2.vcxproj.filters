@@ -707,16 +707,16 @@
     <ClInclude Include="gpudetect\dxgi1_4.h">
       <Filter>External Libraries\gpudetect</Filter>
     </ClInclude>
-    <ClInclude Include="glew-2.1.0\include\GL\eglew.h">
+    <ClInclude Include="Glew\include\eglew.h">
       <Filter>External Libraries\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="glew-2.1.0\include\GL\glew.h">
+    <ClInclude Include="Glew\include\glew.h">
       <Filter>External Libraries\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="glew-2.1.0\include\GL\glxew.h">
+    <ClInclude Include="Glew\include\glxew.h">
       <Filter>External Libraries\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="glew-2.1.0\include\GL\wglew.h">
+    <ClInclude Include="Glew\include\wglew.h">
       <Filter>External Libraries\Glew</Filter>
     </ClInclude>
   </ItemGroup>

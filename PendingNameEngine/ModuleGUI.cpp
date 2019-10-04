@@ -4,6 +4,11 @@
 #include "PanelConsole.h"
 #include "PanelConfiguration.h"
 
+#include "Glew/include/glew.h"
+#include "SDL\include\SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
@@ -285,7 +290,7 @@ void ModuleGUI::ShowAbout()
 		//SDL
 		SDL_version v_compiled;
 		SDL_VERSION(&v_compiled);
-		if (ImGui::SmallButton("SDL"))
+		if (ImGui::Button("SDL", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("https://www.libsdl.org/");
 		}
@@ -293,8 +298,26 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("%d.%d.%d", v_compiled.major, v_compiled.minor, v_compiled.patch);
 		ImGui::NextColumn();
 
+		//OpenGL
+		if (ImGui::Button("OpenGL", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("https://opengl.org/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%s", glGetString(GL_VERSION));
+		ImGui::NextColumn();
+
+		//GLEW
+		if (ImGui::Button("glew", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("https://github.com/nigels-com/glew");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%s", glewGetString(GLEW_VERSION));
+		ImGui::NextColumn();		
+
 		//IMGUI
-		if (ImGui::SmallButton("ImGui"))
+		if (ImGui::Button("ImGui", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("https://github.com/ocornut/imgui");
 		}
@@ -303,7 +326,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//MATHGEOLIB
-		if (ImGui::SmallButton("MathGeoLib"))
+		if (ImGui::Button("MathGeoLib", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("https://github.com/juj/MathGeoLib");
 		}
@@ -312,7 +335,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//PCG
-		if (ImGui::SmallButton("PCG RNG"))
+		if (ImGui::Button("PCG RNG", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("http://www.pcg-random.org/");
 		}
@@ -321,7 +344,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//rapidjson (JSON parser)
-		if (ImGui::SmallButton("rapidjson"))
+		if (ImGui::Button("rapidjson", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("http://rapidjson.org/");
 		}
@@ -330,13 +353,13 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//gpudetect
-		if (ImGui::SmallButton("gpudetect"))
+		if (ImGui::Button("gpudetect", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("https://github.com/GameTechDev/gpudetect");
 		}
 
 		//mmgr
-		if (ImGui::SmallButton("mmgr"))
+		if (ImGui::Button("mmgr", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 		}

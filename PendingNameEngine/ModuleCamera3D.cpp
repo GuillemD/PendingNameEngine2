@@ -11,8 +11,10 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled)
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(0.0f, 0.0f, 5.0f);
+	Position = vec3(0.0f, 10.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	LookAt(Reference);
 	name = "Camera3D";
 }
 
