@@ -29,15 +29,19 @@ bool ModuleWindow::Init()
 		SDL_GetDesktopDisplayMode(0, &dm);
 
 		//Create window
-		screen_w = uint(dm.w) -100;
-		screen_h = uint(dm.h) -100;
+		if (!loaded_window_config)
+		{
+			screen_w = uint(dm.w) - 100;
+			screen_h = uint(dm.h) - 100;
+		}
+
 		max_w = uint(dm.w);
 		max_h = uint(dm.h);
 		
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
-		//Use OpenGL 2.1
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		//Use OpenGL 3.1
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 		if(fullscreen)
@@ -99,6 +103,44 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
+bool ModuleWindow::Save(Document & doc, FileWriteStream & os) 
+{
+	Document::AllocatorType& alloc = doc.GetAllocator();
+	Value window(kObjectType);
+
+	window.AddMember("width", screen_w, alloc);
+	window.AddMember("height", screen_h, alloc);
+	window.AddMember("fullscreen", fullscreen, alloc);
+	window.AddMember("resizable", resizable, alloc);
+	window.AddMember("borderless", borderless, alloc);
+	window.AddMember("fs_desktop", fs_desktop, alloc);
+
+	doc.AddMember("window", window, alloc);
+
+;	return true;
+}
+
+bool ModuleWindow::Load(Document* doc) 
+{
+	bool ret = true;
+
+	Document aux;
+	aux.Parse(App->readBuffer);
+	ret = aux.IsObject();
+
+	SetWidth(aux["window"]["width"].GetUint());
+	SetHeight( aux["window"]["height"].GetUint());
+
+	SetFullscreen(aux["window"]["fullscreen"].GetBool());
+	SetResizable(aux["window"]["resizable"].GetBool());
+	SetBorderless(aux["window"]["borderless"].GetBool());
+	SetFullscreenDesktop(aux["window"]["fs_desktop"].GetBool());
+	
+	loaded_window_config = true;
+	
+	return ret;
+}
+
 void ModuleWindow::ShowWindowConfig()
 {
 	if (ImGui::CollapsingHeader("Window"))
@@ -113,75 +155,46 @@ void ModuleWindow::ShowWindowConfig()
 		ImGui::Columns(2);
 		if (ImGui::Checkbox("Fullscreen", &fullscreen))
 		{
-			if (fullscreen)
-			{
-				if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) == 0)
-					fs_desktop = false;
-				else
-					CONSOLELOG("Switch to fullscreen failed: %s\n", SDL_GetError());
-			}
-			else
-			{
-				if (SDL_SetWindowFullscreen(window, 0) != 0)
-					CONSOLELOG("Switch to window mode failed: %s\n", SDL_GetError());
-			}
+			SetFullscreen(fullscreen);
 		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox("Resizable", &resizable))
-			resizable = !resizable;
+		{
+			SetResizable(resizable);
+		}			
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::SetTooltip("Save and restart to apply");
 		}
 		if (ImGui::Checkbox("Borderless", &borderless))
 		{
-			if (borderless)
-			{
-				if (!fullscreen && !fs_desktop)
-					SDL_SetWindowBordered(window, SDL_FALSE);
-			}
-			else
-			{
-				if (!fullscreen && !fs_desktop)
-					SDL_SetWindowBordered(window, SDL_TRUE);
-			}
-			
+			SetBorderless(borderless);			
 		}
 		
 		if (ImGui::Checkbox("Fullscreen Desktop", &fs_desktop))
 		{
-			if (fs_desktop)
-			{
-				if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP) == 0)
-					fullscreen = false;
-				else
-					CONSOLELOG("Switch to fullscreen failed: %s\n", SDL_GetError());
-			}
-			else
-			{
-				if (SDL_SetWindowFullscreen(window, 0) != 0)
-					CONSOLELOG("Switch to window mode failed: %s\n", SDL_GetError());
-			}
+			SetFullscreenDesktop(fs_desktop);
 		}
 		ImGui::NextColumn();
 
+		ImGui::Text("Default resolutions");
 		if (ImGui::Button("1280x1024",ImVec2(100,20)))
 		{
-
+			SetWindowSize(1280, 1024);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("1366x768", ImVec2(100,20)))
 		{
-
+			SetWindowSize(1366, 768);
 		}
 		if (ImGui::Button("1440x900", ImVec2(100,20)))
 		{
-
+			SetWindowSize(1440, 900);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("1600x900", ImVec2(100, 20)))
 		{
-
+			SetWindowSize(1600, 900);
 		}
 
 		ImGui::Columns(1);
@@ -218,4 +231,68 @@ void ModuleWindow::SetWindowSize(uint w, uint h)
 
 	if (!fullscreen)
 		App->renderer3D->OnResize(screen_w, screen_h);
+}
+
+void ModuleWindow::SetFullscreen(bool fs)
+{
+	if (fs != fullscreen) //If config != previous saved value
+	{
+		fullscreen = fs;
+		if (fullscreen)
+		{
+			if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) == 0)
+				fs_desktop = false;
+			else
+				CONSOLELOG("Switch to fullscreen failed: %s\n", SDL_GetError());
+		}
+		else
+		{
+			if (SDL_SetWindowFullscreen(window, 0) != 0)
+				CONSOLELOG("Switch to window mode failed: %s\n", SDL_GetError());
+		}
+	}
+	
+}
+
+void ModuleWindow::SetResizable(bool res)
+{
+	resizable = res;
+}
+
+void ModuleWindow::SetBorderless(bool brdr)
+{
+	borderless = brdr;
+
+	if (borderless)
+	{
+		if (!fullscreen && !fs_desktop)
+			SDL_SetWindowBordered(window, SDL_FALSE);
+	}
+	else
+	{
+		if (!fullscreen && !fs_desktop)
+			SDL_SetWindowBordered(window, SDL_TRUE);
+	}
+}
+
+void ModuleWindow::SetFullscreenDesktop(bool fs_desk)
+{
+	if (fs_desk != fs_desktop) //avoid mismatch when loading new config
+	{
+		fs_desktop = fs_desk;
+		if (fs_desktop)
+		{
+			if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP) == 0)
+				fullscreen = false;
+			else
+				CONSOLELOG("Switch to fullscreen failed: %s\n", SDL_GetError());
+		}
+		else
+		{
+			if (SDL_SetWindowFullscreen(window, 0) != 0)
+				CONSOLELOG("Switch to window mode failed: %s\n", SDL_GetError());
+		}
+
+	}
+	
 }

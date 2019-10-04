@@ -19,6 +19,9 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	bool Save(Document& doc, FileWriteStream& os);
+	bool Load(Document* doc);
+
 	void ShowWindowConfig();
 
 	void SetTitle(const char* title);
@@ -28,6 +31,11 @@ public:
 	void SetWidth(uint width);
 	void SetHeight(uint height);
 	void SetWindowSize(uint w, uint h);
+
+	void SetFullscreen(bool fs);
+	void SetResizable(bool res);
+	void SetBorderless(bool brdr);
+	void SetFullscreenDesktop(bool fs_desk);
 
 public:
 	//The window we'll be rendering to
@@ -50,6 +58,8 @@ public:
 	uint min_w = 640;
 	uint max_h = 2000;
 	uint max_w = 3000;
+
+	bool loaded_window_config = false;
 };
 
 #endif // _MODULEWINDOW_H_

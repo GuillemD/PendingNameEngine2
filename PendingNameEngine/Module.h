@@ -64,6 +64,7 @@ public:
 		Writer<FileWriteStream> writer(os);
 		return true; 
 	}
+	virtual bool Load(Document* doc) { return true; }
 };
 
 extern Application* App;

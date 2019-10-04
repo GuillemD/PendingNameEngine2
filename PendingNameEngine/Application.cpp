@@ -453,23 +453,23 @@ bool Application::LoadConfig()
 {
 	bool ret = true;
 	FILE* fp = fopen("config.json", "rb"); // readbinary
-	Document doc;
-	char readBuffer[65536];
-	FileReadStream os(fp, readBuffer, sizeof(readBuffer));
+	Document document;
+	
+	FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
 	
-	doc.ParseStream(os);
-	doc.IsObject();
+	document.ParseStream(is);
+	document.IsObject();
 	
 	
-	SetAppName(doc["App"]["app_name"].GetString());
-	SetOrgName(doc["App"]["organization"].GetString());
-	SetVersion(doc["App"]["version"].GetString());
-
+	SetAppName(document["App"]["app_name"].GetString());
+	SetOrgName(document["App"]["organization"].GetString());
+	SetVersion(document["App"]["version"].GetString());
+	
 
 	for (std::list<Module*>::iterator it = list_modules.begin(); it != list_modules.end() && ret; it++)
 	{
-		//ret = (*it)->Load(&doc); TODO
+		ret = (*it)->Load(&document);
 	}
 	
 

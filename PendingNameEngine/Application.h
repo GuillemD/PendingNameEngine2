@@ -65,7 +65,7 @@ private:
 	uint gpu_vendor = 0;
 	uint gpu_device = 0;
 	char* gpu_brand = "";
-	
+
 
 public:
 
@@ -90,6 +90,8 @@ public:
 
 	bool want_to_save_config = false;
 	bool want_to_load_config = false;
+
+	char readBuffer[65536];
 
 private:
 
