@@ -24,6 +24,7 @@ void PanelConfig::Draw()
 		App->ShowHardwareConfig();
 		App->input->ShowInputConfig();
 		App->window->ShowWindowConfig();
+		App->renderer3D->ShowRendererConfig();
 	}
 	ImGui::End();
 }

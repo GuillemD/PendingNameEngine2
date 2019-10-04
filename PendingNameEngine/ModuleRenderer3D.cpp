@@ -92,13 +92,7 @@ bool ModuleRenderer3D::Init()
 			CONSOLELOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
-		
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-		glClearDepth(1.0f);
-		
-		//Initialize clear color
-		glClearColor(0.f, 0.f, 0.f, 1.f);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 		//Check for error
 		error = glGetError();
@@ -126,7 +120,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->screen_w, App->window->screen_h);
 
 	return ret;
 }
@@ -227,6 +221,14 @@ bool ModuleRenderer3D::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	return true;
+}
+
+void ModuleRenderer3D::ShowRendererConfig()
+{
+	if(ImGui::CollapsingHeader("Renderer"))
+	{
+
+	}
 }
 
 
