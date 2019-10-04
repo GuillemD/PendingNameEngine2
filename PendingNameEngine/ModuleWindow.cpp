@@ -60,7 +60,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_w, screen_h, flags);
+		window = SDL_CreateWindow(App->GetAppName(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screen_w, screen_h, flags);
 
 		if(window == NULL)
 		{
@@ -165,16 +165,21 @@ void ModuleWindow::ShowWindowConfig()
 		}
 		ImGui::NextColumn();
 
-		if (ImGui::Button("1280x1024"))
+		if (ImGui::Button("1280x1024",ImVec2(100,20)))
 		{
 
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("1366x768"))
+		if (ImGui::Button("1366x768", ImVec2(100,20)))
 		{
 
 		}
-		if (ImGui::Button("1440x900"))
+		if (ImGui::Button("1440x900", ImVec2(100,20)))
+		{
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("1600x900", ImVec2(100, 20)))
 		{
 
 		}
