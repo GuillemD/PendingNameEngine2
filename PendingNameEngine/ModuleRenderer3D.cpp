@@ -109,10 +109,10 @@ bool ModuleRenderer3D::Init()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 
 		EnableLights();
-		glEnable(GL_LIGHTING);
+		//glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 
 
@@ -227,7 +227,38 @@ void ModuleRenderer3D::ShowRendererConfig()
 {
 	if(ImGui::CollapsingHeader("Renderer"))
 	{
-
+		ImGui::Text("Render Settings");
+		ImGui::Columns(2);
+		if (ImGui::Checkbox("Wireframe", &wireframe))
+		{
+			SetWireframe(wireframe);
+		}
+		if (ImGui::Checkbox("Depth test", &depth_test))
+		{
+			SetDepthTest(depth_test);
+		}
+		if (ImGui::Checkbox("Backface cull", &backface))
+		{
+			SetBackfaceCull(backface);
+		}
+		if (ImGui::Checkbox("Smooth lines", &line_smooth))
+		{
+			SetLineSmooth(line_smooth);
+		}
+		ImGui::NextColumn();
+		if (ImGui::Checkbox("Texture", &texture))
+		{
+			SetTexture2d(texture);
+		}
+		if (ImGui::Checkbox("Color Material", &color_mat))
+		{
+			SetColorMaterial(color_mat);
+		}
+		if (ImGui::Checkbox("Lighting", &lighting))
+		{
+			SetLighting(lighting);
+		}
+		ImGui::Columns(1);
 	}
 }
 
@@ -278,3 +309,83 @@ void ModuleRenderer3D::EnableLights()
 
 	lights[0].Active(true);
 }
+
+void ModuleRenderer3D::SetWireframe(bool wf)
+{
+	
+	if (wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	
+}
+
+void ModuleRenderer3D::SetDepthTest(bool dt)
+{
+	
+	if (depth_test)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
+	
+	
+}
+
+void ModuleRenderer3D::SetBackfaceCull(bool bf)
+{
+	
+	if (backface)
+		glEnable(GL_CULL_FACE);
+	else
+		glDisable(GL_CULL_FACE);
+	
+}
+
+void ModuleRenderer3D::SetTexture2d(bool tx)
+{
+	
+	if (texture)
+		glEnable(GL_TEXTURE_2D);
+	else
+		glDisable(GL_TEXTURE_2D);
+	
+}
+
+void ModuleRenderer3D::SetColorMaterial(bool c_m)
+{
+	
+	if (color_mat)
+		glEnable(GL_COLOR_MATERIAL);
+	else
+		glDisable(GL_COLOR_MATERIAL);
+	
+}
+
+void ModuleRenderer3D::SetLighting(bool light)
+{
+	
+	if (lighting)
+		glEnable(GL_LIGHTING);
+	else
+		glDisable(GL_LIGHTING);
+	
+}
+
+void ModuleRenderer3D::SetLineSmooth(bool sm)
+{
+	
+	if (line_smooth)
+		glEnable(GL_LINE_SMOOTH);
+	else
+		glDisable(GL_LINE_SMOOTH);
+	
+}
+
+
+
+

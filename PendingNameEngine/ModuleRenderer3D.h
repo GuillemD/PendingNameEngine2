@@ -26,12 +26,29 @@ public:
 	void DisableLights();
 	void EnableLights();
 
+	void SetWireframe(bool wf);
+	void SetDepthTest(bool dt);
+	void SetBackfaceCull(bool bf);
+	void SetTexture2d(bool tx);
+	void SetColorMaterial(bool c_m);
+	void SetLighting(bool light);
+	void SetLineSmooth(bool sm);
+
+
 public:
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+
+	bool wireframe = false;
+	bool depth_test = true;
+	bool backface = false;
+	bool texture = true;
+	bool color_mat = true;
+	bool lighting = false;
+	bool line_smooth = false;
 };
 
 #endif //_MODULERENDERER3D_H
