@@ -19,6 +19,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	bool Save(Document& doc, FileWriteStream& os);
+	bool Load(Document* doc);
+
 	void ShowRendererConfig();
 
 	void OnResize(int width, int height);
@@ -49,6 +52,8 @@ public:
 	bool color_mat = true;
 	bool lighting = false;
 	bool line_smooth = false;
+
+	bool loaded_renderer_config = false;
 };
 
 #endif //_MODULERENDERER3D_H

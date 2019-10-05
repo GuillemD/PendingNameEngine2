@@ -108,15 +108,20 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_CULL_FACE);
+
+		
+
+	
 
 		EnableLights();
-		//glEnable(GL_LIGHTING);
-		glEnable(GL_COLOR_MATERIAL);
 
-
-		glEnable(GL_TEXTURE_2D);
+		if (!loaded_renderer_config)
+		{
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_COLOR_MATERIAL);
+			glEnable(GL_TEXTURE_2D);
+		}
+		
 	}
 
 	// Projection matrix for
@@ -221,6 +226,45 @@ bool ModuleRenderer3D::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	return true;
+}
+
+bool ModuleRenderer3D::Save(Document & doc, FileWriteStream & os)
+{
+	Document::AllocatorType& alloc = doc.GetAllocator();
+	Value renderer(kObjectType);
+
+	renderer.AddMember("wireframe", wireframe, alloc);
+	renderer.AddMember("depth test", depth_test, alloc);
+	renderer.AddMember("backface cull", backface, alloc);
+	renderer.AddMember("texture2d", texture, alloc);
+	renderer.AddMember("color material", color_mat, alloc);
+	renderer.AddMember("lighting", lighting, alloc);
+	renderer.AddMember("smooth lines", line_smooth, alloc);
+
+	doc.AddMember("renderer3d", renderer, alloc);
+
+	return true;
+}
+
+bool ModuleRenderer3D::Load(Document * doc)
+{
+	bool ret = true;
+
+	Document aux;
+	aux.Parse(App->readBuffer);
+	ret = aux.IsObject();
+
+	SetWireframe(aux["renderer3d"]["wireframe"].GetBool());
+	SetDepthTest(aux["renderer3d"]["depth test"].GetBool());
+	SetBackfaceCull(aux["renderer3d"]["backface cull"].GetBool());
+	SetTexture2d(aux["renderer3d"]["texture2d"].GetBool());
+	SetColorMaterial(aux["renderer3d"]["color material"].GetBool());
+	SetLighting(aux["renderer3d"]["lighting"].GetBool());
+	SetLineSmooth(aux["renderer3d"]["smooth lines"].GetBool());
+
+	loaded_renderer_config = true;
+
+	return ret;
 }
 
 void ModuleRenderer3D::ShowRendererConfig()
