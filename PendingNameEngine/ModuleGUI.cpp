@@ -267,18 +267,18 @@ void ModuleGUI::ShowAbout()
 			ImGui::Text("and to permit persons to whom the Software is furnished to do so,");
 			ImGui::Text("subject to the following conditions :");
 
-			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
-			ImGui::Text("copies or substantial portions of the Software.");
+ImGui::Text("The above copyright notice and this permission notice shall be included in all");
+ImGui::Text("copies or substantial portions of the Software.");
 
-			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
-			ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
-			ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
-			ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
-			ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
-			ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
+ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
+ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
+ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
+ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
+ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 
 		}
-		
+
 		ImGui::TextColored(GREEN, "External Libraries: \n");
 		ImGui::Columns(2, "libraries");
 		ImGui::Separator();
@@ -314,7 +314,7 @@ void ModuleGUI::ShowAbout()
 		}
 		ImGui::NextColumn();
 		ImGui::Text("%s", glewGetString(GLEW_VERSION));
-		ImGui::NextColumn();		
+		ImGui::NextColumn();
 
 		//IMGUI
 		if (ImGui::Button("ImGui", ImVec2(80, 15)))
@@ -349,7 +349,7 @@ void ModuleGUI::ShowAbout()
 			App->OpenBrowser("http://rapidjson.org/");
 		}
 		ImGui::NextColumn();
-		ImGui::Text("%d.%d.%d", RJSON_MAJOR_COMPILED,RJSON_MINOR_COMPILED, RJSON_PATCH_COMPILED);
+		ImGui::Text("%d.%d.%d", RJSON_MAJOR_COMPILED, RJSON_MINOR_COMPILED, RJSON_PATCH_COMPILED);
 		ImGui::NextColumn();
 
 		//gpudetect
@@ -362,6 +362,12 @@ void ModuleGUI::ShowAbout()
 		if (ImGui::Button("mmgr", ImVec2(80, 15)))
 		{
 			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
+		}
+
+		//PAR Shapes
+		if (ImGui::Button("Par", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("https://github.com/prideout/par");
 		}
 		ImGui::Columns(1);
 		ImGui::Separator();

@@ -719,6 +719,36 @@
     <ClInclude Include="Glew\include\wglew.h">
       <Filter>External Libraries\Glew</Filter>
     </ClInclude>
+    <ClInclude Include="PAR\par_bluenoise.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_bubbles.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_easings.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_easycurl.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_filecache.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_msquares.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_shaders.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_shapes.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_sprune.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
+    <ClInclude Include="PAR\par_streamlines.h">
+      <Filter>External Libraries\PAR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -783,6 +813,9 @@
     </Filter>
     <Filter Include="External Libraries\Glew">
       <UniqueIdentifier>{5f380787-3ccf-404d-8591-167431bbf33d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\PAR">
+      <UniqueIdentifier>{962138c5-3415-4e8f-8f50-c65feb17e9d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

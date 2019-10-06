@@ -166,6 +166,16 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PAR\par_bluenoise.h" />
+    <ClInclude Include="PAR\par_bubbles.h" />
+    <ClInclude Include="PAR\par_easings.h" />
+    <ClInclude Include="PAR\par_easycurl.h" />
+    <ClInclude Include="PAR\par_filecache.h" />
+    <ClInclude Include="PAR\par_msquares.h" />
+    <ClInclude Include="PAR\par_shaders.h" />
+    <ClInclude Include="PAR\par_shapes.h" />
+    <ClInclude Include="PAR\par_sprune.h" />
+    <ClInclude Include="PAR\par_streamlines.h" />
     <ClInclude Include="PCG_c_basic\pcg_basic.h" />
     <ClInclude Include="PCG_c_basic\pcg_variants.h" />
     <ClInclude Include="Primitive.h" />
