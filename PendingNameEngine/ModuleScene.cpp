@@ -1,5 +1,7 @@
 #include "ModuleScene.h"
-
+#include "Application.h"
+#include "Globals.h"
+#include "Primitive.h"
 
 
 ModuleScene::ModuleScene()
@@ -74,4 +76,12 @@ void ModuleScene::CheckAABBCollisions()
 			}		
 		}	
 	}
+}
+
+void ModuleScene::DrawScene()
+{
+	PPlane grid(0, 1, 0, 5);
+	grid.axis = true;
+	grid.color = White;
+	grid.Render();
 }
