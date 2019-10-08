@@ -44,8 +44,12 @@ update_status ModuleCamera3D::Update(float dt)
 
 	vec3 newPos(0, 0, 0);
 	float speed = 30.0f * dt;
-
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) App->camera->LookAt(vec3(0, 0, 0));// Need to change into LookAt, center of the BBox of the GO
+	// Need to change into LookAt, center of the BBox of the GO
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
+		Position = vec3(0, 10, 10);
+		App->camera->LookAt(vec3(0, 0, 0));
+		
+	}
 
 		//Same here orbit needs to look into the center of the GO
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(0) == KEY_REPEAT) {
@@ -87,9 +91,10 @@ update_status ModuleCamera3D::Update(float dt)
 		//Unity like controls
 	if (App->input->GetMouseButton(2) == KEY_REPEAT)
 		{
-			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-				speed = 70.0f * dt;
-
+	
+			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+			speed = 70* dt;
+			}
 			if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y += speed;
 			if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y -= speed;
 
@@ -216,21 +221,10 @@ void ModuleCamera3D::CalculateViewMatrix()
 
 void ModuleCamera3D::ShowCameraConfig() {
 	if (ImGui::CollapsingHeader("Camera")) {
-		ImGui::Text("Camera X: %f .", App->camera->Position.x);
-		ImGui::Text("Camera Y: %f .", App->camera->Position.y);
-		ImGui::Text("Camera Z: %f .", App->camera->Position.z);
-		ImGui::Separator();
-		ImGui::Text("Rotation X.X: %f .", App->camera->X.x);
-		ImGui::Text("Rotation X.Y: %f .", App->camera->X.y);
-		ImGui::Text("Rotation X.Z: %f .", App->camera->X.z);
-		ImGui::Separator();
-		ImGui::Text("Rotation Y.X: %f .", App->camera->Y.x);
-		ImGui::Text("Rotation Y.Y: %f .", App->camera->Y.y);
-		ImGui::Text("Rotation Y.Z: %f .", App->camera->Y.z);
-		ImGui::Separator();
-		ImGui::Text("Rotation Z.X: %f .", App->camera->Z.x);
-		ImGui::Text("Rotation Z.Y: %f .", App->camera->Z.y);
-		ImGui::Text("Rotation Z.Z: %f .", App->camera->Z.z);
+		//ImGui::Text("Camera X: %f .", App->camera->Position.x);
+		ImGui::SliderFloat("Camera X", &App->camera->Position.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Camera Y", &App->camera->Position.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Camera Z", &App->camera->Position.z, -100.0f, 100.0f);
 
 
 	}
