@@ -19,12 +19,14 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(scene);
 	AddModule(gui);
+	AddModule(scene);
+	
 	
 
 	// Renderer last!
 	AddModule(renderer3D);
+	
 }
 
 Application::~Application()

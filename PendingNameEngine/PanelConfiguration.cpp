@@ -17,8 +17,9 @@ PanelConfig::~PanelConfig()
 
 void PanelConfig::Draw()
 {
-	ImGui::SetNextWindowSize(ImVec2(500, 500));
-	if (ImGui::Begin(PanelName.c_str(), &active, NULL))
+	
+
+	if (ImGui::Begin(PanelName.c_str(), &active, ImVec2(500, 500),-0.5f, NULL))
 	{
 		App->ShowApplicationConfig();
 		App->ShowHardwareConfig();

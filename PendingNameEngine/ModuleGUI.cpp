@@ -81,7 +81,41 @@ bool ModuleGUI::CleanUp()
 void ModuleGUI::DrawGUI()
 {
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
-	ImGui::Render();
+	bool iswireframe = App->renderer3D->wireframe;
+	bool iscolormat = App->renderer3D->color_mat;
+
+	if (iswireframe || iscolormat) {
+		if (iswireframe&&iscolormat) {
+			App->renderer3D->wireframe=false;
+			App->renderer3D->color_mat=false;
+			
+			ImGui::Render();
+
+			App->renderer3D->wireframe = true;
+			App->renderer3D->color_mat = true;
+		}
+		else if(iswireframe){
+			App->renderer3D->wireframe = false;
+
+			ImGui::Render();
+
+			App->renderer3D->wireframe = true;
+		}
+		else if (iscolormat) {
+			App->renderer3D->color_mat = false;
+
+			ImGui::Render();
+
+			App->renderer3D->color_mat = true;
+		}
+
+	} else {
+		ImGui::Render();
+	}
+
+
+
+	
 }
 
 void ModuleGUI::CreateMainMenu()
