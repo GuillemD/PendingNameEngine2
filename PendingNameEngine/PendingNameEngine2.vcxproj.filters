@@ -167,6 +167,9 @@
     <ClCompile Include="gpudetect\DeviceId.cpp">
       <Filter>External Libraries\gpudetect</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -749,6 +752,9 @@
     <ClInclude Include="PAR\par_streamlines.h">
       <Filter>External Libraries\PAR</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -816,6 +822,9 @@
     </Filter>
     <Filter Include="External Libraries\PAR">
       <UniqueIdentifier>{962138c5-3415-4e8f-8f50-c65feb17e9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{489bf3f3-2c76-48b9-a1c7-106f21935195}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
