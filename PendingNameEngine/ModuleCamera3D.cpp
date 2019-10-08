@@ -42,28 +42,70 @@ bool ModuleCamera3D::CleanUp()
 update_status ModuleCamera3D::Update(float dt)
 {
 
-		vec3 newPos(0, 0, 0);
-		float speed = 30.0f * dt;
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			speed = 70.0f * dt;
+	vec3 newPos(0, 0, 0);
+	float speed = 30.0f * dt;
 
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) App->camera->LookAt(vec3(0, 0, 0));// Need to change into LookAt, center of the BBox of the GO
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+		//Same here orbit needs to look into the center of the GO
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(0) == KEY_REPEAT) {
+			LookAt(vec3(0, 0, 0));
+			int dx = -App->input->GetMouseXMotion();
+			int dy = -App->input->GetMouseYMotion();
 
+			float Sensitivity = 0.25f;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+			Position -= Reference;
 
-		Position += newPos;
-		Reference += newPos;
+			if (dx != 0)
+			{
+				float DeltaX = (float)dx * Sensitivity;
 
-		
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+
+				if (Y.y < 0.0f)
+				{
+					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+					Y = cross(Z, X);
+				}
+			}
+
+			Position = Reference + Z * length(Position);
+
+		}
+
+		//Unity like controls
+	if (App->input->GetMouseButton(2) == KEY_REPEAT)
 		{
+			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+				speed = 70.0f * dt;
+
+			if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y += speed;
+			if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y -= speed;
+
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+
+
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+
+			Position += newPos;
+			Reference += newPos;
+
+			
+
+
 			int dx = -App->input->GetMouseXMotion();
 			int dy = -App->input->GetMouseYMotion();
 
@@ -96,8 +138,25 @@ update_status ModuleCamera3D::Update(float dt)
 
 			Position = Reference + Z * length(Position);
 		}
-	
-	
+
+		//Mouse Wheel needs to zoom in zoom out
+	{
+		if (App->input->GetMouseZ() > 0)
+		{
+			newPos -= Z * speed; 
+
+			Position += newPos;
+			Reference += newPos;
+
+		}
+		if (App->input->GetMouseZ() < 0) {
+			newPos += Z * speed;
+			Position += newPos;
+			Reference += newPos;
+
+		}
+	}
+
 
 	CalculateViewMatrix();
 
