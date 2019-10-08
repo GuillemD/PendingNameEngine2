@@ -26,6 +26,7 @@ void PanelConfig::Draw()
 		App->input->ShowInputConfig();
 		App->window->ShowWindowConfig();
 		App->renderer3D->ShowRendererConfig();
+		App->camera->ShowCameraConfig();
 	}
 	ImGui::End();
 }

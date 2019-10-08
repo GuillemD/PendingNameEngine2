@@ -73,7 +73,7 @@ update_status ModuleCamera3D::Update(float dt)
 				Y = rotate(Y, DeltaY, X);
 				Z = rotate(Z, DeltaY, X);
 
-				if (Y.y < 0.0f)
+				if (Y.y < 0.0f && Y.y >1.0f)
 				{
 					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 					Y = cross(Z, X);
@@ -135,7 +135,9 @@ update_status ModuleCamera3D::Update(float dt)
 					Y = cross(Z, X);
 				}
 			}
+			vec3 test = Reference + Z * length(Position);
 
+			
 			Position = Reference + Z * length(Position);
 		}
 
@@ -210,4 +212,27 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+void ModuleCamera3D::ShowCameraConfig() {
+	if (ImGui::CollapsingHeader("Camera")) {
+		ImGui::Text("Camera X: %f .", App->camera->Position.x);
+		ImGui::Text("Camera Y: %f .", App->camera->Position.y);
+		ImGui::Text("Camera Z: %f .", App->camera->Position.z);
+		ImGui::Separator();
+		ImGui::Text("Rotation X.X: %f .", App->camera->X.x);
+		ImGui::Text("Rotation X.Y: %f .", App->camera->X.y);
+		ImGui::Text("Rotation X.Z: %f .", App->camera->X.z);
+		ImGui::Separator();
+		ImGui::Text("Rotation Y.X: %f .", App->camera->Y.x);
+		ImGui::Text("Rotation Y.Y: %f .", App->camera->Y.y);
+		ImGui::Text("Rotation Y.Z: %f .", App->camera->Y.z);
+		ImGui::Separator();
+		ImGui::Text("Rotation Z.X: %f .", App->camera->Z.x);
+		ImGui::Text("Rotation Z.Y: %f .", App->camera->Z.y);
+		ImGui::Text("Rotation Z.Z: %f .", App->camera->Z.z);
+
+
+	}
+
 }
