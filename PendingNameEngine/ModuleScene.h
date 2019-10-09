@@ -2,6 +2,7 @@
 #define _MODULE_SCENE_
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
 class ModuleScene :
 	public Module {
 public:
@@ -21,6 +22,7 @@ public:
 	
 	void CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z);
 	void CheckAABBCollisions();
+
 
 	void DrawScene();
 
