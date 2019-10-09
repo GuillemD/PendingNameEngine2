@@ -176,7 +176,10 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ImportManager.cpp">
+    <ClCompile Include="ModuleImporter.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshImporter.cpp">
       <Filter>Modules\Importers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -776,7 +779,10 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ImportManager.h">
+    <ClInclude Include="ModuleImporter.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshImporter.h">
       <Filter>Modules\Importers</Filter>
     </ClInclude>
   </ItemGroup>
