@@ -172,8 +172,6 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>External Libraries\ImGui</Filter>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -768,8 +766,6 @@
     </ClInclude>
     <ClInclude Include="SDL\include\SDL_video.h">
       <Filter>External Libraries\SDL\Include</Filter>
-    <ClInclude Include="Mesh.h">
-      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -838,9 +834,6 @@
     </Filter>
     <Filter Include="External Libraries\PAR">
       <UniqueIdentifier>{962138c5-3415-4e8f-8f50-c65feb17e9d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{489bf3f3-2c76-48b9-a1c7-106f21935195}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
