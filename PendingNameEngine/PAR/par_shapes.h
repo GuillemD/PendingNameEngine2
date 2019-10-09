@@ -25,6 +25,7 @@
 
 #ifndef PAR_SHAPES_H
 #define PAR_SHAPES_H
+#define PAR_SHAPES_IMPLEMENTATION
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +45,7 @@ extern "C" {
 #endif
 
 #ifndef PAR_SHAPES_T
-#define PAR_SHAPES_T uint16_t
+#define PAR_SHAPES_T uint
 #endif
 
 typedef struct par_shapes_mesh_s {

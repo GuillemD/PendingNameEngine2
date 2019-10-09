@@ -3,8 +3,8 @@
 
 #include "Globals.h"
 #include "MathGeoLib/include/MathGeoLib.h"
-#include "PAR/par_shapes.h"
 #include "Primitive.h"
+#include  "PAR/par_shapes.h"
 
 #define DEFAULT_COLOR {1.0f,1.0f,1.0f}
 
@@ -24,7 +24,7 @@ public:
 	uint CreateBuffer();
 
 	void DefineCube(float3 _pos, float size);
-	void DefineSphere(float3 _pos);
+	void DefinePARCube();
 	void DefinePlane(float3 _pos);
 
 	void LoadDataToVRAM();

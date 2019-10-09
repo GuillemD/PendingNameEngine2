@@ -172,7 +172,6 @@ void ModuleWindow::ShowWindowConfig()
 		{
 			SetBorderless(borderless);			
 		}
-		
 		if (ImGui::Checkbox("Fullscreen Desktop", &aux2))
 		{
 			SetFullscreenDesktop(aux2);
