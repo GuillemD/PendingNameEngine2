@@ -40,7 +40,7 @@ void PanelConsole::EmptyConsole()
 
 void PanelConsole::ConsoleLog(char * txt)
 {
-	ConsoleText.append(txt);
+	ConsoleText.appendf(txt);
 }
 
 

@@ -155,10 +155,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 
 	EnableLights();
-
-	App->scene->DrawScene();
 	App->gui->DrawGUI();
+	App->scene->DrawScene();
+	
 	SDL_GL_SwapWindow(App->window->window);
+
 	return UPDATE_CONTINUE;
 }
 

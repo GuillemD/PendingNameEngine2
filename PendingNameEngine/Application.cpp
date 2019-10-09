@@ -170,12 +170,14 @@ bool Application::CleanUp()
 
 	fps_buffer.clear();
 	ms_buffer.clear();
-	for (std::list<Module*>::reverse_iterator item = list_modules.rbegin(); item != list_modules.rend(); item++)
-	{
+	
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++) {
 		ret = (*item)->CleanUp();
 	}
 
 	return ret;
+
+	
 }
 
 void Application::AddModule(Module* mod)

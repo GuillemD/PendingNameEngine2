@@ -190,6 +190,7 @@ extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled);
  *
  *  \return 0 on success, or -1 if not supported.
  */
+
 extern DECLSPEC int SDLCALL SDL_CaptureMouse(SDL_bool enabled);
 
 /**

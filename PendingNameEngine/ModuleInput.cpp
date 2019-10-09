@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ImGui/imgui.h"
-
+#include "ImGui/imgui_impl_sdl.h"
+#include "ImGui/imgui_impl_opengl2.h"
 
 #define MAX_KEYS 300
 
@@ -95,7 +96,7 @@ update_status ModuleInput::PreUpdate(float dt)
 	while(SDL_PollEvent(&e) != 0)
 	{
 
-		ImGui_ImplSdl_ProcessEvent(&e);
+		ImGui_ImplSDL2_ProcessEvent(&e);
 
 		switch(e.type)
 		{
@@ -189,6 +190,8 @@ void ModuleInput::PrintInputLog(uint key, uint state)
 
 void ModuleInput::AddInputToBuffer(const char * entry)
 {
-	input_log_buf.append(entry);
+
+	
+	input_log_buf.appendf(entry);
 	scroll_log = true;
 }

@@ -9,6 +9,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "ImGui/imgui_impl_opengl2.h"
+
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
@@ -23,6 +25,14 @@ bool ModuleGUI::Init()
 {
 	bool ret = true;
 
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	ImGui_ImplOpenGL2_Init();
+
+
 
 	//Panels
 	console = new PanelConsole("Console");
@@ -36,7 +46,7 @@ bool ModuleGUI::Start()
 {
 	bool ret = true;
 
-	ImGui_ImplSdl_Init(App->window->window);
+	
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
@@ -46,36 +56,53 @@ bool ModuleGUI::Start()
 
 update_status ModuleGUI::PreUpdate(float dt)
 {
-	ImGui_ImplSdl_NewFrame(App->window->window);
+
+	
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
+	ImGui::NewFrame();
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleGUI::Update(float dt)
 {
-	if(show_save_popup)ShowSavePopUp();
-
-	if (want_to_quit)
-		return UPDATE_STOP;
-
-	CreateMainMenu();
+	
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleGUI::PostUpdate(float dt)
 {
+	if (show_save_popup)ShowSavePopUp();
+
+
+
+	CreateMainMenu();
+
+
+
+	if (want_to_quit) {
+
+		return UPDATE_STOP;
+
+	}
+		
 
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleGUI::CleanUp()
 {
-	bool ret = true;
+	CONSOLELOG("Cleaning UI");
 
-	ImGui_ImplSdl_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui_ImplOpenGL2_Shutdown();
 
-	return ret;
+
+	int i = 0;
+
+	return true;
 }
 
 void ModuleGUI::DrawGUI()
@@ -83,7 +110,7 @@ void ModuleGUI::DrawGUI()
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
 	bool iswireframe = App->renderer3D->wireframe;
 	bool iscolormat = App->renderer3D->color_mat;
-
+	
 	if (iswireframe || iscolormat) {
 		if (iswireframe&&iscolormat) {
 			App->renderer3D->wireframe=false;
@@ -91,6 +118,7 @@ void ModuleGUI::DrawGUI()
 			
 			ImGui::Render();
 
+			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 			App->renderer3D->wireframe = true;
 			App->renderer3D->color_mat = true;
 		}
@@ -99,6 +127,7 @@ void ModuleGUI::DrawGUI()
 
 			ImGui::Render();
 
+			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 			App->renderer3D->wireframe = true;
 		}
 		else if (iscolormat) {
@@ -106,11 +135,13 @@ void ModuleGUI::DrawGUI()
 
 			ImGui::Render();
 
+			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 			App->renderer3D->color_mat = true;
 		}
 
 	} else {
 		ImGui::Render();
+		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	}
 
 
@@ -133,6 +164,7 @@ void ModuleGUI::CreateMainMenu()
 			}
 			if (ImGui::MenuItem("Quit")) {
 				show_save_popup = true;
+
 			}
 			ImGui::EndMenu();
 
@@ -224,7 +256,7 @@ void ModuleGUI::CreateMainMenu()
 
 void ModuleGUI::ShowDemoWindow()
 {
-	ImGui::ShowTestWindow(&show_demo_window);
+	ImGui::ShowDemoWindow(&show_demo_window);
 }
 
 
