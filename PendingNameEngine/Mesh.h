@@ -4,7 +4,8 @@
 #include "Globals.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Primitive.h"
-#include  "PAR/par_shapes.h"
+#include <string>
+//#include  "PAR/par_shapes.h"
 
 #define DEFAULT_COLOR {1.0f,1.0f,1.0f}
 
@@ -24,15 +25,20 @@ public:
 	uint CreateBuffer();
 
 	void DefineCube(float3 _pos, float size);
-	void DefinePARCube();
+	//void DefinePARCube();
 	void DefinePlane(float3 _pos);
 
 	void LoadDataToVRAM();
 	void Reset();
 
-private:
+public:
+	std::string mesh_name = "";
 
+	//transform
 	float3 pos = { 0,0,0 };
+	Quat rot = Quat::identity;
+	float3 scale = { 1,1,1 };
+
 	MESH_TYPE type;
 	float3 color = { 0,0,0 };
 

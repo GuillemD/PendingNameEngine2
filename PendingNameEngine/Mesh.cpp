@@ -85,7 +85,7 @@ void Mesh::DefineCube(float3 _pos, float size)
 	indices[4] = 1;
 	indices[5] = 3,
 
-		indices[6] = 1;
+	indices[6] = 1;
 	indices[7] = 3;
 	indices[8] = 5;
 
@@ -127,36 +127,36 @@ void Mesh::DefineCube(float3 _pos, float size)
 
 }
 
-void Mesh::DefinePARCube()
-{
-	par_shapes_mesh* cube = par_shapes_create_cube();
-
-	type = MESH_TYPE::CUBE_MESH;
-
-	num_vertices = cube->npoints;
-	vertices = new float3[num_vertices];
-	memcpy(vertices, cube->points, sizeof(float3)*num_vertices);
-
-	num_indices = cube->ntriangles;
-	indices = new uint[num_indices];
-	memcpy(indices, cube->triangles, sizeof(cube->triangles));
-	
-
-	if (cube->normals != nullptr)
-	{
-		num_normals = cube->npoints;
-		normals = new float3[num_normals];
-		memcpy(normals, cube->normals, sizeof(float3)*num_normals);
-	}
-	if (cube->tcoords != nullptr)
-	{
-		num_texcoords = cube->npoints;
-		texcoords = new float[num_texcoords * 3];
-		memcpy(texcoords, cube->tcoords, sizeof(float)*num_texcoords * 3);
-	}
-
-	par_shapes_free_mesh(cube);
-}
+//void Mesh::DefinePARCube()
+//{
+//	par_shapes_mesh* cube = par_shapes_create_cube();
+//
+//	type = MESH_TYPE::CUBE_MESH;
+//
+//	num_vertices = cube->npoints;
+//	vertices = new float3[num_vertices];
+//	memcpy(vertices, cube->points, sizeof(float3)*num_vertices);
+//
+//	num_indices = cube->ntriangles;
+//	indices = new uint[num_indices];
+//	memcpy(indices, cube->triangles, sizeof(cube->triangles));
+//	
+//
+//	if (cube->normals != nullptr)
+//	{
+//		num_normals = cube->npoints;
+//		normals = new float3[num_normals];
+//		memcpy(normals, cube->normals, sizeof(float3)*num_normals);
+//	}
+//	if (cube->tcoords != nullptr)
+//	{
+//		num_texcoords = cube->npoints;
+//		texcoords = new float[num_texcoords * 3];
+//		memcpy(texcoords, cube->tcoords, sizeof(float)*num_texcoords * 3);
+//	}
+//
+//	par_shapes_free_mesh(cube);
+//}
 
 void Mesh::DefinePlane(float3 _pos)
 {

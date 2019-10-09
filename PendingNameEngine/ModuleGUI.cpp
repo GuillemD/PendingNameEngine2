@@ -11,6 +11,8 @@
 
 #include "ImGui/imgui_impl_opengl2.h"
 
+#include "Assimp/include/version.h"
+
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
@@ -67,7 +69,6 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	
 
 	return UPDATE_CONTINUE;
 }
@@ -76,18 +77,12 @@ update_status ModuleGUI::PostUpdate(float dt)
 {
 	if (show_save_popup)ShowSavePopUp();
 
-
-
 	CreateMainMenu();
-
-
 
 	if (want_to_quit) {
 
 		return UPDATE_STOP;
-
 	}
-		
 
 	return UPDATE_CONTINUE;
 }
@@ -98,9 +93,6 @@ bool ModuleGUI::CleanUp()
 
 	ImGui_ImplSDL2_Shutdown();
 	ImGui_ImplOpenGL2_Shutdown();
-
-
-	int i = 0;
 
 	return true;
 }
@@ -146,8 +138,6 @@ void ModuleGUI::DrawGUI()
 		ImGui::Render();
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	}
-
-
 
 	
 }
@@ -336,15 +326,15 @@ void ModuleGUI::ShowAbout()
 			ImGui::Text("and to permit persons to whom the Software is furnished to do so,");
 			ImGui::Text("subject to the following conditions :");
 
-ImGui::Text("The above copyright notice and this permission notice shall be included in all");
-ImGui::Text("copies or substantial portions of the Software.");
+			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
+			ImGui::Text("copies or substantial portions of the Software.");
 
-ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
-ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
-ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
-ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
-ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
-ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
+			ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
+			ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
+			ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
+			ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
+			ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 
 		}
 
@@ -438,6 +428,16 @@ ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 		{
 			App->OpenBrowser("https://github.com/prideout/par");
 		}
+
+		//Assimp
+		if (ImGui::Button("Assimp", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("http://www.assimp.org/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%d.%d.%d", aiGetVersionMajor(), aiGetVersionMinor(), aiGetVersionRevision());
+		ImGui::NextColumn();
+
 		ImGui::Columns(1);
 		ImGui::Separator();
 
