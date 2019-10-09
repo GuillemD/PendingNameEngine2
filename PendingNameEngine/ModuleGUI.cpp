@@ -116,6 +116,7 @@ void ModuleGUI::DrawGUI()
 			App->renderer3D->wireframe=false;
 			App->renderer3D->color_mat=false;
 			
+			
 			ImGui::Render();
 
 			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -124,7 +125,7 @@ void ModuleGUI::DrawGUI()
 		}
 		else if(iswireframe){
 			App->renderer3D->wireframe = false;
-
+			
 			ImGui::Render();
 
 			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -133,6 +134,7 @@ void ModuleGUI::DrawGUI()
 		else if (iscolormat) {
 			App->renderer3D->color_mat = false;
 
+			
 			ImGui::Render();
 
 			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -140,6 +142,7 @@ void ModuleGUI::DrawGUI()
 		}
 
 	} else {
+		
 		ImGui::Render();
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	}

@@ -84,6 +84,7 @@
     <ClInclude Include="Glew\include\wglew.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
+    <ClInclude Include="ImportManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -286,6 +287,7 @@
     <ClCompile Include="ImGui\imgui_impl_opengl2.cpp" />
     <ClCompile Include="ImGui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="ImportManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleScene.cpp" />

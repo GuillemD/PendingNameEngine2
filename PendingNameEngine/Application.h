@@ -10,6 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
+//#include "ImportManager.h"
 
 #include "rapidjson\rapidjson.h"
 #include "rapidjson\document.h"
@@ -30,6 +31,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleScene* scene;
+	//ImportManager* importer;
 
 private:
 

@@ -176,6 +176,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ImportManager.cpp">
+      <Filter>Modules\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -773,6 +776,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ImportManager.h">
+      <Filter>Modules\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -843,6 +849,9 @@
     </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{a9b6bcee-573e-43ef-b186-aa4460921bfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Importers">
+      <UniqueIdentifier>{c8a5efed-b69b-40d4-8b29-f09ba01f9cec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
