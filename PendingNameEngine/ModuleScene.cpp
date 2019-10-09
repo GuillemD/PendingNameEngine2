@@ -4,7 +4,6 @@
 #include "Primitive.h"
 
 
-
 ModuleScene::ModuleScene()
 {
 	name = "Scene";
@@ -79,13 +78,10 @@ void ModuleScene::CheckAABBCollisions()
 	}
 }
 
-
 void ModuleScene::DrawScene()
 {
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
 	grid.color = White;
 	grid.Render();
-
-	
 }

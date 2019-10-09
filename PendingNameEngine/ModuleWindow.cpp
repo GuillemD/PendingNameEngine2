@@ -153,11 +153,9 @@ void ModuleWindow::ShowWindowConfig()
 
 		ImGui::Separator();
 		ImGui::Columns(2);
-		bool aux1 = fullscreen;
-		bool aux2 = fs_desktop;
-		if (ImGui::Checkbox("Fullscreen", &aux1))
+		if (ImGui::Checkbox("Fullscreen", &fullscreen))
 		{
-			SetFullscreen(aux1);
+			SetFullscreen(fullscreen);
 		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox("Resizable", &resizable))
@@ -172,9 +170,10 @@ void ModuleWindow::ShowWindowConfig()
 		{
 			SetBorderless(borderless);			
 		}
-		if (ImGui::Checkbox("Fullscreen Desktop", &aux2))
+		
+		if (ImGui::Checkbox("Fullscreen Desktop", &fs_desktop))
 		{
-			SetFullscreenDesktop(aux2);
+			SetFullscreenDesktop(fs_desktop);
 		}
 		ImGui::NextColumn();
 
