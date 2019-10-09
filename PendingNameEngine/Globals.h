@@ -60,6 +60,16 @@ enum update_status
 #define TITLE "PendingNameEngine2"
 #define ORGANISATION "CITM (UPC)"
 #define VERSION "0.1.0"
+#define ASSETS_FOLDER "/Assets/"
+#define SETTINGS_FOLDER "/Settings/"
+#define LIBRARY_FOLDER "/Library/"
+#define LIBRARY_AUDIO_FOLDER "/Library/Audio/"
+#define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
+#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
+#define LIBRARY_BONE_FOLDER "/Library/Bones/"
+#define LIBRARY_ANIMATION_FOLDER "/Library/Animations/"
+#define LIBRARY_SCENE_FOLDER "/Library/Scenes/"
+
 
 //ImGui
 #define BLUE ImVec4(0,0,1,1)

@@ -173,6 +173,9 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>External Libraries\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -767,6 +770,12 @@
     <ClInclude Include="SDL\include\SDL_video.h">
       <Filter>External Libraries\SDL\Include</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysFS\include\physfs.h">
+      <Filter>External Libraries\PhysFS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -835,6 +844,9 @@
     <Filter Include="External Libraries\PAR">
       <UniqueIdentifier>{962138c5-3415-4e8f-8f50-c65feb17e9d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External Libraries\PhysFS">
+      <UniqueIdentifier>{cda234e5-526e-4f3e-9577-71ac89ff808d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -856,6 +868,9 @@
     </Library>
     <Library Include="SDL\libx86\SDL2main.lib">
       <Filter>External Libraries\SDL\lib</Filter>
+    </Library>
+    <Library Include="PhysFS\libx86\physfs.lib">
+      <Filter>External Libraries\PhysFS</Filter>
     </Library>
   </ItemGroup>
 </Project>
