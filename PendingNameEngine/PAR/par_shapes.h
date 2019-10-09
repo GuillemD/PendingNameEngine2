@@ -25,6 +25,7 @@
 
 #ifndef PAR_SHAPES_H
 #define PAR_SHAPES_H
+#define PAR_SHAPES_IMPLEMENTATION
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,13 +45,13 @@ extern "C" {
 #endif
 
 #ifndef PAR_SHAPES_T
-#define PAR_SHAPES_T uint16_t
+#define PAR_SHAPES_T uint
 #endif
 
 typedef struct par_shapes_mesh_s {
     float* points;           // Flat list of 3-tuples (X Y Z X Y Z...)
     int npoints;             // Number of points
-    PAR_SHAPES_T* triangles; // Flat list of 3-tuples (I J K I J K...)
+    PAR_SHAPES_T* triangles; // Flat list of 3-tuples (I J K I J K...) -> index
     int ntriangles;          // Number of triangles
     float* normals;          // Optional list of 3-tuples (X Y Z X Y Z...)
     float* tcoords;          // Optional list of 2-tuples (U V U V U V...)
