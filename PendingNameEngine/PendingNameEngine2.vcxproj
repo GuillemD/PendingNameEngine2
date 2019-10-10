@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Assimp.h" />
     <ClInclude Include="Assimp\include\ai_assert.h" />
     <ClInclude Include="Assimp\include\anim.h" />
     <ClInclude Include="Assimp\include\camera.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleScene.h" />
+    <ClInclude Include="OpenGL.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="glmath.h" />
@@ -239,6 +241,7 @@
     <ClInclude Include="rapidjson\stream.h" />
     <ClInclude Include="rapidjson\stringbuffer.h" />
     <ClInclude Include="rapidjson\writer.h" />
+    <ClInclude Include="rjson.h" />
     <ClInclude Include="SDL\include\begin_code.h" />
     <ClInclude Include="SDL\include\close_code.h" />
     <ClInclude Include="SDL\include\SDL.h" />
@@ -375,13 +378,6 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assimp\include\color4.inl" />
-    <None Include="Assimp\include\material.inl" />
-    <None Include="Assimp\include\matrix3x3.inl" />
-    <None Include="Assimp\include\matrix4x4.inl" />
-    <None Include="Assimp\include\quaternion.inl" />
-    <None Include="Assimp\include\vector2.inl" />
-    <None Include="Assimp\include\vector3.inl" />
     <None Include="Game\config.json" />
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\include\Geometry\QuadTree.inl" />

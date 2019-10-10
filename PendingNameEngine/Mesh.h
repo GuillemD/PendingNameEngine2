@@ -5,6 +5,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Primitive.h"
 #include <string>
+#include "Assimp.h"
 //#include  "PAR/par_shapes.h"
 
 #define DEFAULT_COLOR {1.0f,1.0f,1.0f}
@@ -27,6 +28,8 @@ public:
 	void DefineCube(float3 _pos, float size);
 	//void DefinePARCube();
 	void DefinePlane(float3 _pos);
+
+	void Draw();
 
 	void LoadDataToVRAM();
 	void Reset();

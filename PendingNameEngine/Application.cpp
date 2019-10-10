@@ -1,12 +1,7 @@
 #include "Application.h"
 
 #include "mmgr/mmgr.h"
-
-#include "rapidjson\rapidjson.h"
-#include "rapidjson\document.h"
-#include "rapidjson\filereadstream.h"
-#include "rapidjson\filewritestream.h"
-
+#include "rjson.h"
 #include "gpudetect/DeviceId.h"
 
 Application::Application()

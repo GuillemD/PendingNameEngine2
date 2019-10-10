@@ -1,14 +1,8 @@
 #include "MeshImporter.h"
 #include "Application.h"
-#include "Mesh.h"
-
-#include <Windows.h>
-#include "GLEW/include/glew.h" 
-#include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
-
+#include "OpenGL.h"
+#include <string>
+#include "Assimp.h"
 
 void AssimpToConsoleLog(const char* str, char* userData);
 
@@ -32,7 +26,6 @@ bool MeshImporter::Start()
 	return ret;
 }
 
-
 bool MeshImporter::CleanUp()
 {
 	bool ret = true;
@@ -42,15 +35,15 @@ bool MeshImporter::CleanUp()
 	return ret;
 }
 
-bool MeshImporter::Import(const string & full_path)
+bool MeshImporter::ImportMesh(const char* full_path)
 {
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(full_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr)
 	{
 		aiNode* root = scene->mRootNode;
-		//LoadMesh(scene, root, full_path.c_str());
+		LoadMesh(scene, root, full_path);
 
 		aiReleaseImport(scene);
 	}
@@ -151,6 +144,8 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				m->texcoords_id = m->CreateBuffer();
 			}
 			m->LoadDataToVRAM();
+
+			App->scene->scene_meshes.push_back(m);
 			
 		}
 	}
@@ -164,9 +159,9 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 }
 
 
-
 void AssimpToConsoleLog(const char * str, char * userData)
 {
 	CONSOLELOG("%s", str);
 }
+
 

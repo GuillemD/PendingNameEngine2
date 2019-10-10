@@ -100,6 +100,13 @@ update_status ModuleInput::PreUpdate(float dt)
 
 		switch(e.type)
 		{
+			case SDL_DROPFILE:
+			{
+			App->importer->Import(e.drop.file);
+			SDL_free(e.drop.file);
+			break;
+			}
+
 			case SDL_MOUSEWHEEL:
 			mouse_z = e.wheel.y;
 			break;
@@ -128,6 +135,8 @@ update_status ModuleInput::PreUpdate(float dt)
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			}
+
+			
 		}
 	}
 

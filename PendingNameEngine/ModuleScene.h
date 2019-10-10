@@ -2,6 +2,7 @@
 #define _MODULE_SCENE_
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "Mesh.h"
 
 class ModuleScene :
 	public Module {
@@ -12,12 +13,10 @@ public:
 
 
 
-
-	bool Init();
 	bool Start();
-	update_status PreUpdate(float dt);
+	
 	update_status Update(float dt);
-	update_status PostUpdate(float dt);
+
 	bool CleanUp();
 	
 	void CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z);
@@ -29,6 +28,7 @@ public:
 public:
 
 	std::vector<AABB*> boxes;
+	std::vector<Mesh*> scene_meshes;
 
 };
 

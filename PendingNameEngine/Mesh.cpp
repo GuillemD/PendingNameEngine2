@@ -1,13 +1,7 @@
 #include "Mesh.h"
 #include "Application.h"
 
-#include <Windows.h>
-#include "GLEW/include/glew.h" 
-#include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
-
+#include "OpenGL.h"
 
 
 Mesh::Mesh()
@@ -202,6 +196,11 @@ void Mesh::DefinePlane(float3 _pos)
 
 	LoadDataToVRAM();
 
+
+}
+
+void Mesh::Draw()
+{
 
 }
 
