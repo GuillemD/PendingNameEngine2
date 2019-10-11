@@ -76,5 +76,8 @@ void ModuleScene::DrawScene()
 	grid.color = White;
 	grid.Render();
 
-	
+	for (auto it = scene_meshes.begin(); it != scene_meshes.end(); it++)
+	{
+		(*it)->Draw();
+	}
 }
