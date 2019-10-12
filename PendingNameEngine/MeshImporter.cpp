@@ -116,11 +116,11 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 					{
 						memcpy(&m->indices[j*3], imp_mesh->mFaces[i].mIndices, sizeof(uint) * 3);
 						correct_num_faces = true;
-						CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
+						
 						
 					}
 				}
-				
+				CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
 			}
 			
 			if (imp_mesh->HasNormals())
@@ -131,7 +131,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				
 				CONSOLELOG("Mesh %s with %d normals loaded", m->mesh_name.c_str(), m->num_normals);
 
-				
 			}
 			
 			if (imp_mesh->HasTextureCoords(0))
