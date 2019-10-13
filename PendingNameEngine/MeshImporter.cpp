@@ -40,7 +40,7 @@ bool MeshImporter::ImportMesh(const char* full_path)
 	bool ret = true;
 
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
-	if (scene != nullptr)
+	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiNode* root = scene->mRootNode;
 		LoadMesh(scene, root, full_path);
@@ -60,7 +60,7 @@ bool MeshImporter::ImportMesh(const char* full_path)
 void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const char * _full_path)
 {
 	Mesh* m = new Mesh();
-	bool correct_num_faces = false;
+	bool correct_num_faces = true;
 
 	if (_node->mTransformation[0] != nullptr)
 	{
@@ -96,7 +96,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->vertices, imp_mesh->mVertices, sizeof(float3)*m->num_vertices);
 
 				CONSOLELOG("Mesh %s with %d vertex loaded", m->mesh_name.c_str(), m->num_vertices);
-				m->LoadVertices();
 				
 			}
 			
@@ -113,17 +112,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 					if (imp_mesh->mFaces[i].mNumIndices != 3)
 					{
 						CONSOLELOG("WARNING, geometry face with != 3 indices!");
+						correct_num_faces = false;
 					}
 					else
 					{
 						memcpy(&m->indices[j*3], imp_mesh->mFaces[i].mIndices, sizeof(uint) * 3);
-						correct_num_faces = true;
-						
-						
 					}
 				}
 				CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
-				m->LoadIndices();
+				
 			}
 			
 			if (imp_mesh->HasNormals())
@@ -133,7 +130,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->normals, &imp_mesh->mNormals[0], sizeof(float3)*m->num_normals);
 				
 				CONSOLELOG("Mesh %s with %d normals loaded", m->mesh_name.c_str(), m->num_normals);
-				m->LoadNormals();
+				
 			}
 			
 			if (imp_mesh->HasTextureCoords(0))
@@ -143,9 +140,39 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*m->num_texcoords * 3);
 
 				CONSOLELOG("Mesh %s with %d texcoords loaded", m->mesh_name.c_str(), m->num_texcoords);
-				m->LoadTexcoords();
+				
 			}
-			
+			/*m->LoadVertices();
+			m->LoadIndices();
+			m->LoadNormals();
+			m->LoadTexcoords();*/
+
+			glGenBuffers(1, (GLuint*)&m->vertices_id);
+			glBindBuffer(GL_ARRAY_BUFFER, m->vertices_id);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->num_vertices * 3, m->vertices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			glGenBuffers(1, (GLuint*)&m->indices_id);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->indices_id);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*m->num_indices, m->indices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+			if (m->num_normals != 0)
+			{
+				glGenBuffers(1, (GLuint*)&m->normals_id);
+				glBindBuffer(GL_ARRAY_BUFFER, m->normals_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->num_normals * 3, m->normals, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
+
+			if (m->texcoords != 0)
+			{
+				glGenBuffers(1, (GLuint*)&m->texcoords_id);
+				glBindBuffer(GL_ARRAY_BUFFER, m->texcoords_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->texcoords_id * 3, m->texcoords, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
+
 			if(imp_mesh->HasPositions() && correct_num_faces)
 				App->scene->scene_meshes.push_back(m);
 			

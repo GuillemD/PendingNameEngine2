@@ -196,36 +196,32 @@ void Mesh::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-
+	
+	if (num_normals != 0)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, this->normals_id);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
 	if (num_texcoords != 0)
 	{
-		/*glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);*/
-		
-		/*if (num_normals != 0)
-		{
-			glBindBuffer(GL_ARRAY_BUFFER, normals_id);
-			glNormalPointer(GL_FLOAT, 0, NULL);
-		}*/
-	}
-	else
-	{
-		glDisable(GL_TEXTURE_2D);
-		glColor3f(1.0f,1.0f,1.0f);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, this->texcoords_id);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
 	}
 
-
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indices_id);
+	glDrawElements(GL_TRIANGLES, this->num_indices, GL_UNSIGNED_INT, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 
@@ -253,24 +249,24 @@ void Mesh::LoadIndices()
 
 void Mesh::LoadNormals()
 {
-	if (num_normals != 0)
+	/*if (num_normals != 0)
 	{
 		glGenBuffers(1, (GLuint*)&normals_id);
 		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_normals*3, normals, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+	}*/
 }
 
 void Mesh::LoadTexcoords()
 {
-	if (texcoords != 0)
+	/*if (texcoords != 0)
 	{
 		glGenBuffers(1, (GLuint*)&texcoords_id);
 		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*texcoords_id * 3, texcoords, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+	}*/
 }
 
 void Mesh::Reset()

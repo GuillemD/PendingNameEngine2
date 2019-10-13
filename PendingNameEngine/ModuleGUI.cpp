@@ -434,23 +434,21 @@ void ModuleGUI::ShowGeometryCreator()
 {
 	
 	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
-		ImGui::Text("Minimum coordinates");
-		ImGui::SliderInt("Min X", &min_x, -50, 50);
-		ImGui::SliderInt("Min Y", &min_y, -50, 50);
-		ImGui::SliderInt("Min Z", &min_z, -50, 50);
+		ImGui::Text("Cube Position");
+		ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+		ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+		ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
 
 		ImGui::Separator();
 
-		ImGui::Text("Maximum coordinates");
-		ImGui::SliderInt("Max X", &max_x, -50, 50);	
-		ImGui::SliderInt("Max Y", &max_y, -50, 50);
-		ImGui::SliderInt("Max Z", &max_z, -50, 50);
+		ImGui::Text("Cube Size");
+		ImGui::SliderFloat("Size",&size, -20.f, 20.f);	
 
 
-		if (ImGui::Button("Create AABB")) {
-			//App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+		if (ImGui::Button("Create Cube")) {
+
 			Mesh* c = new Mesh();
-			c->DefineCube({ 0,0,0 }, 1.0f);
+			c->DefineCube({ pos_x,pos_y,pos_z }, size);
 			c->LoadVertices();
 			c->LoadIndices();
 			App->scene->scene_meshes.push_back(c);

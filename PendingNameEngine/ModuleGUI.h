@@ -62,8 +62,8 @@ public:
 
 
 
-	int min_x = 0; int min_y = 0; int min_z = 0;
-	int max_x = 0; int max_y = 0; int max_z = 0;
+	float pos_x = 0.f; float pos_y = 0.f; float pos_z = 0.f;
+	float size = 1.f;
 
 private:
 	//Variables
