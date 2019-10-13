@@ -98,38 +98,21 @@ bool ModuleGUI::CleanUp()
 void ModuleGUI::DrawGUI()
 {
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
+
 	bool iswireframe = App->renderer3D->wireframe;
 	bool iscolormat = App->renderer3D->color_mat;
 	
-	if (iswireframe || iscolormat) {
-		if (iswireframe&&iscolormat) {
-			App->renderer3D->wireframe=false;
-			App->renderer3D->color_mat=false;
-			
-			
-			ImGui::Render();
+	if (iswireframe || !iscolormat) {
+		if (iswireframe)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
+		if (!iscolormat)
+			glEnable(GL_COLOR_MATERIAL); //turn on color
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-			App->renderer3D->color_mat = true;
-		}
-		else if(iswireframe){
-			App->renderer3D->wireframe = false;
-			
-			ImGui::Render();
+		ImGui::Render();
+		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-		}
-		else if (iscolormat) {
-			App->renderer3D->color_mat = false;
-
-			
-			ImGui::Render();
-
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->color_mat = true;
-		}
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //turn on wireframe again
+		glDisable(GL_COLOR_MATERIAL); //disable color mat again
 
 	} else {
 		
@@ -137,7 +120,6 @@ void ModuleGUI::DrawGUI()
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	
 }
 
 void ModuleGUI::CreateMainMenu()
@@ -469,7 +451,8 @@ void ModuleGUI::ShowGeometryCreator()
 			//App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
 			Mesh* c = new Mesh();
 			c->DefineCube({ 0,0,0 }, 1.0f);
-			c->LoadDataToVRAM();
+			c->LoadVertices();
+			c->LoadIndices();
 			App->scene->scene_meshes.push_back(c);
 		}
 	}

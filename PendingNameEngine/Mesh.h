@@ -31,7 +31,11 @@ public:
 
 	void Draw();
 
-	void LoadDataToVRAM();
+	void LoadVertices();
+	void LoadIndices();
+	void LoadNormals();
+	void LoadTexcoords();
+
 	void Reset();
 
 public:

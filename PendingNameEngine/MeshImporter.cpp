@@ -96,8 +96,10 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->vertices, imp_mesh->mVertices, sizeof(float3)*m->num_vertices);
 
 				CONSOLELOG("Mesh %s with %d vertex loaded", m->mesh_name.c_str(), m->num_vertices);
+				m->LoadVertices();
 				
 			}
+			
 			
 
 			if (imp_mesh->HasFaces())
@@ -121,6 +123,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 					}
 				}
 				CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
+				m->LoadIndices();
 			}
 			
 			if (imp_mesh->HasNormals())
@@ -130,7 +133,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->normals, &imp_mesh->mNormals[0], sizeof(float3)*m->num_normals);
 				
 				CONSOLELOG("Mesh %s with %d normals loaded", m->mesh_name.c_str(), m->num_normals);
-
+				m->LoadNormals();
 			}
 			
 			if (imp_mesh->HasTextureCoords(0))
@@ -140,11 +143,11 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				memcpy(m->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*m->num_texcoords * 3);
 
 				CONSOLELOG("Mesh %s with %d texcoords loaded", m->mesh_name.c_str(), m->num_texcoords);
-				
+				m->LoadTexcoords();
 			}
-			m->LoadDataToVRAM();
-
-			App->scene->scene_meshes.push_back(m);
+			
+			if(imp_mesh->HasPositions() && correct_num_faces)
+				App->scene->scene_meshes.push_back(m);
 			
 		}
 	}

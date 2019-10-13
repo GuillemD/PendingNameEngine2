@@ -22,7 +22,9 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	return true;
+	bool ret = true;
+	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	return ret;
 }
 
 
@@ -76,12 +78,8 @@ void ModuleScene::DrawScene()
 	grid.color = White;
 	grid.Render();
 
-	/*for (auto it = scene_meshes.begin(); it != scene_meshes.end(); it++)
+	for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
 	{
 		(*it)->Draw();
-	}*/
-	for (int i = 0; i < scene_meshes.size(); i++)
-	{
-		scene_meshes[i]->Draw();
 	}
 }
