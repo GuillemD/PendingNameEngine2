@@ -25,8 +25,6 @@ uint Mesh::CreateBuffer()
 void Mesh::DefineCube(float3 _pos, float size)
 {
 	pos = _pos;
-	vertices_id = CreateBuffer();
-	indices_id = CreateBuffer();
 
 	type = MESH_TYPE::CUBE_MESH;
 
@@ -156,9 +154,6 @@ void Mesh::DefinePlane(float3 _pos)
 {
 
 	pos = _pos;
-	vertices_id = CreateBuffer();
-
-	indices_id = CreateBuffer();
 
 	type = MESH_TYPE::PLANE_MESH;
 
@@ -206,6 +201,24 @@ void Mesh::Draw()
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
+	if (texcoords != nullptr)
+	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		
+		if (num_normals != 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, normals_id);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
+	}
+	else
+	{
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(1.0f,1.0f,1.0f);
+	}
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
@@ -213,6 +226,7 @@ void Mesh::Draw()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void Mesh::LoadDataToVRAM()
