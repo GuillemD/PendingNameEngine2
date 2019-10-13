@@ -2,6 +2,8 @@
 #define _TEXTUREIMPORTER_H_
 
 
+#include "Globals.h"
+
 class TextureImporter
 {
 public:

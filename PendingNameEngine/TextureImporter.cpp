@@ -1,6 +1,6 @@
 #include "TextureImporter.h"
 #include "Application.h"
-#include "Globals.h"
+
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"
@@ -28,9 +28,9 @@ TextureImporter::~TextureImporter()
 
 bool TextureImporter::Start()
 {
-	bool ret;
+	bool ret=true;
 
-	current_path = "";
+	/*current_path ="";*/
 
 	return ret;
 }
@@ -52,7 +52,7 @@ int TextureImporter::GetILVersion()
 uint TextureImporter::LoadTextureFromPath(const char * path)
 {
 	CONSOLELOG("Trying to import texture from %s . ", path);
-	GLuint texture_id;
+	GLuint texture_id=0;
 
 	ILenum error;
 	ILboolean image_loaded_correctly = ilLoadImage(path);
