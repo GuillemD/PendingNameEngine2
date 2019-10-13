@@ -10,6 +10,8 @@
 
 #include "Assimp/include/version.h"
 
+#include "Mesh.h"
+
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
@@ -30,7 +32,6 @@ bool ModuleGUI::Init()
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL2_Init();
-
 
 
 	//Panels
@@ -458,14 +459,18 @@ void ModuleGUI::ShowGeometryCreator()
 
 		ImGui::Separator();
 
-		ImGui::Text("Minimum coordinates");
+		ImGui::Text("Maximum coordinates");
 		ImGui::SliderInt("Max X", &max_x, -50, 50);	
 		ImGui::SliderInt("Max Y", &max_y, -50, 50);
 		ImGui::SliderInt("Max Z", &max_z, -50, 50);
 
 
 		if (ImGui::Button("Create AABB")) {
-			App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+			//App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+			Mesh* c = new Mesh();
+			c->DefineCube({ 0,0,0 }, 1.0f);
+			c->LoadDataToVRAM();
+			App->scene->scene_meshes.push_back(c);
 		}
 	}
 	ImGui::End();

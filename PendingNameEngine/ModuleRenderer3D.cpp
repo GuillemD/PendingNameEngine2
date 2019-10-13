@@ -148,12 +148,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	
-	
 
-	EnableLights();
-	App->gui->DrawGUI();
 	App->scene->DrawScene();
+	App->gui->DrawGUI();
+	EnableLights();
+
 	
 	SDL_GL_SwapWindow(App->window->window);
 
