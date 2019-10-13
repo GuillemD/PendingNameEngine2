@@ -182,6 +182,7 @@
     <ClCompile Include="MeshImporter.cpp">
       <Filter>Modules\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="TextureImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -917,6 +918,7 @@
     <ClInclude Include="DevIL\include\ilut_config.h">
       <Filter>External Libraries\DevIL</Filter>
     </ClInclude>
+    <ClInclude Include="TextureImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

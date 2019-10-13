@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "MeshImporter.h"
+#include "TextureImporter.h"
 
 
 ModuleImporter::ModuleImporter(bool start_enabled)
@@ -18,7 +19,7 @@ bool ModuleImporter::Start()
 	bool ret = true;
 
 	mesh_import->Start();
-
+	texture_import->Start();
 	return ret;
 }
 
@@ -31,6 +32,7 @@ update_status ModuleImporter::Update(float dt)
 bool ModuleImporter::CleanUp()
 {
 	mesh_import->CleanUp();
+	texture_import->CleanUp();
 	return true;
 }
 
@@ -62,6 +64,7 @@ bool ModuleImporter::Import(string path)
 			if (!App->scene->scene_meshes.empty())
 			{
 				//check if texture already loaded
+				texture_import->LoadTextureFromPath(path.c_str());
 				//load new texture
 			}
 		}

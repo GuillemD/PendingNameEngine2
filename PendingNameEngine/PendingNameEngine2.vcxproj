@@ -320,6 +320,7 @@
     <ClInclude Include="SDL\include\SDL_types.h" />
     <ClInclude Include="SDL\include\SDL_version.h" />
     <ClInclude Include="SDL\include\SDL_video.h" />
+    <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -383,6 +384,7 @@
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PCG_c_basic\pcg_basic.c" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

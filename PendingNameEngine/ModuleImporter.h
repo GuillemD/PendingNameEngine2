@@ -6,6 +6,7 @@
 
 using namespace std;
 class MeshImporter;
+class TextureImporter;
 
 class ModuleImporter : public Module
 {
@@ -20,6 +21,7 @@ public:
 	 bool Import(string path);
 public:
 	MeshImporter* mesh_import;
+	TextureImporter*  texture_import;
 	string mesh_path = "";
 
 };
