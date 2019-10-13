@@ -15,7 +15,7 @@ public:
 	int GetILVersion();
 	uint LoadTextureFromPath(const char* path);
 
-	char* current_path;
+	char* current_path="";
 
 };
 
