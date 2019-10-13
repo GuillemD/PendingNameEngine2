@@ -893,6 +893,30 @@
     <ClInclude Include="Assimp.h">
       <Filter>Utility\Includes</Filter>
     </ClInclude>
+    <ClInclude Include="DevIL\include\config.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\devil_internal_exports.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\il.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\il_wrap.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilu.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilu_region.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilut.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\ilut_config.h">
+      <Filter>External Libraries\DevIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -973,6 +997,12 @@
     <Filter Include="External Libraries\ASSIMP">
       <UniqueIdentifier>{77af64d3-00da-4ee7-8b70-8cef907a7e69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External Libraries\DevIL">
+      <UniqueIdentifier>{f4b4c4e5-b444-4b04-9260-f490ead693fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\DevIL\Lib">
+      <UniqueIdentifier>{3bb47984-2714-4d7d-a1cd-c3be8acd477b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -994,6 +1024,15 @@
     </Library>
     <Library Include="SDL\libx86\SDL2main.lib">
       <Filter>External Libraries\SDL\lib</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\DevIL.lib">
+      <Filter>External Libraries\DevIL\Lib</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\ILU.lib">
+      <Filter>External Libraries\DevIL\Lib</Filter>
+    </Library>
+    <Library Include="DevIL\libx86\ILUT.lib">
+      <Filter>External Libraries\DevIL\Lib</Filter>
     </Library>
   </ItemGroup>
 </Project>
