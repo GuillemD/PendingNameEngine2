@@ -72,11 +72,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 		_node->mTransformation.Decompose(scaling, rotation, translation);
 
 		float3 pos(translation.x, translation.y, translation.z);
-		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 		float3 scale(scaling.x, scaling.y, scaling.z);
 
+		aiVector3D euler_rotation = rotation.GetEuler();
+		euler_rotation *= RADTODEG;
+
 		m->pos = pos;
-		m->rot = rot;
+		m->euler_rot.x = euler_rotation.x;
+		m->euler_rot.y = euler_rotation.y;
+		m->euler_rot.z = euler_rotation.z;
 		m->scale = scale;
 
 	}
@@ -167,6 +171,13 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->texcoords_id * 3, m->texcoords, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
+
+			m->bb.SetNegativeInfinity();
+			m->bb.Enclose((float3*)imp_mesh->mVertices, imp_mesh->mNumVertices);
+
+			App->camera->can_focus = true;
+			App->camera->Focus(m->bb);
+			App->camera->can_focus = false;
 
 			if(imp_mesh->HasPositions() && correct_num_faces)
 				App->scene->scene_meshes.push_back(m);

@@ -273,4 +273,8 @@ void Mesh::Reset()
 {
 	vertices_id = indices_id = texcoords_id = normals_id = 0;
 	num_vertices = num_indices = num_texcoords = num_normals = 0;
+	vertices = nullptr;
+	indices = nullptr;
+	normals = nullptr;
+	texcoords = nullptr;
 }

@@ -22,6 +22,7 @@ public:
 	float* GetViewMatrix();
 	void ShowCameraConfig();
 
+	void Focus(const AABB& box);
 
 
 private:
@@ -32,6 +33,8 @@ private:
 public:
 	
 	vec3 X, Y, Z, Position, Reference;
+
+	bool can_focus = false;
 	
 };
 
