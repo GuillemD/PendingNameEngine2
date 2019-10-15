@@ -3,7 +3,7 @@
 #include "Module.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Mesh.h"
-
+#include "Texture.h"
 class ModuleScene :
 	public Module {
 public:
@@ -27,7 +27,7 @@ public:
 
 	std::vector<AABB*> boxes;
 	std::vector<Mesh*> scene_meshes;
-
+	std::vector<Texture*> textures;
 };
 
 #endif // !_MODULE_SCENE_

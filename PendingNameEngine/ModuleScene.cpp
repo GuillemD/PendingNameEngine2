@@ -24,6 +24,9 @@ bool ModuleScene::Start()
 {
 	bool ret = true;
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	App->importer->Import(".//Assets//Baker_house.png");
+
+
 	return ret;
 }
 

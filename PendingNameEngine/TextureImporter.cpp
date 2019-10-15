@@ -1,6 +1,6 @@
 #include "TextureImporter.h"
 #include "Application.h"
-
+#include "Texture.h"
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"
@@ -104,11 +104,13 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 
 		CONSOLELOG("Texture %s loaded correctly", path);
 
-
-		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
+		//We will do this when we have Go
+	/*	for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
 		{
 			(*it)->texcoords_id = tex_id;
-		}
+		}*/
+
+		App->scene->textures.push_back(new Texture(tex_id, width, height));
 
 	}
 	else
@@ -118,6 +120,8 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. Texture_id set to %d", iluErrorString(error), tex_id);
 		return tex_id;
 	}
+
+	
 
 	return tex_id;
 }

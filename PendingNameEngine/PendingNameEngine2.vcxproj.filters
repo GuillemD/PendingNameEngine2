@@ -185,6 +185,7 @@
     <ClCompile Include="TextureImporter.cpp">
       <Filter>Modules\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -923,6 +924,7 @@
     <ClInclude Include="TextureImporter.h">
       <Filter>Modules\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
