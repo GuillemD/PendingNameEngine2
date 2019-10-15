@@ -99,26 +99,17 @@ void ModuleGUI::DrawGUI()
 {
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
 
-	bool iswireframe = App->renderer3D->wireframe;
-	bool iscolormat = App->renderer3D->color_mat;
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDisable(GL_COLOR_MATERIAL);
 	
-	if (iswireframe || !iscolormat) {
-		if (iswireframe)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //turn off wireframe
-		if (!iscolormat)
-			glEnable(GL_COLOR_MATERIAL); //turn on color
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	if(App->renderer3D->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //turn on wireframe again
-		glDisable(GL_COLOR_MATERIAL); //disable color mat again
-
-	} else {
-		
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	}
+	if(App->renderer3D->color_mat)
+		glEnable(GL_COLOR_MATERIAL);
 
 }
 
@@ -158,8 +149,11 @@ void ModuleGUI::CreateMainMenu()
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Meshes")) {
-				
+			if (ImGui::MenuItem("Delete Meshes")) {
+				if (!App->scene->scene_meshes.empty())
+				{
+					App->scene->scene_meshes.clear();
+				}
 			}
 			
 			ImGui::EndMenu();

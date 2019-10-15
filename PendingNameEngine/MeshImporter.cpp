@@ -98,8 +98,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				CONSOLELOG("Mesh %s with %d vertex loaded", m->mesh_name.c_str(), m->num_vertices);
 				
 			}
-			
-			
 
 			if (imp_mesh->HasFaces())
 			{
@@ -109,14 +107,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 
 				for (int j = 0; j < imp_mesh->mNumFaces; j++)
 				{
-					if (imp_mesh->mFaces[i].mNumIndices != 3)
+					aiFace triangle = imp_mesh->mFaces[j];
+					if (triangle.mNumIndices != 3)
 					{
-						CONSOLELOG("WARNING, geometry face with != 3 indices!");
+						CONSOLELOG("WARNING, geometry face %d with != 3 indices!", j);
 						correct_num_faces = false;
 					}
 					else
 					{
-						memcpy(&m->indices[j*3], imp_mesh->mFaces[i].mIndices, sizeof(uint) * 3);
+						memcpy(&m->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
 					}
 				}
 				CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
@@ -142,10 +141,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 				CONSOLELOG("Mesh %s with %d texcoords loaded", m->mesh_name.c_str(), m->num_texcoords);
 				
 			}
-			/*m->LoadVertices();
-			m->LoadIndices();
-			m->LoadNormals();
-			m->LoadTexcoords();*/
 
 			glGenBuffers(1, (GLuint*)&m->vertices_id);
 			glBindBuffer(GL_ARRAY_BUFFER, m->vertices_id);
