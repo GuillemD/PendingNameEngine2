@@ -51,44 +51,43 @@ int TextureImporter::GetILVersion()
 
 uint TextureImporter::LoadTextureFromPath(const char * path)
 {
-	CONSOLELOG("Trying to import texture from %s . ", path);
-	GLuint texture_id=0;
+	CONSOLELOG("Importing texture %s", path);
 
-	ILenum error=0;
 	ILuint image_id;
-	
+	GLuint tex_id;
+	ILenum error;
 
-	ILboolean image_loaded_correctly = ilLoadImage(path);
-	
 	ilGenImages(1, &image_id);
 	ilBindImage(image_id);
 
-	if (image_loaded_correctly) {
-		
+	ILboolean imageloaded = true;
 
+	imageloaded = ilLoadImage(path);
+
+	if (imageloaded) {
 		ILinfo info;
 		iluGetImageInfo(&info);
 
-		if (info.Origin == IL_ORIGIN_UPPER_LEFT) {
+		if (info.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
 			iluFlipImage();
 		}
+
 		ILboolean converted = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		CONSOLELOG("Devilising teture. >:)");
 		if (!converted)
 		{
-			texture_id = 0;
+			tex_id = 0;
 			CONSOLELOG("DevIL failed to convert image %s. Error: %s", path, iluErrorString(ilGetError()));
-			return texture_id;
+			return tex_id;
 		}
-		
 		int width = ilGetInteger(IL_IMAGE_WIDTH);
 		int height = ilGetInteger(IL_IMAGE_HEIGHT);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		glGenTextures(1, &texture_id);
+		glGenTextures(1, &tex_id);
 
-		glBindTexture(GL_TEXTURE_2D, texture_id);
+		glBindTexture(GL_TEXTURE_2D, tex_id);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -103,19 +102,22 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("Image height: %d", ilGetInteger(IL_IMAGE_HEIGHT));
 
 
-		CONSOLELOG("Texture loaded correctly from %s .", path);
+		CONSOLELOG("Texture %s loaded correctly", path);
 
-		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++) {
-			(*it)->texcoords_id = texture_id;
+
+		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
+		{
+			(*it)->texcoords_id = tex_id;
 		}
-		
 
-	}	
-	else {
-		texture_id = 0;
-		CONSOLELOG("Failed to loadtexture from %s . Error: %s",path, iluErrorString(error));
+	}
+	else
+	{
+		tex_id = 0;
+		error = ilGetError();
+		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. Texture_id set to %d", iluErrorString(error), tex_id);
+		return tex_id;
 	}
 
-
-	return texture_id;
+	return tex_id;
 }
