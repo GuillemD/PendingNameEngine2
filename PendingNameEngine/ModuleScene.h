@@ -18,9 +18,10 @@ public:
 	bool CleanUp();
 	
 	void CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z);
-	void CheckAABBCollisions();
+	//void CheckAABBCollisions();
 
 	void DrawScene();
+	void ClearScene();
 
 public:
 
@@ -28,11 +29,6 @@ public:
 	std::vector<Mesh*> scene_meshes;
 
 };
-
-
-
-
-
 
 #endif // !_MODULE_SCENE_
 

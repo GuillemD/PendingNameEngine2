@@ -152,7 +152,7 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::MenuItem("Delete Meshes")) {
 				if (!App->scene->scene_meshes.empty())
 				{
-					App->scene->scene_meshes.clear();
+					App->scene->ClearScene();
 				}
 			}
 			
@@ -163,7 +163,7 @@ void ModuleGUI::CreateMainMenu()
 
 		if (ImGui::BeginMenu("Geometry")) {
 
-			if (ImGui::MenuItem("Generate Geometry")) {
+			if (ImGui::MenuItem("3D Object")) {
 				geometry_creator = !geometry_creator;
 				if (geometry_creator) {
 					CONSOLELOG("Geoetry Creator opened.");
@@ -171,10 +171,10 @@ void ModuleGUI::CreateMainMenu()
 				else CONSOLELOG("Geometry Creator closed.");
 				
 			}
-			if (ImGui::MenuItem("Check AABB collisions")) {
+			/*if (ImGui::MenuItem("Check AABB collisions")) {
 				CONSOLELOG("Checking AABB collisions...");
 				App->scene->CheckAABBCollisions();
-			}
+			}*/
 
 			ImGui::EndMenu();
 

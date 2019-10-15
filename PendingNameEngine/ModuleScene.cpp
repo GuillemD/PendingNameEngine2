@@ -54,7 +54,7 @@ void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_
 	int test = 0;
 }
 
-void ModuleScene::CheckAABBCollisions()
+/*void ModuleScene::CheckAABBCollisions()
 {
 	for (int i = 0; i < boxes.size(); i++) {
 		for (int j = 0; j < boxes.size(); j++) {
@@ -68,7 +68,7 @@ void ModuleScene::CheckAABBCollisions()
 			}		
 		}	
 	}
-}
+}*/
 
 
 void ModuleScene::DrawScene()
@@ -82,4 +82,10 @@ void ModuleScene::DrawScene()
 	{
 		(*it)->Draw();
 	}
+}
+
+void ModuleScene::ClearScene()
+{
+	scene_meshes.clear();
+	App->importer->mesh_path = "";
 }
