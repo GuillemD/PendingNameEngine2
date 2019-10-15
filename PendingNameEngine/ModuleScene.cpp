@@ -22,7 +22,9 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	return true;
+	bool ret = true;
+	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	return ret;
 }
 
 
@@ -52,7 +54,7 @@ void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_
 	int test = 0;
 }
 
-void ModuleScene::CheckAABBCollisions()
+/*void ModuleScene::CheckAABBCollisions()
 {
 	for (int i = 0; i < boxes.size(); i++) {
 		for (int j = 0; j < boxes.size(); j++) {
@@ -66,7 +68,7 @@ void ModuleScene::CheckAABBCollisions()
 			}		
 		}	
 	}
-}
+}*/
 
 
 void ModuleScene::DrawScene()
@@ -76,12 +78,14 @@ void ModuleScene::DrawScene()
 	grid.color = White;
 	grid.Render();
 
-	/*for (auto it = scene_meshes.begin(); it != scene_meshes.end(); it++)
+	for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
 	{
 		(*it)->Draw();
-	}*/
-	for (int i = 0; i < scene_meshes.size(); i++)
-	{
-		scene_meshes[i]->Draw();
 	}
+}
+
+void ModuleScene::ClearScene()
+{
+	scene_meshes.clear();
+	App->importer->mesh_path = "";
 }

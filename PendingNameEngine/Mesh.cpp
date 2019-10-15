@@ -12,6 +12,7 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
+	
 }
 
 uint Mesh::CreateBuffer()
@@ -25,8 +26,6 @@ uint Mesh::CreateBuffer()
 void Mesh::DefineCube(float3 _pos, float size)
 {
 	pos = _pos;
-	vertices_id = CreateBuffer();
-	indices_id = CreateBuffer();
 
 	type = MESH_TYPE::CUBE_MESH;
 
@@ -156,9 +155,6 @@ void Mesh::DefinePlane(float3 _pos)
 {
 
 	pos = _pos;
-	vertices_id = CreateBuffer();
-
-	indices_id = CreateBuffer();
 
 	type = MESH_TYPE::PLANE_MESH;
 
@@ -194,65 +190,91 @@ void Mesh::DefinePlane(float3 _pos)
 	indices[4] = 1;
 	indices[5] = 3;
 
-	LoadDataToVRAM();
-
-
 }
 
 void Mesh::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
+	if (num_normals != 0)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, this->normals_id);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+	if (num_texcoords != 0)
+	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, this->texcoords_id);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indices_id);
+	glDrawElements(GL_TRIANGLES, this->num_indices, GL_UNSIGNED_INT, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void Mesh::LoadDataToVRAM()
+
+void Mesh::LoadVertices()
 {
 	if (num_vertices != 0)
 	{
-		glGenBuffers(1, &vertices_id);
+		glGenBuffers(1, (GLuint*)&vertices_id);
 		glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+}
 
+void Mesh::LoadIndices()
+{
 	if (num_indices != 0)
 	{
-		glGenBuffers(1, &indices_id);
+		glGenBuffers(1, (GLuint*)&indices_id);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*num_indices, indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*num_indices, indices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+}
 
-	if (texcoords != 0)
+void Mesh::LoadNormals()
+{
+	/*if (num_normals != 0)
 	{
-		glGenBuffers(1, &texcoords_id);
+		glGenBuffers(1, (GLuint*)&normals_id);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_normals*3, normals, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}*/
+}
+
+void Mesh::LoadTexcoords()
+{
+	/*if (texcoords != 0)
+	{
+		glGenBuffers(1, (GLuint*)&texcoords_id);
 		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*texcoords_id * 3, texcoords, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	if (num_normals != 0)
-	{
-		glGenBuffers(1, &normals_id);
-		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float3)*num_normals, normals, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
+	}*/
 }
 
 void Mesh::Reset()
 {
 	vertices_id = indices_id = texcoords_id = normals_id = 0;
 	num_vertices = num_indices = num_texcoords = num_normals = 0;
+	vertices = nullptr;
+	indices = nullptr;
+	normals = nullptr;
+	texcoords = nullptr;
 }

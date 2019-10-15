@@ -98,46 +98,19 @@ bool ModuleGUI::CleanUp()
 void ModuleGUI::DrawGUI()
 {
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
-	bool iswireframe = App->renderer3D->wireframe;
-	bool iscolormat = App->renderer3D->color_mat;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDisable(GL_COLOR_MATERIAL);
 	
-	if (iswireframe || iscolormat) {
-		if (iswireframe&&iscolormat) {
-			App->renderer3D->wireframe=false;
-			App->renderer3D->color_mat=false;
-			
-			
-			ImGui::Render();
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-			App->renderer3D->color_mat = true;
-		}
-		else if(iswireframe){
-			App->renderer3D->wireframe = false;
-			
-			ImGui::Render();
+	if(App->renderer3D->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-		}
-		else if (iscolormat) {
-			App->renderer3D->color_mat = false;
+	if(App->renderer3D->color_mat)
+		glEnable(GL_COLOR_MATERIAL);
 
-			
-			ImGui::Render();
-
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->color_mat = true;
-		}
-
-	} else {
-		
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	}
-
-	
 }
 
 void ModuleGUI::CreateMainMenu()
@@ -176,8 +149,11 @@ void ModuleGUI::CreateMainMenu()
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Meshes")) {
-				
+			if (ImGui::MenuItem("Delete Meshes")) {
+				if (!App->scene->scene_meshes.empty())
+				{
+					App->scene->ClearScene();
+				}
 			}
 			
 			ImGui::EndMenu();
@@ -187,7 +163,7 @@ void ModuleGUI::CreateMainMenu()
 
 		if (ImGui::BeginMenu("Geometry")) {
 
-			if (ImGui::MenuItem("Generate Geometry")) {
+			if (ImGui::MenuItem("3D Object")) {
 				geometry_creator = !geometry_creator;
 				if (geometry_creator) {
 					CONSOLELOG("Geoetry Creator opened.");
@@ -195,10 +171,10 @@ void ModuleGUI::CreateMainMenu()
 				else CONSOLELOG("Geometry Creator closed.");
 				
 			}
-			if (ImGui::MenuItem("Check AABB collisions")) {
+			/*if (ImGui::MenuItem("Check AABB collisions")) {
 				CONSOLELOG("Checking AABB collisions...");
 				App->scene->CheckAABBCollisions();
-			}
+			}*/
 
 			ImGui::EndMenu();
 
@@ -452,24 +428,23 @@ void ModuleGUI::ShowGeometryCreator()
 {
 	
 	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
-		ImGui::Text("Minimum coordinates");
-		ImGui::SliderInt("Min X", &min_x, -50, 50);
-		ImGui::SliderInt("Min Y", &min_y, -50, 50);
-		ImGui::SliderInt("Min Z", &min_z, -50, 50);
+		ImGui::Text("Cube Position");
+		ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+		ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+		ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
 
 		ImGui::Separator();
 
-		ImGui::Text("Maximum coordinates");
-		ImGui::SliderInt("Max X", &max_x, -50, 50);	
-		ImGui::SliderInt("Max Y", &max_y, -50, 50);
-		ImGui::SliderInt("Max Z", &max_z, -50, 50);
+		ImGui::Text("Cube Size");
+		ImGui::SliderFloat("Size",&size, -20.f, 20.f);	
 
 
-		if (ImGui::Button("Create AABB")) {
-			//App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+		if (ImGui::Button("Create Cube")) {
+
 			Mesh* c = new Mesh();
-			c->DefineCube({ 0,0,0 }, 1.0f);
-			c->LoadDataToVRAM();
+			c->DefineCube({ pos_x,pos_y,pos_z }, size);
+			c->LoadVertices();
+			c->LoadIndices();
 			App->scene->scene_meshes.push_back(c);
 		}
 	}
