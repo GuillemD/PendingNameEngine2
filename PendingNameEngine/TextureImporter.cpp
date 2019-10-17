@@ -101,10 +101,10 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("Texture %s loaded correctly", path);
 
 		//We will do this when we have Go
-	/*	for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
+		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
 		{
 			(*it)->texcoords_id = tex_id;
-		}*/
+		}
 
 		App->scene->textures.push_back(new Texture(tex_id, width, height));
 

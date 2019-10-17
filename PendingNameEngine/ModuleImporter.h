@@ -25,6 +25,7 @@ public:
 	MeshImporter* mesh_import;
 	TextureImporter*  texture_import;
 	string mesh_path = "";
+	string texture_path = "";
 
 };
 #endif // !_MODULEIMPORTER_H_

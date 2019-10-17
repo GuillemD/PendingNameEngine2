@@ -64,9 +64,12 @@ bool ModuleImporter::Import(string path)
 		{
 			if (!App->scene->scene_meshes.empty())
 			{
-				//check if texture already loaded
-				texture_import->LoadTextureFromPath(path.c_str());
-				//load new texture
+				if (texture_path != path)
+				{
+					texture_import->LoadTextureFromPath(path.c_str());
+					texture_path = path;
+				}
+
 			}
 		}
 		else
