@@ -19,6 +19,8 @@ public:
 	 bool CleanUp();
 
 	 bool Import(string path);
+
+	 int GetILVersion() const;
 public:
 	MeshImporter* mesh_import;
 	TextureImporter*  texture_import;

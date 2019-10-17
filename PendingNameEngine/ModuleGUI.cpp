@@ -412,6 +412,15 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("%d.%d.%d", aiGetVersionMajor(), aiGetVersionMinor(), aiGetVersionRevision());
 		ImGui::NextColumn();
 
+		//DevIL
+		if (ImGui::Button("DevIL", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("http://openil.sourceforge.net/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%d", App->importer->GetILVersion());
+		ImGui::NextColumn();
+
 		ImGui::Columns(1);
 		ImGui::Separator();
 

@@ -139,8 +139,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-//Update: Draw?
-
 
 
 // PostUpdate present buffer to screen

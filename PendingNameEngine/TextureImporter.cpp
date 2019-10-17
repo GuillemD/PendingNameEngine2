@@ -44,10 +44,6 @@ bool TextureImporter::CleanUp()
 	return ret;
 }
 
-int TextureImporter::GetILVersion()
-{
-	return IL_VERSION;
-}
 
 uint TextureImporter::LoadTextureFromPath(const char * path)
 {
@@ -124,4 +120,9 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 	
 
 	return tex_id;
+}
+
+int TextureImporter::GetVersion() const
+{
+	return IL_VERSION;
 }

@@ -12,8 +12,9 @@ public:
 
 	bool Start();
 	bool CleanUp();
-	int GetILVersion();
+
 	uint LoadTextureFromPath(const char* path);
+	int GetVersion() const;
 
 	char* current_path="";
 
