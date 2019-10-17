@@ -3,6 +3,7 @@
 
 #include "PanelConsole.h"
 #include "PanelConfiguration.h"
+#include "PanelInspector.h"
 
 #include "OpenGL.h"
 
@@ -37,6 +38,7 @@ bool ModuleGUI::Init()
 	//Panels
 	console = new PanelConsole("Console");
 	config = new PanelConfig("Configuration");
+	inspector = new PanelInspector("Inspector");
 
 
 	return ret;
@@ -45,19 +47,18 @@ bool ModuleGUI::Init()
 bool ModuleGUI::Start()
 {
 	bool ret = true;
-
 	
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
 	config->SetActive();
+	inspector->SetActive();
 	return ret;
 }
 
 update_status ModuleGUI::PreUpdate(float dt)
 {
 
-	
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
@@ -67,7 +68,6 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-
 	return UPDATE_CONTINUE;
 }
 
@@ -128,7 +128,6 @@ void ModuleGUI::CreateMainMenu()
 			}
 			if (ImGui::MenuItem("Quit")) {
 				show_save_popup = true;
-
 			}
 			ImGui::EndMenu();
 
@@ -138,7 +137,7 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::BeginMenu("Panels")) {
 				
 				ImGui::Checkbox("Configuration", &config->active );
-				//ImGui::Checkbox("Inspector", );
+				ImGui::Checkbox("Inspector", &inspector->active );
 				ImGui::Checkbox("Console", &console->active);
 				ImGui::Separator();
 
@@ -146,6 +145,7 @@ void ModuleGUI::CreateMainMenu()
 				{
 					if (config->isActive()) config->SetInactive();
 					if (console->isActive()) console->SetInactive();
+					if (inspector->isActive()) inspector->SetInactive();
 				}
 				ImGui::EndMenu();
 			}
@@ -218,6 +218,7 @@ void ModuleGUI::CreateMainMenu()
 	if (show_about)ShowAbout();
 	if (console->isActive())ShowConsole();
 	if (config->isActive())ShowConfig();
+	if (inspector->isActive())ShowInspector();
 	
 }
 
@@ -483,6 +484,11 @@ void ModuleGUI::ShowSavePopUp()
 	}
 	ImGui::End();
 	
+}
+
+void ModuleGUI::ShowInspector()
+{
+	inspector->Draw();
 }
 
 

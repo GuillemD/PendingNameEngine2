@@ -49,6 +49,8 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 {
 	CONSOLELOG("Importing texture %s", path);
 
+	Texture* t = new Texture();
+
 	ILuint image_id;
 	GLuint tex_id;
 	ILenum error;
@@ -74,16 +76,20 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		{
 			tex_id = 0;
 			CONSOLELOG("DevIL failed to convert image %s. Error: %s", path, iluErrorString(ilGetError()));
-			return tex_id;
+			exit(-1);
 		}
-		int width = ilGetInteger(IL_IMAGE_WIDTH);
-		int height = ilGetInteger(IL_IMAGE_HEIGHT);
 
+		
+		t->SetWidth(ilGetInteger(IL_IMAGE_WIDTH));
+		t->SetHeight(ilGetInteger(IL_IMAGE_HEIGHT));
+		t->SetName(path); //temporary
+			
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
 		glGenTextures(1, &tex_id);
 
 		glBindTexture(GL_TEXTURE_2D, tex_id);
+
+		t->SetTextureId(tex_id);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -91,22 +97,30 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+		glTexImage2D(GL_TEXTURE_2D, 
+								0, 
+							GL_RGB,
+					t->GetWidth(), 
+					t->GetHeight(),
+								0, 
+		ilGetInteger(IL_IMAGE_FORMAT),
+				GL_UNSIGNED_BYTE,
+					ilGetData());
 
 
-		CONSOLELOG("Image width: %d", ilGetInteger(IL_IMAGE_WIDTH));
-		CONSOLELOG("Image height: %d", ilGetInteger(IL_IMAGE_HEIGHT));
+		CONSOLELOG("Image width: %d", t->GetWidth());
+		CONSOLELOG("Image height: %d",t->GetHeight());
 
 
 		CONSOLELOG("Texture %s loaded correctly", path);
 
-		//We will do this when we have Go
+
 		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
 		{
 			(*it)->texcoords_id = tex_id;
 		}
 
-		App->scene->textures.push_back(new Texture(tex_id, width, height));
+		App->scene->textures.push_back(t);
 
 	}
 	else
@@ -118,7 +132,6 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 	}
 
 	
-
 	return tex_id;
 }
 

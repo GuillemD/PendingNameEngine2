@@ -11,6 +11,7 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+class PanelInspector;
 class PanelConsole;
 class PanelConfig;
 class Panel;
@@ -46,6 +47,7 @@ private:
 	void ShowConfig();
 	void ShowGeometryCreator();
 	void ShowSavePopUp();
+	void ShowInspector();
 
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
@@ -56,6 +58,7 @@ public:
 
 	PanelConsole* console = nullptr;
 	PanelConfig* config = nullptr;
+	PanelInspector* inspector = nullptr;
 
 	//tmp needs to be moved somewhere else
 	std::vector<AABB> aabb_array;

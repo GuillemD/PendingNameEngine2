@@ -216,6 +216,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PAR\par_bluenoise.h" />
     <ClInclude Include="PAR\par_bubbles.h" />
     <ClInclude Include="PAR\par_easings.h" />
@@ -383,6 +384,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PCG_c_basic\pcg_basic.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Texture.cpp" />

@@ -186,6 +186,9 @@
       <Filter>Modules\Importers</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="PanelInspector.cpp">
+      <Filter>Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -925,6 +928,9 @@
       <Filter>Modules\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="PanelInspector.h">
+      <Filter>Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
