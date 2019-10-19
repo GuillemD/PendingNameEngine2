@@ -101,6 +101,7 @@ void ModuleGUI::DrawGUI()
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -110,6 +111,9 @@ void ModuleGUI::DrawGUI()
 
 	if(App->renderer3D->color_mat)
 		glEnable(GL_COLOR_MATERIAL);
+
+	if (App->renderer3D->texture)
+		glEnable(GL_TEXTURE_2D);
 
 }
 

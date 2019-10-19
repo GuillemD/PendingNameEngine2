@@ -293,11 +293,13 @@ void ModuleRenderer3D::EnableLights()
 
 void ModuleRenderer3D::SetWireframe(bool wf)
 {
-	
+	if (wireframe != wf)
+	{
+		wireframe = wf;
+	}
 	if (wireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
 	}
 	else
 	{
@@ -308,7 +310,9 @@ void ModuleRenderer3D::SetWireframe(bool wf)
 
 void ModuleRenderer3D::SetDepthTest(bool dt)
 {
-	
+	if (depth_test != dt)
+		depth_test = dt;
+
 	if (depth_test)
 		glEnable(GL_DEPTH_TEST);
 	else
@@ -319,7 +323,9 @@ void ModuleRenderer3D::SetDepthTest(bool dt)
 
 void ModuleRenderer3D::SetBackfaceCull(bool bf)
 {
-	
+	if (backface != bf)
+		backface = bf;
+
 	if (backface)
 		glEnable(GL_CULL_FACE);
 	else
@@ -329,7 +335,9 @@ void ModuleRenderer3D::SetBackfaceCull(bool bf)
 
 void ModuleRenderer3D::SetTexture2d(bool tx)
 {
-	
+	if (texture != tx)
+		texture = tx;
+
 	if (texture)
 		glEnable(GL_TEXTURE_2D);
 	else
@@ -339,7 +347,9 @@ void ModuleRenderer3D::SetTexture2d(bool tx)
 
 void ModuleRenderer3D::SetColorMaterial(bool c_m)
 {
-	
+	if (color_mat != c_m)
+		color_mat = c_m;
+
 	if (color_mat)
 		glEnable(GL_COLOR_MATERIAL);
 	else
@@ -349,7 +359,9 @@ void ModuleRenderer3D::SetColorMaterial(bool c_m)
 
 void ModuleRenderer3D::SetLighting(bool light)
 {
-	
+	if (lighting != light)
+		lighting = light;
+
 	if (lighting)
 		glEnable(GL_LIGHTING);
 	else
@@ -359,7 +371,9 @@ void ModuleRenderer3D::SetLighting(bool light)
 
 void ModuleRenderer3D::SetLineSmooth(bool sm)
 {
-	
+	if (line_smooth != sm)
+		line_smooth = sm;
+
 	if (line_smooth)
 		glEnable(GL_LINE_SMOOTH);
 	else

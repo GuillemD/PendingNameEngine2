@@ -49,7 +49,6 @@ public:
 	float3 scale = { 1,1,1 };
 
 	MESH_TYPE type;
-	float3 color = { 0,0,0 };
 
 	float3* vertices = nullptr;
 	uint num_vertices = 0;

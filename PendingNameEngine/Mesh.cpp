@@ -6,7 +6,7 @@
 
 Mesh::Mesh()
 {
-	color = DEFAULT_COLOR;
+	//color = DEFAULT_COLOR;
 	Reset();
 }
 
@@ -196,28 +196,31 @@ void Mesh::Draw()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertices_id);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
 	
 	if (num_normals != 0)
 	{
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, this->normals_id);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 	if (num_texcoords != 0)
 	{
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, this->texcoords_id);
+		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
+		glBindTexture(GL_TEXTURE_2D, (GLuint)App->scene->textures.front()->GetTextureId());
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indices_id);
-	glDrawElements(GL_TRIANGLES, this->num_indices, GL_UNSIGNED_INT, NULL);
+	
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);

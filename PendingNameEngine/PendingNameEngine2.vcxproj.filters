@@ -185,9 +185,11 @@
     <ClCompile Include="TextureImporter.cpp">
       <Filter>Modules\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="PanelInspector.cpp">
       <Filter>Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -927,9 +929,11 @@
     <ClInclude Include="TextureImporter.h">
       <Filter>Modules\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="PanelInspector.h">
       <Filter>Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

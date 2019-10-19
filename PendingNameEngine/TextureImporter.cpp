@@ -114,12 +114,6 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 
 		CONSOLELOG("Texture %s loaded correctly", path);
 
-
-		for (std::vector<Mesh*>::iterator it = App->scene->scene_meshes.begin(); it != App->scene->scene_meshes.end(); it++)
-		{
-			(*it)->texcoords_id = tex_id;
-		}
-
 		App->scene->textures.push_back(t);
 
 	}

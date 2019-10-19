@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include "Primitive.h"
 
+#include "OpenGL.h"
+
 
 
 ModuleScene::ModuleScene()
@@ -75,15 +77,16 @@ void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_
 
 void ModuleScene::DrawScene()
 {
+
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
-	grid.color = White;
 	grid.Render();
-
+	
 	for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
 	{
 		(*it)->Draw();
 	}
+
 }
 
 void ModuleScene::ClearScene()
