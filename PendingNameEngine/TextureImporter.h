@@ -18,6 +18,8 @@ public:
 
 	char* current_path="";
 
+	bool CreateCheckersTexture();
+
 };
 
 #endif _TEXTUREIMPORTER_H_

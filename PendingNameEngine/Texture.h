@@ -10,6 +10,7 @@ class Texture
 public:
 	Texture();
 	Texture(uint id, uint w, uint h);
+	Texture(uint id, uint w, uint h, string name_);
 	~Texture();
 
 	const char* GetName() const { return tex_name.c_str(); }

@@ -31,6 +31,7 @@ bool TextureImporter::Start()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 	
+	CreateCheckersTexture();
 
 	return ret;
 }
@@ -47,7 +48,7 @@ bool TextureImporter::CleanUp()
 
 uint TextureImporter::LoadTextureFromPath(const char * path)
 {
-	CONSOLELOG("Importing texture %s", path);
+	CONSOLELOG("Importing texture %s ...", path);
 
 	Texture* t = new Texture();
 
@@ -75,7 +76,7 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		if (!converted)
 		{
 			tex_id = 0;
-			CONSOLELOG("DevIL failed to convert image %s. Error: %s", path, iluErrorString(ilGetError()));
+			CONSOLELOG("DevIL failed to convert image %s. Error: %s . :(", path, iluErrorString(ilGetError()));
 			exit(-1);
 		}
 
@@ -112,7 +113,7 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("Image height: %d",t->GetHeight());
 
 
-		CONSOLELOG("Texture %s loaded correctly", path);
+		CONSOLELOG("Texture %s loaded correctly! :)", path);
 
 		App->scene->textures.push_back(t);
 
@@ -121,7 +122,7 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 	{
 		tex_id = 0;
 		error = ilGetError();
-		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. Texture_id set to %d", iluErrorString(error), tex_id);
+		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
 		return tex_id;
 	}
 
@@ -132,4 +133,39 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 int TextureImporter::GetVersion() const
 {
 	return IL_VERSION;
+}
+#define CHECKERS_WIDTH 64
+#define CHECKERS_HEIGHT 32
+
+bool TextureImporter::CreateCheckersTexture()
+{
+	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	uint ImageName = 0;
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glGenTextures(1, &ImageName);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+	App->scene->textures.push_back(new Texture(ImageName,CHECKERS_WIDTH,CHECKERS_HEIGHT,"Checkers"));
+	
+	return true;
 }
