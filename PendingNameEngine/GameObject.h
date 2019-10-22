@@ -2,6 +2,12 @@
 #define _GAMEOBJECT_H_
 
 #include "Globals.h"
+#include "Component.h"
+#include <list>
+
+class Component;
+enum ComponentTYPE;
+class ComponentTransform;
 
 class GameObject
 {
@@ -11,10 +17,20 @@ public:
 
 	void Update();
 	void Draw();
+
+	//parent
+	GameObject* GetParent() const;
+	void SetParent(GameObject* new_parent);
+
+	//components
+	Component* GetComponent(ComponentTYPE _type) const;
+	Component* AddComponent(ComponentTYPE _type);
 public:
-	GameObject* parent;
+	GameObject* parent = nullptr;
 	bool selected;
 	std::string go_name;
+	std::list<Component*> components;
+	ComponentTransform* trans;
 
 private:
 	bool is_active;

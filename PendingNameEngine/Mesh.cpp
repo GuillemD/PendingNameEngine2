@@ -25,7 +25,7 @@ uint Mesh::CreateBuffer()
 
 void Mesh::DefineCube(float3 _pos, float size)
 {
-	pos = _pos;
+	/*pos = _pos;
 
 	type = MESH_TYPE::CUBE_MESH;
 
@@ -117,7 +117,7 @@ void Mesh::DefineCube(float3 _pos, float size)
 	indices[33] = 6;
 	indices[34] = 0;
 	indices[35] = 2;
-
+	*/
 }
 
 //void Mesh::DefinePARCube()
@@ -154,7 +154,7 @@ void Mesh::DefineCube(float3 _pos, float size)
 void Mesh::DefinePlane(float3 _pos)
 {
 
-	pos = _pos;
+	/*pos = _pos;
 
 	type = MESH_TYPE::PLANE_MESH;
 
@@ -189,7 +189,7 @@ void Mesh::DefinePlane(float3 _pos)
 	indices[3] = 2;
 	indices[4] = 1;
 	indices[5] = 3;
-
+	*/
 }
 
 /*void Mesh::Draw()

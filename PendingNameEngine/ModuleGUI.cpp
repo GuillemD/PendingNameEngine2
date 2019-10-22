@@ -154,7 +154,7 @@ void ModuleGUI::CreateMainMenu()
 				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Delete Meshes")) {
-				if (!App->scene->scene_meshes.empty())
+				if (!App->scene->scene_gameobjects.empty())
 				{
 					App->scene->ClearScene();
 				}
@@ -455,11 +455,11 @@ void ModuleGUI::ShowGeometryCreator()
 
 		if (ImGui::Button("Create Cube")) {
 
-			Mesh* c = new Mesh();
+			/*Mesh* c = new Mesh();
 			c->DefineCube({ pos_x,pos_y,pos_z }, size);
 			c->LoadVertices();
 			c->LoadIndices();
-			App->scene->scene_meshes.push_back(c);
+			App->scene->scene_meshes.push_back(c);*/
 		}
 	}
 	ImGui::End();

@@ -38,14 +38,6 @@ public:
 	void Reset();
 
 public:
-	std::string mesh_name = "";
-
-	AABB bb;
-
-	//transform
-	float3 pos = { 0,0,0 };
-	vec3 euler_rot = { 0,0,0 };
-	float3 scale = { 1,1,1 };
 
 	MESH_TYPE type;
 

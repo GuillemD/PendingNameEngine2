@@ -6,6 +6,8 @@
 
 enum ComponentTYPE { CMP_TRANSFORM = 0, CMP_MESH, CMP_MATERIAL };
 
+class GameObject;
+
 class Component
 {
 public:

@@ -32,7 +32,6 @@ bool ModuleScene::Start()
 }
 
 
-
 update_status ModuleScene::Update(float dt)
 {
 	return UPDATE_CONTINUE;
@@ -58,22 +57,6 @@ void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_
 	int test = 0;
 }
 
-/*void ModuleScene::CheckAABBCollisions()
-{
-	for (int i = 0; i < boxes.size(); i++) {
-		for (int j = 0; j < boxes.size(); j++) {
-			
-			if (i != j) {
-				if (boxes[i]->Intersects(*boxes[j])) {
-
-					CONSOLELOG("Box %d intersects with box %d", i, j);
-
-				}
-			}		
-		}	
-	}
-}*/
-
 
 void ModuleScene::DrawScene()
 {
@@ -82,15 +65,15 @@ void ModuleScene::DrawScene()
 	grid.axis = true;
 	grid.Render();
 	
-	/*for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
-	{
-		(*it)->Draw();
-	}*/
-
 }
 
 void ModuleScene::ClearScene()
 {
-	scene_meshes.clear();
+	scene_gameobjects.clear();
 	App->importer->mesh_path = "";
+}
+
+void ModuleScene::AddGameObject(GameObject * go)
+{
+	scene_gameobjects.push_back(go);
 }

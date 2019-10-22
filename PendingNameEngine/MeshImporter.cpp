@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include "ComponentMesh.h"
+#include "ComponentTransform.h"
 
 #include "OpenGL.h"
 #include <string>
@@ -66,8 +67,29 @@ bool MeshImporter::ImportMesh(const char* full_path)
 void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameObject* parent, const char * _full_path)
 {
 	GameObject* go = new GameObject();
-	Mesh* m = new Mesh();
 	bool correct_num_faces = true;
+
+	if (_node->mParent != nullptr)
+		go->SetParent(parent);
+
+	if (string(_node->mName.C_Str()) == string("RootNode"))
+	{
+		go->SetParent(parent);
+		
+		string aux_name = _full_path;
+		int pos = aux_name.find_last_of('\\');
+		int len = aux_name.length() - pos;
+		aux_name = aux_name.substr(pos + 1, len);
+
+		int pos2 = aux_name.find_last_of('.');
+		aux_name = aux_name.substr(0, pos2);
+
+		go->go_name = aux_name;
+	}
+	else
+		go->go_name = _node->mName.C_Str();
+
+	ComponentTransform* t_cmp = nullptr;
 
 	if (_node->mTransformation[0] != nullptr)
 	{
@@ -79,16 +101,19 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		_node->mTransformation.Decompose(scaling, rotation, translation);
 
 		float3 pos(translation.x, translation.y, translation.z);
+		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 		float3 scale(scaling.x, scaling.y, scaling.z);
 
 		aiVector3D euler_rotation = rotation.GetEuler();
 		euler_rotation *= RADTODEG;
 
-		m->pos = pos;
-		m->euler_rot.x = euler_rotation.x;
-		m->euler_rot.y = euler_rotation.y;
-		m->euler_rot.z = euler_rotation.z;
-		m->scale = scale;
+		float3 euler_angles = { euler_rotation.x,euler_rotation.y, euler_rotation.z };
+
+		t_cmp = (ComponentTransform*)go->GetComponent(CMP_TRANSFORM);
+		t_cmp->SetPosition(pos);
+		t_cmp->SetRotation(rot);
+		t_cmp->SetScale(scale);
+		t_cmp->SetEulerRotation(euler_angles);
 
 	}
 	if (_node->mNumMeshes > 0)
@@ -96,25 +121,33 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		for (int i = 0; i < _node->mNumMeshes; i++)
 		{
 			aiMesh* imp_mesh = _scene->mMeshes[_node->mMeshes[i]];
-			string name = _node->mName.C_Str();
-			m->mesh_name = name;
+			Mesh* mesh = nullptr;
+
+			string m_name = _node->mName.C_Str();
+			go->go_name = m_name;
 
 			if (imp_mesh->HasPositions())
 			{
-				//vertices
-				m->num_vertices = imp_mesh->mNumVertices;
-				m->vertices = new float3[m->num_vertices];
-				memcpy(m->vertices, imp_mesh->mVertices, sizeof(float3)*m->num_vertices);
+				mesh = new Mesh();
 
-				CONSOLELOG("Mesh %s with %d vertex loaded", m->mesh_name.c_str(), m->num_vertices);
-				
+				//vertices
+				mesh->num_vertices = imp_mesh->mNumVertices;
+				mesh->vertices = new float3[mesh->num_vertices];
+				memcpy(mesh->vertices, imp_mesh->mVertices, sizeof(float3)*mesh->num_vertices);
+
+				glGenBuffers(1, (GLuint*)&mesh->vertices_id);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				CONSOLELOG("GO %s with %d vertex loaded", go->go_name.c_str(), mesh->num_vertices);
+
 			}
 
 			if (imp_mesh->HasFaces())
 			{
 				//indices
-				m->num_indices = imp_mesh->mNumFaces * 3; //num triangles * 3
-				m->indices = new uint[m->num_indices];
+				mesh->num_indices = imp_mesh->mNumFaces * 3; //num triangles * 3
+				mesh->indices = new uint[mesh->num_indices];
 
 				for (int j = 0; j < imp_mesh->mNumFaces; j++)
 				{
@@ -126,71 +159,76 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 					}
 					else
 					{
-						memcpy(&m->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
+						memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
 					}
 				}
-				CONSOLELOG("Mesh %s with %d indices loaded", m->mesh_name.c_str(), m->num_indices);
+				glGenBuffers(1, (GLuint*)&mesh->indices_id);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				CONSOLELOG("GO %s with %d indices loaded", go->go_name.c_str(), mesh->num_indices);
 				
 			}
 			
 			if (imp_mesh->HasNormals())
 			{
-				m->num_normals = m->num_vertices;
-				m->normals = new float3[m->num_normals];
-				memcpy(m->normals, &imp_mesh->mNormals[0], sizeof(float3)*m->num_normals);
+				mesh->num_normals = mesh->num_vertices;
+				mesh->normals = new float3[mesh->num_normals];
+				memcpy(mesh->normals, &imp_mesh->mNormals[0], sizeof(float3)*mesh->num_normals);
 				
-				CONSOLELOG("Mesh %s with %d normals loaded", m->mesh_name.c_str(), m->num_normals);
-				
+				CONSOLELOG("GO %s with %d normals loaded", go->go_name.c_str(), mesh->num_normals);
+				glGenBuffers(1, (GLuint*)&mesh->normals_id);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->normals_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
 			
 			if (imp_mesh->HasTextureCoords(0))
 			{
-				m->num_texcoords = imp_mesh->mNumVertices;
-				m->texcoords = new float[m->num_texcoords * 3];
-				memcpy(m->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*m->num_texcoords * 3);
-
-				CONSOLELOG("Mesh %s with %d texcoords loaded", m->mesh_name.c_str(), m->num_texcoords);
+				mesh->num_texcoords = imp_mesh->mNumVertices;
+				mesh->texcoords = new float[mesh->num_texcoords * 3];
 				
-			}
+				if (mesh->texcoords != nullptr)
+					glTexCoordPointer(3, GL_FLOAT_R_NV, 0, &mesh->texcoords);
 
-			glGenBuffers(1, (GLuint*)&m->vertices_id);
-			glBindBuffer(GL_ARRAY_BUFFER, m->vertices_id);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->num_vertices * 3, m->vertices, GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+				memcpy(mesh->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*mesh->num_texcoords * 3);
 
-			glGenBuffers(1, (GLuint*)&m->indices_id);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->indices_id);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*m->num_indices, m->indices, GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-			if (m->num_normals != 0)
-			{
-				glGenBuffers(1, (GLuint*)&m->normals_id);
-				glBindBuffer(GL_ARRAY_BUFFER, m->normals_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->num_normals * 3, m->normals, GL_STATIC_DRAW);
+				CONSOLELOG("GO %s with %d texcoords loaded", go->go_name.c_str(), mesh->num_texcoords);
+				
+				glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->texcoords_id * 3, mesh->texcoords, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
 
-			if (m->texcoords != 0)
-			{
-				glGenBuffers(1, (GLuint*)&m->texcoords_id);
-				glBindBuffer(GL_ARRAY_BUFFER, m->texcoords_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->texcoords_id * 3, m->texcoords, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-			}
+			ComponentMesh* m_cmp = (ComponentMesh*)go->AddComponent(CMP_MESH);
+			m_cmp->SetMesh(mesh);
+			m_cmp->bb.SetNegativeInfinity();
+			m_cmp->bb.Enclose(mesh->vertices, mesh->num_vertices);
 
-			m->bb.SetNegativeInfinity();
-			m->bb.Enclose((float3*)imp_mesh->mVertices, imp_mesh->mNumVertices);
+			/*if (_scene->HasMaterials())
+			{
+				aiMaterial* mat = nullptr;
+				mat = _scene->mMaterials[imp_mesh->mMaterialIndex];
+
+				aiString name;
+				mat->GetTexture(aiTextureType_DIFFUSE, 0, &name);
+			}*/
 
 			App->camera->can_focus = true;
-			App->camera->Focus(m->bb);
+			App->camera->Focus(m_cmp->bb);
 			App->camera->can_focus = false;
 
-			if(imp_mesh->HasPositions() && correct_num_faces)
-				App->scene->scene_meshes.push_back(m);
+			if (imp_mesh->HasPositions() && correct_num_faces)
+				App->scene->AddGameObject(go);
 			
 		}
 	}
+	else
+	{
+		App->scene->AddGameObject(go);
+	}
+
 	if (_node->mNumChildren > 0)
 	{
 		for (int k = 0; k < _node->mNumChildren; k++)
@@ -198,6 +236,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			LoadMesh(_scene, _node->mChildren[k], go, _full_path);
 		}
 	}
+	parent = go;
 }
 
 

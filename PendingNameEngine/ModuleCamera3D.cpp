@@ -158,7 +158,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
-		if (App->scene->scene_meshes.empty())
+		if (App->scene->scene_gameobjects.empty())
 		{
 			Reference = { 0,0,0 };
 			Position = Reference + (Z * 3);
@@ -168,7 +168,7 @@ update_status ModuleCamera3D::Update(float dt)
 			if (can_focus)
 			{
 				
-				Focus(App->scene->scene_meshes.front()->bb);
+				//Focus(App->scene->scene_gameobjects.front()->bb);
 				can_focus = false;
 			}
 		}

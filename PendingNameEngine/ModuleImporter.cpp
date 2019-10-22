@@ -62,7 +62,7 @@ bool ModuleImporter::Import(string path)
 		}
 		else if (extension == "PNG" || extension == "png" || extension == "DDS" || extension == "dds")
 		{
-			if (!App->scene->scene_meshes.empty())
+			if (!App->scene->scene_gameobjects.empty())
 			{
 				if (texture_path != path)
 				{

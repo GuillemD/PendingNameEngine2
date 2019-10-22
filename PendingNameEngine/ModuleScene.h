@@ -24,11 +24,12 @@ public:
 	void DrawScene();
 	void ClearScene();
 
+	void AddGameObject(GameObject* go);
+
 public:
 	GameObject* root = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
 	std::vector<AABB*> boxes;
-	std::vector<Mesh*> scene_meshes;
 	std::vector<Texture*> textures;
 };
 
