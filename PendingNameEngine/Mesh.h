@@ -8,7 +8,6 @@
 #include "Assimp.h"
 //#include  "PAR/par_shapes.h"
 
-#define DEFAULT_COLOR {1.0f,1.0f,1.0f}
 
 enum MESH_TYPE {
 	CUBE_MESH = 0,
@@ -29,7 +28,7 @@ public:
 	//void DefinePARCube();
 	void DefinePlane(float3 _pos);
 
-	void Draw();
+	//void Draw();
 
 	void LoadVertices();
 	void LoadIndices();

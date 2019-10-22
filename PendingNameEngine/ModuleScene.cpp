@@ -82,10 +82,10 @@ void ModuleScene::DrawScene()
 	grid.axis = true;
 	grid.Render();
 	
-	for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
+	/*for (std::vector<Mesh*>::iterator it = scene_meshes.begin(); it != scene_meshes.end(); it++)
 	{
 		(*it)->Draw();
-	}
+	}*/
 
 }
 

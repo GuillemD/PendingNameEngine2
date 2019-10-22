@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "Mesh.h"
 #include "Texture.h"
+#include "GameObject.h"
 class ModuleScene :
 	public Module {
 public:
@@ -24,7 +25,8 @@ public:
 	void ClearScene();
 
 public:
-
+	GameObject* root = nullptr;
+	std::vector<GameObject*> scene_gameobjects;
 	std::vector<AABB*> boxes;
 	std::vector<Mesh*> scene_meshes;
 	std::vector<Texture*> textures;

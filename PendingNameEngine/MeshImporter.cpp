@@ -1,5 +1,10 @@
 #include "MeshImporter.h"
 #include "Application.h"
+
+#include "GameObject.h"
+
+#include "ComponentMesh.h"
+
 #include "OpenGL.h"
 #include <string>
 #include "Assimp.h"
@@ -38,12 +43,13 @@ bool MeshImporter::CleanUp()
 bool MeshImporter::ImportMesh(const char* full_path)
 {
 	bool ret = true;
-
+	
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiNode* root = scene->mRootNode;
-		LoadMesh(scene, root, full_path);
+
+		LoadMesh(scene, root, App->scene->root, full_path);
 
 		aiReleaseImport(scene);
 	}
@@ -57,8 +63,9 @@ bool MeshImporter::ImportMesh(const char* full_path)
 	return ret;
 }
 
-void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const char * _full_path)
+void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameObject* parent, const char * _full_path)
 {
+	GameObject* go = new GameObject();
 	Mesh* m = new Mesh();
 	bool correct_num_faces = true;
 
@@ -188,7 +195,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, const 
 	{
 		for (int k = 0; k < _node->mNumChildren; k++)
 		{
-			LoadMesh(_scene, _node->mChildren[k], _full_path);
+			LoadMesh(_scene, _node->mChildren[k], go, _full_path);
 		}
 	}
 }

@@ -15,9 +15,5 @@ void PanelHierarchy::Draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(400, 400));
 	ImGui::Begin("Hierarchy", &active);
-	for
-
-
-
-
+	ImGui::End();
 }
