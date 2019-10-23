@@ -48,6 +48,15 @@ void GameObject::SetParent(GameObject * new_parent)
 	parent = new_parent;
 }
 
+void GameObject::AddChild(GameObject * child)
+{
+	if (child != nullptr)
+	{
+		child->SetParent(this);
+		childs.push_back(child);
+	}
+}
+
 Component * GameObject::GetComponent(ComponentTYPE _type) const
 {
 	for (auto it = components.begin(); it != components.end(); it++)

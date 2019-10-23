@@ -25,6 +25,11 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Start()
 {
 	bool ret = true;
+
+	root = new GameObject();
+	root->go_name = "RootGameObject";
+	scene_gameobjects.push_back(root);
+
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	ret = App->importer->Import(".//Assets//Baker_house.png");
 

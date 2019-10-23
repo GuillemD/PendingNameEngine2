@@ -17,9 +17,6 @@ public:
 	Mesh* GetMesh() const;
 	void SetMesh(Mesh* m);
 
-public:
-	AABB bb;
-
 private:
 	Mesh* mesh = nullptr;
 };

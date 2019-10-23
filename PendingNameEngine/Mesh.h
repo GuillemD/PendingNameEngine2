@@ -40,6 +40,7 @@ public:
 public:
 
 	MESH_TYPE type;
+	AABB bb;
 
 	float3* vertices = nullptr;
 	uint num_vertices = 0;

@@ -22,6 +22,8 @@ public:
 	GameObject* GetParent() const;
 	void SetParent(GameObject* new_parent);
 
+	void AddChild(GameObject* child);
+
 	//components
 	Component* GetComponent(ComponentTYPE _type) const;
 	Component* AddComponent(ComponentTYPE _type);
