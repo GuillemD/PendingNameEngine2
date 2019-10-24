@@ -209,6 +209,7 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -971,6 +972,7 @@
     <ClInclude Include="Transform.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
