@@ -51,7 +51,7 @@ bool ModuleImporter::Import(string path)
 		{
 			if (mesh_path != path)
 			{
-				App->scene->ClearScene();
+				//App->scene->ClearScene();
 				ret = mesh_import->ImportMesh(path.c_str());
 				mesh_path = path;
 			}
