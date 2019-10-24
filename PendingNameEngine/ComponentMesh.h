@@ -17,6 +17,11 @@ public:
 	Mesh* GetMesh() const;
 	void SetMesh(Mesh* m);
 
+	void CreateBB();
+	void DrawBB();
+
+public:
+	bool draw_bb = false;
 private:
 	Mesh* mesh = nullptr;
 };

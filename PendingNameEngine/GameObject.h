@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "Component.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 #include <list>
 
 enum ComponentTYPE;
@@ -45,6 +46,7 @@ public:
 	std::string go_name;
 	std::list<Component*> components;
 	ComponentTransform* trans;
+	AABB* go_bb;
 
 private:
 	bool is_active;

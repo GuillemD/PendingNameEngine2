@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ComponentMesh.h"
 
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled)
@@ -167,8 +168,8 @@ update_status ModuleCamera3D::Update(float dt)
 		{
 			if (can_focus)
 			{
-				
-				//Focus(App->scene->scene_gameobjects.front()->bb);
+				ComponentMesh* tmp = (ComponentMesh*)App->scene->selected_go->GetComponent(CMP_MESH);
+				Focus(tmp->GetMesh()->bb);
 				can_focus = false;
 			}
 		}

@@ -26,8 +26,11 @@ public:
 
 	void AddGameObject(GameObject* go);
 
+	void SetSelectedGO(GameObject* go);
+
 public:
 	GameObject* root = nullptr;
+	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
 	std::vector<AABB*> boxes;
 	std::vector<Texture*> textures;

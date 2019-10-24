@@ -91,3 +91,8 @@ void ModuleScene::AddGameObject(GameObject * go)
 {
 	scene_gameobjects.push_back(go);
 }
+
+void ModuleScene::SetSelectedGO(GameObject * go)
+{
+	selected_go = go;
+}

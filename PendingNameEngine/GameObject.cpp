@@ -13,6 +13,7 @@ GameObject::GameObject()
 	selected = false;
 	is_active = true;
 	is_static = false;
+	go_bb = nullptr;
 
 	//create component transform
 	Component* cmp = new ComponentTransform(this);

@@ -62,6 +62,9 @@ void ComponentMesh::Draw()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (draw_bb)
+		DrawBB();
 }
 
 Mesh * ComponentMesh::GetMesh() const
@@ -72,4 +75,35 @@ Mesh * ComponentMesh::GetMesh() const
 void ComponentMesh::SetMesh(Mesh * m)
 {
 	mesh = m;
+}
+
+void ComponentMesh::CreateBB()
+{
+	if (mesh != nullptr)
+	{
+		mesh->bb.SetNegativeInfinity();
+		mesh->bb = mesh->bb.MinimalEnclosingAABB(GetMesh()->vertices, GetMesh()->num_vertices);
+		owner->go_bb = &mesh->bb;
+	}
+}
+
+void ComponentMesh::DrawBB()
+{
+	if (draw_bb) //TODO: add owner->IsSelected() when hierarchy implemented
+	{
+		LineSegment curr_line;
+
+		glBegin(GL_LINES);
+		App->renderer3D->DebugRenderSettings();
+
+		for (int i = 0; i < 12; i++)
+		{
+			curr_line = mesh->bb.Edge(i);
+
+			glVertex3f(curr_line.a.x, curr_line.a.y, curr_line.a.z);
+			glVertex3f(curr_line.b.x, curr_line.b.y, curr_line.b.z);
+		}
+
+		glEnd();
+	}
 }

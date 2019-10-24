@@ -215,11 +215,8 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			}*/
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
-
-			AABB boundingbox;
-			boundingbox.SetNegativeInfinity();
-			boundingbox.Enclose((float3*)imp_mesh->mVertices, imp_mesh->mNumVertices);
-			mesh->bb = boundingbox;
+			m_cmp->CreateBB();
+			m_cmp->draw_bb = true;
 
 			parent->AddChild(child);
 
@@ -250,6 +247,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			}
 			
 			App->scene->AddGameObject(child);
+			App->scene->SetSelectedGO(child);
 
 			App->camera->can_focus = true;
 			App->camera->Focus(m_cmp->GetMesh()->bb);
