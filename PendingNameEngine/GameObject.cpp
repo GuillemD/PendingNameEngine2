@@ -5,6 +5,8 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 
+#include "OpenGL.h"
+
 GameObject::GameObject()
 {
 	go_name = "";
@@ -36,6 +38,13 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
+	if (!is_active)
+		return;
+
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Draw();
+	}
 }
 
 GameObject * GameObject::GetParent() const
@@ -89,4 +98,34 @@ Component * GameObject::AddComponent(ComponentTYPE _type)
 	}
 	components.push_back(aux);
 	return aux;
+}
+
+bool GameObject::IsActive() const
+{
+	return is_active;
+}
+
+void GameObject::SetActive(bool a)
+{
+	is_active = a;
+}
+
+bool GameObject::IsStatic() const
+{
+	return is_static;
+}
+
+void GameObject::SetStatic(bool st)
+{
+	is_static = st;
+}
+
+bool GameObject::IsSelected() const
+{
+	return selected;
+}
+
+void GameObject::SetSelected(bool sel)
+{
+	selected = sel;
 }

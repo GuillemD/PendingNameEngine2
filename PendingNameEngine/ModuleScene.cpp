@@ -31,7 +31,7 @@ bool ModuleScene::Start()
 	scene_gameobjects.push_back(root);
 
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
-	ret = App->importer->Import(".//Assets//Baker_house.png");
+	//ret = App->importer->Import(".//Assets//Baker_house.png");
 
 	return ret;
 }
@@ -68,7 +68,16 @@ void ModuleScene::DrawScene()
 
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
+	grid.color = { 1.0f,1.0f,1.0f };
+
+	App->renderer3D->DebugRenderSettings();
 	grid.Render();
+	App->renderer3D->SetDefaultSettings();
+
+	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		(*it)->Draw();
+	}
 	
 }
 

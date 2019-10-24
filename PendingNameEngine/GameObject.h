@@ -5,9 +5,10 @@
 #include "Component.h"
 #include <list>
 
-class Component;
 enum ComponentTYPE;
+class Component;
 class ComponentTransform;
+class ComponentMesh;
 
 class GameObject
 {
@@ -22,11 +23,22 @@ public:
 	GameObject* GetParent() const;
 	void SetParent(GameObject* new_parent);
 
+	//childs
 	void AddChild(GameObject* child);
 
 	//components
 	Component* GetComponent(ComponentTYPE _type) const;
 	Component* AddComponent(ComponentTYPE _type);
+
+	//utility
+	bool IsActive() const;
+	void SetActive(bool a);
+
+	bool IsStatic() const;
+	void SetStatic(bool st);
+
+	bool IsSelected() const;
+	void SetSelected(bool sel);
 public:
 	GameObject* parent = nullptr;
 	bool selected;

@@ -1,4 +1,5 @@
 #include "ComponentMesh.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 #include "GameObject.h"
 
@@ -46,10 +47,12 @@ void ComponentMesh::Draw()
 	if (mesh == nullptr)
 		return;
 
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
 	glDrawElements(GL_TRIANGLES, mesh->num_indices, GL_UNSIGNED_INT, NULL);

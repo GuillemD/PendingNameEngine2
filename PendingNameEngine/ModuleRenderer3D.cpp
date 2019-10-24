@@ -106,12 +106,13 @@ bool ModuleRenderer3D::Init()
 
 		EnableLights();
 
-		if (!loaded_renderer_config)
-		{
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_COLOR_MATERIAL);
-			glEnable(GL_TEXTURE_2D);
-		}
+		SetWireframe(false);
+		SetBackfaceCull(true);
+		SetDepthTest(true);
+		SetColorMaterial(true);
+		SetTexture2d(true);
+		SetLighting(true);
+		SetLineSmooth(false);
 		
 	}
 
@@ -165,7 +166,7 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-bool ModuleRenderer3D::Save(Document & doc, FileWriteStream & os)
+/*bool ModuleRenderer3D::Save(Document & doc, FileWriteStream & os)
 {
 	Document::AllocatorType& alloc = doc.GetAllocator();
 	Value renderer(kObjectType);
@@ -202,7 +203,7 @@ bool ModuleRenderer3D::Load(Document * doc)
 	loaded_renderer_config = true;
 
 	return ret;
-}
+}*/
 
 void ModuleRenderer3D::ShowRendererConfig()
 {
@@ -379,6 +380,33 @@ void ModuleRenderer3D::SetLineSmooth(bool sm)
 	else
 		glDisable(GL_LINE_SMOOTH);
 	
+}
+
+void ModuleRenderer3D::DebugRenderSettings()
+{
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glColor3f(0.3f,1.0f,0.3f);
+}
+
+void ModuleRenderer3D::UIRenderSettings()
+{
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_COLOR_MATERIAL);
+}
+
+void ModuleRenderer3D::SetDefaultSettings()
+{
+	SetWireframe(wireframe);
+	SetBackfaceCull(backface);
+	SetDepthTest(depth_test);
+	SetColorMaterial(color_mat);
+	SetTexture2d(texture);
+	SetLighting(lighting);
+	SetLineSmooth(line_smooth);
 }
 
 
