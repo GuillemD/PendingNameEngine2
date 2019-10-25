@@ -130,3 +130,23 @@ void GameObject::SetSelected(bool sel)
 {
 	selected = sel;
 }
+
+void GameObject::PrintMyHierarchy()
+{
+	if (childs.empty() != true) {
+		if (ImGui::TreeNodeEx(go_name.c_str())) {
+
+			for (auto c : childs) {
+				c->PrintMyHierarchy();
+
+			}
+			ImGui::TreePop();
+		}
+	}
+	else {
+		bool selected = false;
+		ImGui::Selectable(go_name.c_str(), &selected);
+	}
+}
+
+

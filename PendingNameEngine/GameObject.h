@@ -40,6 +40,9 @@ public:
 
 	bool IsSelected() const;
 	void SetSelected(bool sel);
+
+	void PrintMyHierarchy();
+
 public:
 	GameObject* parent = nullptr;
 	bool selected;

@@ -10,6 +10,7 @@ class PanelHierarchy :
 {
 public:
 	PanelHierarchy();
+	PanelHierarchy(char* _name);
 	~PanelHierarchy();
 
 	void Draw() override;

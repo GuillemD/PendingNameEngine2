@@ -4,6 +4,7 @@
 #include "PanelConsole.h"
 #include "PanelConfiguration.h"
 #include "PanelInspector.h"
+#include "PanelHierarchy.h"
 
 #include "OpenGL.h"
 
@@ -39,7 +40,7 @@ bool ModuleGUI::Init()
 	console = new PanelConsole("Console");
 	config = new PanelConfig("Configuration");
 	inspector = new PanelInspector("Inspector");
-
+	hierarchy = new PanelHierarchy("Hierarchy");
 
 	return ret;
 }
@@ -53,6 +54,7 @@ bool ModuleGUI::Start()
 	console->SetActive();
 	config->SetActive();
 	inspector->SetActive();
+	hierarchy->SetActive();
 	return ret;
 }
 
@@ -143,6 +145,7 @@ void ModuleGUI::CreateMainMenu()
 				ImGui::Checkbox("Configuration", &config->active );
 				ImGui::Checkbox("Inspector", &inspector->active );
 				ImGui::Checkbox("Console", &console->active);
+				ImGui::Checkbox("Hierarchy", &hierarchy->active);
 				ImGui::Separator();
 
 				if (ImGui::SmallButton("Hide all"))
@@ -223,7 +226,7 @@ void ModuleGUI::CreateMainMenu()
 	if (console->isActive())ShowConsole();
 	if (config->isActive())ShowConfig();
 	if (inspector->isActive())ShowInspector();
-	
+	if (hierarchy->isActive())hierarchy->Draw();
 }
 
 void ModuleGUI::ShowDemoWindow()

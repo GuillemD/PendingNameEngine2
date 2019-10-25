@@ -15,7 +15,7 @@ class PanelInspector;
 class PanelConsole;
 class PanelConfig;
 class Panel;
-
+class PanelHierarchy;
 
 class ModuleGUI : public Module
 {
@@ -59,7 +59,7 @@ public:
 	PanelConsole* console = nullptr;
 	PanelConfig* config = nullptr;
 	PanelInspector* inspector = nullptr;
-
+	PanelHierarchy* hierarchy = nullptr;
 	//tmp needs to be moved somewhere else
 	std::vector<AABB> aabb_array;
 
