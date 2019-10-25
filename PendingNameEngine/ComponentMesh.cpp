@@ -1,5 +1,6 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
 #include "Application.h"
 #include "GameObject.h"
 
@@ -47,15 +48,36 @@ void ComponentMesh::Draw()
 	if (mesh == nullptr)
 		return;
 
-
+	ComponentMaterial* mat = (ComponentMaterial*)owner->GetComponent(CMP_MATERIAL);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	
-
+	if (mat && mat->GetMaterial())
+	{
+		if (mat->GetMaterial()->GetDiffuse() != nullptr)
+		{
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
+			glBindTexture(GL_TEXTURE_2D, mat->GetMaterial()->GetDiffuse()->GetTextureId());
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		}
+		else
+		{
+			App->renderer3D->SetTexture2d(false);
+			Color col = mat->GetColor();
+			glColor3f(col.r, col.g, col.b);
+		}
+	}
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
 	glDrawElements(GL_TRIANGLES, mesh->num_indices, GL_UNSIGNED_INT, NULL);
+
+	if (mat && mat->GetMaterial())
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
