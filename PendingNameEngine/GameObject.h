@@ -26,10 +26,13 @@ public:
 
 	//childs
 	void AddChild(GameObject* child);
+	void SetChild(GameObject* child);
 
 	//components
 	Component* GetComponent(ComponentTYPE _type) const;
 	Component* AddComponent(ComponentTYPE _type);
+	void RemoveComponent(ComponentTYPE _type);
+	void PushComponent(Component* cmp);
 
 	//utility
 	bool IsActive() const;
@@ -46,6 +49,7 @@ public:
 public:
 	GameObject* parent = nullptr;
 	bool selected;
+	bool is_root;
 	std::string go_name;
 	std::list<Component*> components;
 	ComponentTransform* trans;

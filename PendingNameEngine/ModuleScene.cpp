@@ -28,10 +28,11 @@ bool ModuleScene::Start()
 
 	root = new GameObject();
 	root->go_name = "RootGameObject";
+	root->is_root = true;
 	scene_gameobjects.push_back(root);
 
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
-	//ret = App->importer->Import(".//Assets//Baker_house.png");
+	ret = App->importer->Import(".//Assets//Baker_house.png");
 
 	return ret;
 }

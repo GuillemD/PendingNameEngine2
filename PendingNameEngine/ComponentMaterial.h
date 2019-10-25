@@ -3,16 +3,25 @@
 
 #include "Component.h"
 #include "Texture.h"
+#include "Material.h"
+
 class ComponentMaterial : public Component
 {
 public:
 	ComponentMaterial();
+	ComponentMaterial(GameObject* p);
 	~ComponentMaterial();
-	Texture* GetTexture();
-	bool SetTexture(Texture* newtex);
+
+	bool CleanUp();
+
+	Material* GetMaterial() const;
+	void SetMaterial(Material* mat);
+
+	Color GetColor() const;
+	void SetColor(Color col);
 
 private:
-	Texture* texture = nullptr;
+	Material* material = nullptr;
 };
 
 

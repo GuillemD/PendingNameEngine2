@@ -31,7 +31,7 @@ bool TextureImporter::Start()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 	
-	CreateCheckersTexture();
+	//CreateCheckersTexture();
 
 	return ret;
 }
@@ -46,7 +46,7 @@ bool TextureImporter::CleanUp()
 }
 
 
-uint TextureImporter::LoadTextureFromPath(const char * path)
+Texture* TextureImporter::LoadTextureFromPath(const char * path)
 {
 	CONSOLELOG("Importing texture %s ...", path);
 
@@ -55,11 +55,11 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 	ILuint image_id;
 	GLuint tex_id;
 	ILenum error;
+	ILboolean imageloaded;
 
 	ilGenImages(1, &image_id);
 	ilBindImage(image_id);
-
-	ILboolean imageloaded = true;
+	
 
 	imageloaded = ilLoadImage(path);
 
@@ -72,11 +72,11 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 			iluFlipImage();
 		}
 
-		ILboolean converted = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!converted)
+		imageloaded = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!imageloaded)
 		{
-			tex_id = 0;
-			CONSOLELOG("DevIL failed to convert image %s. Error: %s . :(", path, iluErrorString(ilGetError()));
+			error = ilGetError();
+			CONSOLELOG("DevIL failed to convert image %s. Error: %s . :(", path, iluErrorString(error));
 			exit(-1);
 		}
 
@@ -101,8 +101,8 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 		glTexImage2D(GL_TEXTURE_2D, 
 								0, 
 							GL_RGB,
-					t->GetWidth(), 
-					t->GetHeight(),
+		ilGetInteger(IL_IMAGE_WIDTH),
+		ilGetInteger(IL_IMAGE_HEIGHT),
 								0, 
 		ilGetInteger(IL_IMAGE_FORMAT),
 				GL_UNSIGNED_BYTE,
@@ -115,19 +115,17 @@ uint TextureImporter::LoadTextureFromPath(const char * path)
 
 		CONSOLELOG("Texture %s loaded correctly! :)", path);
 
-		App->scene->textures.push_back(t);
-
 	}
 	else
 	{
 		tex_id = 0;
 		error = ilGetError();
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
-		return tex_id;
+		
 	}
 
 	
-	return tex_id;
+	return t;
 }
 
 int TextureImporter::GetVersion() const
@@ -165,7 +163,7 @@ bool TextureImporter::CreateCheckersTexture()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
-	App->scene->textures.push_back(new Texture(ImageName,CHECKERS_WIDTH,CHECKERS_HEIGHT,"Checkers"));
+	//App->scene->textures.push_back(new Texture(ImageName,CHECKERS_WIDTH,CHECKERS_HEIGHT,"Checkers"));
 	
 	return true;
 }

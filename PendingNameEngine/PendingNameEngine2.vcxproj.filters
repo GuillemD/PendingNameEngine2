@@ -209,7 +209,12 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp" />
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -972,7 +977,12 @@
     <ClInclude Include="Transform.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

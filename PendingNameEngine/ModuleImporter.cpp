@@ -4,6 +4,9 @@
 #include "MeshImporter.h"
 #include "TextureImporter.h"
 
+#include "Component.h"
+#include "ComponentMaterial.h"
+
 
 ModuleImporter::ModuleImporter(bool start_enabled)
 {
@@ -66,7 +69,23 @@ bool ModuleImporter::Import(string path)
 			{
 				if (texture_path != path)
 				{
-					texture_import->LoadTextureFromPath(path.c_str());
+					ComponentMaterial* mat = new ComponentMaterial();
+					mat->GetMaterial()->SetDiffuse(texture_import->LoadTextureFromPath(path.c_str()));
+					for (auto it : App->scene->scene_gameobjects)
+					{
+						ComponentMaterial* aux = (ComponentMaterial*)it->GetComponent(CMP_MATERIAL);
+						if (aux != nullptr)
+						{
+							it->RemoveComponent(CMP_MATERIAL);
+							it->PushComponent(mat);
+							mat->SetOwner(it);
+						}
+						else
+						{
+							it->PushComponent(mat);
+							mat->SetOwner(it);
+						}
+					}
 					texture_path = path;
 				}
 

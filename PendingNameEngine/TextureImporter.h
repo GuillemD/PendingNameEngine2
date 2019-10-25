@@ -3,6 +3,9 @@
 
 
 #include "Globals.h"
+#include "Texture.h"
+
+class Material;
 
 class TextureImporter
 {
@@ -13,7 +16,7 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	uint LoadTextureFromPath(const char* path);
+	Texture* LoadTextureFromPath(const char* path);
 	int GetVersion() const;
 
 	char* current_path="";

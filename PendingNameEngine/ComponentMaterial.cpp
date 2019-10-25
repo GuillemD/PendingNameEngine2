@@ -1,9 +1,23 @@
 #include "ComponentMaterial.h"
+#include "GameObject.h"
+
 
 
 
 ComponentMaterial::ComponentMaterial()
 {
+
+	type = CMP_MATERIAL;
+	active = true;
+	material = new Material();
+}
+
+ComponentMaterial::ComponentMaterial(GameObject* p)
+{
+	SetOwner(p);
+	type = CMP_MATERIAL;
+	active = true;
+	material = new Material();
 }
 
 
@@ -11,15 +25,33 @@ ComponentMaterial::~ComponentMaterial()
 {
 }
 
-Texture * ComponentMaterial::GetTexture()
+bool ComponentMaterial::CleanUp()
 {
-	return texture;
+	if (material != nullptr)
+	{
+		material->UnloadMaterial();
+	}
+	return true;
 }
 
-bool ComponentMaterial::SetTexture(Texture* newtex)
+Material * ComponentMaterial::GetMaterial() const
 {
-	texture = newtex;
-	if (texture != nullptr)
-		return true;
-	return false;
+	return material;
 }
+
+void ComponentMaterial::SetMaterial(Material * mat)
+{
+	if (mat != nullptr)
+		material = mat;
+}
+
+Color ComponentMaterial::GetColor() const
+{
+	return material->color;
+}
+
+void ComponentMaterial::SetColor(Color col)
+{
+	material->color = col;
+}
+

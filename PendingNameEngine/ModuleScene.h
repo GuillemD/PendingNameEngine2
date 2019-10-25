@@ -33,7 +33,7 @@ public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
 	std::vector<AABB*> boxes;
-	std::vector<Texture*> textures;
+
 };
 
 #endif // !_MODULE_SCENE_

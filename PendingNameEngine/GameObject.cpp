@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
 
 #include "OpenGL.h"
 
@@ -11,6 +12,7 @@ GameObject::GameObject()
 {
 	go_name = "";
 	selected = false;
+	is_root = false;
 	is_active = true;
 	is_static = false;
 	go_bb = nullptr;
@@ -55,6 +57,7 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::SetParent(GameObject * new_parent)
 {
+	new_parent->SetChild(this);
 	parent = new_parent;
 }
 
@@ -63,6 +66,15 @@ void GameObject::AddChild(GameObject * child)
 	if (child != nullptr)
 	{
 		child->SetParent(this);
+		childs.push_back(child);
+	}
+}
+
+void GameObject::SetChild(GameObject * child)
+{
+	if (child != nullptr)
+	{
+		child->parent = this;
 		childs.push_back(child);
 	}
 }
@@ -93,12 +105,31 @@ Component * GameObject::AddComponent(ComponentTYPE _type)
 				aux = new ComponentMesh(this);
 				break;
 			case CMP_MATERIAL:
+				aux = new ComponentMaterial(this);
 				break;
 		}
 
 	}
 	components.push_back(aux);
 	return aux;
+}
+
+void GameObject::RemoveComponent(ComponentTYPE _type)
+{
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->GetType() == _type)
+		{
+			(*it)->CleanUp();
+			delete (*it);
+			components.erase(it);
+		}
+	}
+}
+
+void GameObject::PushComponent(Component * cmp)
+{
+	components.push_back(cmp);
 }
 
 bool GameObject::IsActive() const
@@ -133,7 +164,7 @@ void GameObject::SetSelected(bool sel)
 
 void GameObject::PrintMyHierarchy()
 {
-	if (childs.empty() != true) {
+	/*if (childs.empty() != true) {
 		if (ImGui::TreeNodeEx(go_name.c_str())) {
 
 			for (auto c : childs) {
@@ -146,7 +177,7 @@ void GameObject::PrintMyHierarchy()
 	else {
 		bool selected = false;
 		ImGui::Selectable(go_name.c_str(), &selected);
-	}
+	}*/
 }
 
 

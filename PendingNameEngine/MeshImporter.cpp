@@ -5,6 +5,8 @@
 
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+#include "TextureImporter.h"
 
 #include "OpenGL.h"
 #include <string>
@@ -72,26 +74,30 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	if (_node->mNumMeshes < 1)
 	{
 		go = new GameObject();
+		string aux_name(_full_path);
 
 		if (string(_node->mName.C_Str()) == string("RootNode"))
 		{
-			go->SetParent(App->scene->root);
-
-			string aux_name = _full_path;
-			int pos = aux_name.find_last_of('\\');
+			
+			go->is_root = true;
+			
+			int pos = aux_name.find_last_of('//');
 			int len = aux_name.length() - pos;
 			aux_name = aux_name.substr(pos + 1, len);
 
 			int pos2 = aux_name.find_last_of('.');
 			aux_name = aux_name.substr(0, pos2);
-
+			go->go_name = aux_name;
+			
+		}
+		else
+		{
+			go->SetParent(App->scene->root);
 			go->go_name = aux_name;
 		}
-		else if (parent != nullptr)
-		{
-			parent->AddChild(go);
-			go->go_name = _node->mName.C_Str();
-		}
+		
+		if(parent != nullptr)
+			parent->SetChild(go);
 
 		if (_node->mTransformation[0] != nullptr)
 		{
@@ -212,11 +218,17 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				aiColor3D col;
 				mat->Get(AI_MATKEY_COLOR_DIFFUSE, col);
 
+				if (string(name.C_Str()) != string(""))
+				{
+					Material* new_material = nullptr;
+					
+				}
+
 			}*/
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
 			m_cmp->CreateBB();
-			m_cmp->draw_bb = true;
+			m_cmp->draw_bb = false;
 
 			parent->AddChild(child);
 
@@ -247,7 +259,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			}
 			
 			App->scene->AddGameObject(child);
-			App->scene->SetSelectedGO(child);
 
 			App->camera->can_focus = true;
 			App->camera->Focus(m_cmp->GetMesh()->bb);
@@ -255,6 +266,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 
 		}
+		go = parent;
 	}
 
 	if (_node->mNumChildren > 0)

@@ -45,11 +45,11 @@ void PanelInspector::Draw()
 		
 		//ImGui::Text("Total normals: %d\nTotal vertices: %d\nTotal indices: %d\n", tmp->num_normals, tmp->num_indices, tmp->num_vertices);
 		ImGui::Separator();
-		ImGui::Text("Texture:");
+		/*ImGui::Text("Texture:");
 		ImTextureID tex = (uint*)App->scene->textures[0]->texture_id;
 		ImVec2 size = ImGui::GetWindowSize();
 		size.y = size.x;
-		ImGui::Image(tex, size);
+		ImGui::Image(tex, size);*/
 	}
 	ImGui::Separator();
 	/*for (std::vector<Texture*>::iterator it = App->scene->textures.begin(); it != App->scene->textures.end(); it++)
