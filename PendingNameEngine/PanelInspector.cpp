@@ -1,9 +1,11 @@
 #include "PanelInspector.h"
 #include "Application.h"
 #include "GameObject.h"
-#include "ComponentTransform.h"
-#include "Transform.h"
 #include "ComponentMesh.h"
+#include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+#include "Transform.h"
+#include "Material.h"
 #include "Mesh.h"
 #include "Globals.h"
 PanelInspector::PanelInspector()
@@ -86,6 +88,62 @@ void PanelInspector::Draw()
 						ImGui::Text("Position: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", position.x, position.y, position.z);
 						ImGui::Text("Rotation: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", rotation.x, rotation.y, rotation.z);
 						ImGui::Text("Scale: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", scale.x, scale.y, scale.z);
+					}
+				}
+				else if ((*it).GetType() == CMP_MESH)
+				{
+					if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						ComponentMesh* aux_mesh = (ComponentMesh*)App->scene->selected_go->GetComponent(CMP_MESH);
+						if (aux_mesh->GetMesh() != nullptr)
+						{
+							ImGui::Columns(2, "Mesh Info", true);
+							ImGui::Text("Num Vertices: ");
+							ImGui::Text("Num Indices: ");
+							ImGui::Text("Num Faces: ");
+							ImGui::Text("Has Normals: ");
+							ImGui::Text("Has TexCoords: ");
+							ImGui::NextColumn();
+							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_vertices);
+							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_indices);
+							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_indices / 3);
+							if(aux_mesh->GetMesh()->normals_id > 0)
+								ImGui::TextColored(YELLOW, "yes");
+							else
+								ImGui::TextColored(YELLOW, "-");
+
+							if (aux_mesh->GetMesh()->texcoords_id > 0)
+								ImGui::TextColored(YELLOW, "yes");
+							else
+								ImGui::TextColored(YELLOW, "-");
+
+							ImGui::Columns(1);
+						}
+						ImGui::Separator();
+					}
+				}
+				else if ((*it).GetType() == CMP_MATERIAL)
+				{
+					if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						ComponentMaterial* aux_mat = (ComponentMaterial*)App->scene->selected_go->GetComponent(CMP_MATERIAL);
+						
+						if (aux_mat->GetMaterial() != nullptr)
+						{
+							ImGui::Text("Texture Id: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetTextureId());
+							ImGui::Text("Texture Name: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", aux_mat->GetMaterial()->GetDiffuse()->GetName());
+
+							ImGui::Separator();
+							ImGui::Text("Width: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetWidth());
+							ImGui::SameLine();
+							ImGui::Text("Height: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetHeight());
+							ImGui::Separator();
+
+							ImTextureID tex = (uint*)aux_mat->GetMaterial()->GetDiffuse()->GetTextureId();
+							ImVec2 size = ImGui::GetContentRegionAvail();
+							size.y = size.x;
+							ImGui::Image(tex, size);
+						}
 					}
 				}
 			}
