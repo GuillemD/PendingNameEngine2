@@ -20,6 +20,8 @@ public:
 	void Update();
 	void Draw();
 
+	void DeleteGameObject();
+
 	//parent
 	GameObject* GetParent() const;
 	void SetParent(GameObject* new_parent);
@@ -27,12 +29,15 @@ public:
 	//childs
 	void AddChild(GameObject* child);
 	void SetChild(GameObject* child);
+	GameObject* GetChild(uint id)const;
+	void DeleteChild(GameObject* child_to_delete);
 
 	//components
 	Component* GetComponent(ComponentTYPE _type) const;
 	Component* AddComponent(ComponentTYPE _type);
 	void RemoveComponent(ComponentTYPE _type);
 	void PushComponent(Component* cmp);
+	void DeleteComponents();
 
 	//utility
 	bool IsActive() const;

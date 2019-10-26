@@ -23,6 +23,8 @@ public:
 
 	void DrawScene();
 	void ClearScene();
+	void DeleteAllGOs();
+	void DeleteGameObject(GameObject* go_to_delete);
 
 	void AddGameObject(GameObject* go);
 
@@ -33,6 +35,7 @@ public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
 	std::vector<AABB*> boxes;
+	std::vector<GameObject*> to_delete;
 
 };
 

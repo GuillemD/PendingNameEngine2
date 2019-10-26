@@ -48,6 +48,23 @@ void GameObject::Draw()
 	{
 		(*it)->Draw();
 	}
+	for (auto it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->Draw();
+	}
+
+}
+
+void GameObject::DeleteGameObject()
+{
+	if (!childs.empty())
+	{
+		for (auto it = childs.begin(); it != childs.end(); it++)
+		{
+			(*it)->DeleteGameObject();
+		}
+	}
+
 }
 
 GameObject * GameObject::GetParent() const
@@ -57,8 +74,16 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::SetParent(GameObject * new_parent)
 {
-	new_parent->SetChild(this);
+	if (parent == new_parent)
+		return;
+
+	if (parent)
+		parent->DeleteChild(this);
+
 	parent = new_parent;
+
+	if (new_parent != nullptr)
+		new_parent->childs.push_back(this);
 }
 
 void GameObject::AddChild(GameObject * child)
@@ -75,7 +100,34 @@ void GameObject::SetChild(GameObject * child)
 	if (child != nullptr)
 	{
 		child->parent = this;
-		childs.push_back(child);
+		//childs.push_back(child);
+	}
+}
+
+GameObject * GameObject::GetChild(uint id) const
+{
+	uint i = 0;
+
+	for (auto it = childs.begin(); it != childs.end(); it++, i++)
+	{
+		if (i == id)
+			return (*it);
+	}
+	return nullptr;
+}
+
+void GameObject::DeleteChild(GameObject * child_to_delete)
+{
+	if (!childs.empty())
+	{
+		for (auto it = childs.begin(); it != childs.end(); it++)
+		{
+			if ((*it) == child_to_delete)
+			{
+				childs.erase(it);
+				return;
+			}
+		}
 	}
 }
 
@@ -132,6 +184,17 @@ void GameObject::PushComponent(Component * cmp)
 	components.push_back(cmp);
 }
 
+void GameObject::DeleteComponents()
+{
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->CleanUp();
+		delete (*it);
+	}
+
+	components.clear();
+}
+
 bool GameObject::IsActive() const
 {
 	return is_active;
@@ -164,7 +227,7 @@ void GameObject::SetSelected(bool sel)
 
 void GameObject::PrintMyHierarchy()
 {
-	/*if (childs.empty() != true) {
+	if (childs.empty() != true) {
 		if (ImGui::TreeNodeEx(go_name.c_str())) {
 
 			for (auto c : childs) {
@@ -177,7 +240,7 @@ void GameObject::PrintMyHierarchy()
 	else {
 		bool selected = false;
 		ImGui::Selectable(go_name.c_str(), &selected);
-	}*/
+	}
 }
 
 

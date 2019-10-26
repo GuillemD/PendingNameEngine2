@@ -157,7 +157,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			{
 				//indices
 				mesh->num_indices = imp_mesh->mNumFaces * 3; //num triangles * 3
-				mesh->indices = new uint[mesh->num_indices];
+				mesh->indices = new int[mesh->num_indices];
 
 				for (int j = 0; j < imp_mesh->mNumFaces; j++)
 				{
@@ -174,7 +174,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				}
 				glGenBuffers(1, (GLuint*)&mesh->indices_id);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 				CONSOLELOG("%d indices loaded", mesh->num_indices);
 

@@ -46,7 +46,7 @@ public:
 	uint num_vertices = 0;
 	uint vertices_id = 0;
 
-	uint* indices = nullptr;
+	int* indices = nullptr;
 	uint num_indices = 0;
 	uint indices_id = 0;
 

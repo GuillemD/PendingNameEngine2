@@ -84,8 +84,47 @@ void ModuleScene::DrawScene()
 
 void ModuleScene::ClearScene()
 {
-	scene_gameobjects.clear();
+	if (!scene_gameobjects.empty())
+	{
+		for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+		{
+			if ((*it)->GetParent() == nullptr)
+				(*it)->DeleteGameObject();
+		}
+		DeleteAllGOs();
+	}
+	//scene_gameobjects.clear();
 	App->importer->mesh_path = "";
+}
+
+void ModuleScene::DeleteAllGOs()
+{
+
+	for (auto it = to_delete.begin(); it != to_delete.end();)
+	{
+		(*it)->DeleteComponents();
+
+		if ((*it)->parent != nullptr)
+			(*it)->parent->DeleteChild((*it));
+
+		(*it)->parent = nullptr;
+
+		DeleteGameObject((*it));
+
+		it = to_delete.erase(it);
+	}
+}
+
+void ModuleScene::DeleteGameObject(GameObject * go_to_delete)
+{
+	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		if (go_to_delete == (*it))
+		{
+			scene_gameobjects.erase(it);
+			return;
+		}
+	}
 }
 
 void ModuleScene::AddGameObject(GameObject * go)
