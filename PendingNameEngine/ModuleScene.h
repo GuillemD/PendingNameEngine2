@@ -28,9 +28,9 @@ public:
 	void SetSelectedGO(GameObject* go);
 
 public:
-	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
+	std::list<GameObject*> root_gameobjects;
 
 private:
 	std::vector<GameObject*> to_delete;

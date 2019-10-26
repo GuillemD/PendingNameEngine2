@@ -52,7 +52,7 @@ bool MeshImporter::ImportMesh(const char* full_path)
 	{
 		aiNode* root = scene->mRootNode;
 
-		LoadMesh(scene, root, App->scene->root, full_path);
+		LoadMesh(scene, root, nullptr, full_path);
 
 		aiReleaseImport(scene);
 	}
@@ -87,41 +87,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			aux_name = aux_name.substr(0, pos2);
 			go->go_name = aux_name;
 			
+
+			App->scene->AddGameObject(go);
+
 		}
 		else
 		{
 			go = parent;
 		}
 		
-		if(parent != nullptr)
-			parent->AddChild(go);
-
-		if (_node->mTransformation[0] != nullptr)
-		{
-
-			aiVector3D translation;
-			aiVector3D scaling;
-			aiQuaternion rotation;
-
-			_node->mTransformation.Decompose(scaling, rotation, translation);
-
-			float3 pos(translation.x, translation.y, translation.z);
-			Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-			float3 scale(scaling.x, scaling.y, scaling.z);
-
-			aiVector3D euler_rotation = rotation.GetEuler();
-			euler_rotation *= RADTODEG;
-
-			float3 euler_angles = { euler_rotation.x,euler_rotation.y, euler_rotation.z };
-
-
-			go->trans->SetPosition(pos);
-			go->trans->SetRotation(rot);
-			go->trans->SetScale(scale);
-			go->trans->SetEulerRotation(euler_angles);
-
-		}
-		App->scene->AddGameObject(go);
 	}
 	else if (_node->mNumMeshes > 0)
 	{
@@ -204,24 +178,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				CONSOLELOG(" %d texcoords loaded", mesh->num_texcoords);
 			}
 
-			/*if (_scene->HasMaterials())
-			{
-				aiMaterial* mat = nullptr;
-				mat = _scene->mMaterials[imp_mesh->mMaterialIndex];
-
-				aiString name;
-				mat->GetTexture(aiTextureType_DIFFUSE, 0, &name);
-
-				aiColor3D col;
-				mat->Get(AI_MATKEY_COLOR_DIFFUSE, col);
-
-				if (string(name.C_Str()) != string(""))
-				{
-					Material* new_material = nullptr;
-					
-				}
-
-			}*/
+			
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
 			m_cmp->CreateBB();
@@ -260,7 +217,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			App->camera->can_focus = true;
 			App->camera->Focus(m_cmp->GetMesh()->bb);
 			App->camera->can_focus = false;
-
 
 		}
 		go = parent;

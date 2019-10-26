@@ -26,10 +26,6 @@ bool ModuleScene::Start()
 {
 	bool ret = true;
 
-	root = new GameObject();
-	root->go_name = "RootGameObject";
-	root->is_root = true;
-
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	ret = App->importer->Import(".//Assets//Baker_house.png");
 
@@ -119,7 +115,7 @@ void ModuleScene::AddGameObject(GameObject * go)
 		scene_gameobjects.push_back(go);
 		if (go->GetParent() == nullptr)
 		{
-			root = go;
+			root_gameobjects.push_back(go);
 		}
 	}
 	

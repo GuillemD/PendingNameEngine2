@@ -86,6 +86,7 @@ void GameObject::SetParent(GameObject * new_parent)
 		new_parent->childs.push_back(this);
 
 	is_root = false;
+	App->scene->root_gameobjects.remove(this);
 }
 
 void GameObject::AddChild(GameObject * child)
@@ -101,7 +102,6 @@ void GameObject::SetChild(GameObject * child)
 	if (child != nullptr)
 	{
 		child->parent = this;
-		//childs.push_back(child);
 	}
 }
 
@@ -228,20 +228,26 @@ void GameObject::SetSelected(bool sel)
 
 void GameObject::PrintMyHierarchy()
 {
-	if (childs.empty() != true) {
-		if (ImGui::TreeNodeEx(go_name.c_str())) {
+	uint flags = 0;
 
-			for (auto c : childs) {
-				c->PrintMyHierarchy();
+	if (this->childs.empty())
+	{
+		flags |= ImGuiTreeNodeFlags_Leaf;
+	}
+	if (this->IsSelected())
+	{
+		flags |= ImGuiTreeNodeFlags_Selected;
+	}
 
-			}
-			ImGui::TreePop();
+	if (ImGui::TreeNodeEx(this->go_name.c_str(), flags))
+	{
+		for (std::vector<GameObject*>::iterator it = this->childs.begin(); it != this->childs.end(); it++)
+		{
+			(*it)->PrintMyHierarchy();
 		}
+		ImGui::TreePop();
 	}
-	else {
-		bool selected = false;
-		ImGui::Selectable(go_name.c_str(), &selected);
-	}
+
 }
 
 
