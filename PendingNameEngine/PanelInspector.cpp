@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "ComponentMesh.h"
 #include "Mesh.h"
+#include "Globals.h"
 PanelInspector::PanelInspector()
 {
 	PanelName = "Inspector";
@@ -23,43 +24,75 @@ void PanelInspector::Draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(400, 800));
 	ImGui::Begin("Inspector", &active);
-	int i = 1;
-	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
+	if (App->scene->selected_go != nullptr)
 	{
-		ImGui::Separator();
-		ImGui::Separator();
-		ImGui::Text("%s \n", (*it)->go_name.c_str());
-		ImGui::Separator();
-	
+		if (App->scene->selected_go->go_name != "")
+		{
+			ImGui::Text("Name:");
+			ImGui::SameLine();
+			ImGui::TextColored(YELLOW, "%s", App->scene->selected_go->go_name.c_str());
+			bool is_go_active = App->scene->selected_go->IsActive();
+			if (ImGui::Checkbox("Active", &is_go_active))
+			{
+				App->scene->selected_go->SetActive(is_go_active);
+			}
+			ImGui::SameLine();
+			bool is_go_static = App->scene->selected_go->IsStatic();
+			if (ImGui::Checkbox("Static", &is_go_static))
+			{
+				App->scene->selected_go->SetStatic(is_go_static);
+			}
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::SetTooltip("Not yet functional");
+			}
+			ImGui::Separator();
 
-		ComponentTransform* tmp_trans = (ComponentTransform*)(*it)->GetComponent(CMP_TRANSFORM);
-		ComponentMesh* tmp_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+			for (auto it : App->scene->selected_go->components)
+			{
+				if ((*it).GetType() == CMP_TRANSFORM)
+				{
+					if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						ComponentTransform* aux_trans = (ComponentTransform*)App->scene->selected_go->GetComponent(CMP_TRANSFORM);
+						float3 position;
+						float3 rotation;
+						float3 scale;
 
-		float3 f = tmp_trans->GetPosition();
-		ImGui::Text("Position x:%.3f, y:%.3f, z:%.3f .", f.x, f.y, f.z);
-		f = tmp_trans->GetEulerRotation();
-		ImGui::Text("Rotation x:%.3f, y:%.3f, z:%.3f .", f.x, f.y, f.z);
-		f = tmp_trans->GetScale();
-		ImGui::Text("Scale    x:%.3f, y:%.3f, z:%.3f .", f.x, f.y, f.z);
-		ImGui::Separator();
-		
-		//ImGui::Text("Total normals: %d\nTotal vertices: %d\nTotal indices: %d\n", tmp->num_normals, tmp->num_indices, tmp->num_vertices);
-		ImGui::Separator();
-		/*ImGui::Text("Texture:");
-		ImTextureID tex = (uint*)App->scene->textures[0]->texture_id;
-		ImVec2 size = ImGui::GetWindowSize();
-		size.y = size.x;
-		ImGui::Image(tex, size);*/
+						if ((*it).GetOwner()->IsRoot())
+						{
+							position = aux_trans->GetPosition();
+							rotation = aux_trans->GetEulerRotation();
+							scale = aux_trans->GetScale();
+						}
+						else
+						{
+							
+							if ((*it).GetOwner()->GetParent() != nullptr)
+							{
+								ComponentTransform* parent_trans = (ComponentTransform*)(*it).GetOwner()->GetParent()->GetComponent(CMP_TRANSFORM);
+								position = aux_trans->GetPosition() - parent_trans->GetPosition();
+								rotation = aux_trans->GetEulerRotation() - parent_trans->GetEulerRotation();
+								scale = (aux_trans->GetScale() - parent_trans->GetScale()) + float3(1.f, 1.f, 1.f);
+							}
+							else
+							{
+								position = aux_trans->GetPosition();
+								rotation = aux_trans->GetEulerRotation();
+								scale = aux_trans->GetScale();
+							}
+						}
+
+						ImGui::Text("Position: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", position.x, position.y, position.z);
+						ImGui::Text("Rotation: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", rotation.x, rotation.y, rotation.z);
+						ImGui::Text("Scale: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", scale.x, scale.y, scale.z);
+					}
+				}
+			}
+
+		}
 	}
-	ImGui::Separator();
-	/*for (std::vector<Texture*>::iterator it = App->scene->textures.begin(); it != App->scene->textures.end(); it++)
-	{
-		ImTextureID tex = (uint*)(*it)->texture_id;
-		ImVec2 size = ImGui::GetWindowSize();
-		size.y = size.x;
-		ImGui::Image(tex, size);
-		i++;
-	}*/
+	
 
 	ImGui::End();
 }

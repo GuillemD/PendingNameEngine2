@@ -226,6 +226,11 @@ void GameObject::SetSelected(bool sel)
 	selected = sel;
 }
 
+bool GameObject::IsRoot() const
+{
+	return is_root;
+}
+
 void GameObject::PrintMyHierarchy()
 {
 	uint flags = 0;
@@ -249,7 +254,7 @@ void GameObject::PrintMyHierarchy()
 				{
 					App->scene->selected_go->SetSelected(false);
 					this->SetSelected(true);
-					App->scene->selected_go = this;
+					App->scene->SetSelectedGO(this);
 				}
 			}
 		}

@@ -49,6 +49,8 @@ public:
 	bool IsSelected() const;
 	void SetSelected(bool sel);
 
+	bool IsRoot() const;
+
 	void PrintMyHierarchy();
 
 public:
