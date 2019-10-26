@@ -68,7 +68,7 @@ bool MeshImporter::ImportMesh(const char* full_path)
 
 void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameObject* parent, const char * _full_path)
 {
-	GameObject* go = new GameObject();
+	GameObject* go = nullptr;
 	bool correct_num_faces = true;
 
 	if (_node->mNumMeshes < 1)
@@ -78,9 +78,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 		if (string(_node->mName.C_Str()) == string("RootNode"))
 		{
-			
-			go->is_root = true;
-			
+
 			int pos = aux_name.find_last_of('//');
 			int len = aux_name.length() - pos;
 			aux_name = aux_name.substr(pos + 1, len);
@@ -92,12 +90,11 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		}
 		else
 		{
-			go->SetParent(App->scene->root);
-			go->go_name = aux_name;
+			go = parent;
 		}
 		
 		if(parent != nullptr)
-			parent->SetChild(go);
+			parent->AddChild(go);
 
 		if (_node->mTransformation[0] != nullptr)
 		{

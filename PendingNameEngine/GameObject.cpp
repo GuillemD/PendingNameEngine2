@@ -74,16 +74,18 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::SetParent(GameObject * new_parent)
 {
-	if (parent == new_parent)
+	if (this->parent == new_parent)
 		return;
 
 	if (parent)
-		parent->DeleteChild(this);
+		this->parent->DeleteChild(this);
 
-	parent = new_parent;
+	this->parent = new_parent;
 
 	if (new_parent != nullptr)
 		new_parent->childs.push_back(this);
+
+	is_root = false;
 }
 
 void GameObject::AddChild(GameObject * child)
@@ -91,7 +93,6 @@ void GameObject::AddChild(GameObject * child)
 	if (child != nullptr)
 	{
 		child->SetParent(this);
-		childs.push_back(child);
 	}
 }
 

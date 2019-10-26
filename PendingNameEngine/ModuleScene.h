@@ -17,9 +17,6 @@ public:
 	update_status Update(float dt);
 
 	bool CleanUp();
-	
-	void CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z);
-	//void CheckAABBCollisions();
 
 	void DrawScene();
 	void ClearScene();
@@ -34,7 +31,8 @@ public:
 	GameObject* root = nullptr;
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
-	std::vector<AABB*> boxes;
+
+private:
 	std::vector<GameObject*> to_delete;
 
 };
