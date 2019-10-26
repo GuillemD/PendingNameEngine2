@@ -202,7 +202,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 				glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->texcoords_id * 3, mesh->texcoords, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				CONSOLELOG(" %d texcoords loaded", mesh->num_texcoords);
 			}
