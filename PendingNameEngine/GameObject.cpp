@@ -241,6 +241,18 @@ void GameObject::PrintMyHierarchy()
 
 	if (ImGui::TreeNodeEx(this->go_name.c_str(), flags))
 	{
+		if (ImGui::IsMouseClicked(0))
+		{
+			if (ImGui::IsItemHovered())
+			{
+				if (string(App->scene->selected_go->go_name) != string(this->go_name))
+				{
+					App->scene->selected_go->SetSelected(false);
+					this->SetSelected(true);
+					App->scene->selected_go = this;
+				}
+			}
+		}
 		for (std::vector<GameObject*>::iterator it = this->childs.begin(); it != this->childs.end(); it++)
 		{
 			(*it)->PrintMyHierarchy();
