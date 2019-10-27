@@ -20,11 +20,11 @@ public:
 
 	void DrawScene();
 	void ClearScene();
-	void DeleteAllGOs();
+	void DeleteGameObjects();
 	void DeleteGameObject(GameObject* go_to_delete);
 
 	void AddGameObject(GameObject* go);
-	void AddGameObjectToDelete();
+	void AddGameObjectToDelete(GameObject* go_to_delete);
 
 	void SetSelectedGO(GameObject* go);
 

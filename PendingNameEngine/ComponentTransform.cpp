@@ -22,6 +22,11 @@ ComponentTransform::~ComponentTransform()
 {
 }
 
+bool ComponentTransform::CleanUp()
+{
+	return true;
+}
+
 float3 ComponentTransform::GetPosition() const
 {
 	return transform.pos;

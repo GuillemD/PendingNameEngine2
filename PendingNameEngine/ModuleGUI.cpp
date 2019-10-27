@@ -161,12 +161,6 @@ void ModuleGUI::CreateMainMenu()
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Delete Meshes")) {
-				if (!App->scene->scene_gameobjects.empty())
-				{
-					App->scene->ClearScene();
-				}
-			}
 			
 			ImGui::EndMenu();
 

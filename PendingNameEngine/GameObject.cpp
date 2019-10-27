@@ -32,11 +32,6 @@ void GameObject::Update()
 	if (!is_active)
 		return;
 
-	//update components
-	for (auto it = childs.begin(); it != childs.end(); it++)
-	{
-		(*it)->Update();
-	}
 }
 
 void GameObject::Draw()
@@ -48,15 +43,15 @@ void GameObject::Draw()
 	{
 		(*it)->Draw();
 	}
-	for (auto it = childs.begin(); it != childs.end(); it++)
-	{
-		(*it)->Draw();
-	}
 
 }
 
 void GameObject::DeleteGameObject()
 {
+	if (this->IsSelected())
+	{
+		App->scene->SetSelectedGO(nullptr);
+	}
 	if (!childs.empty())
 	{
 		for (auto it = childs.begin(); it != childs.end(); it++)
@@ -64,6 +59,7 @@ void GameObject::DeleteGameObject()
 			(*it)->DeleteGameObject();
 		}
 	}
+	App->scene->AddGameObjectToDelete(this);
 
 }
 
@@ -174,7 +170,6 @@ void GameObject::RemoveComponent(ComponentTYPE _type)
 		if ((*it)->GetType() == _type)
 		{
 			(*it)->CleanUp();
-			delete (*it);
 			components.erase(it);
 		}
 	}
@@ -190,9 +185,8 @@ void GameObject::DeleteComponents()
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
 		(*it)->CleanUp();
-		delete (*it);
 	}
-
+		
 	components.clear();
 }
 
@@ -239,10 +233,25 @@ void GameObject::PrintMyHierarchy()
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
+
+	ComponentMesh* c_m = (ComponentMesh*)GetComponent(CMP_MESH);
+
 	if (this->IsSelected())
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
+
+		
+		if (c_m != nullptr)
+		{
+			c_m->draw_bb = true;
+		}
 	}
+	else
+	{
+		if(c_m != nullptr)
+			c_m->draw_bb = false;
+	}
+		
 
 	if (ImGui::TreeNodeEx(this->go_name.c_str(), flags))
 	{
