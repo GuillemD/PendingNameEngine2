@@ -1,16 +1,18 @@
 #ifndef _PARGEOMETRY_H_
 #define _PARGEOMETRY_H_
 #include "Globals.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+
+struct par_shapes_mesh_s;
 
 class ParGeometry
 {
 public:
 	ParGeometry();
 	~ParGeometry();
-	void GeometryGenerator(uint type);
+	void GeometryGenerator(par_shapes_mesh_s* par, float3 pos, char* name);
 
-public:
-	char* name = nullptr;
+
 };
 
 

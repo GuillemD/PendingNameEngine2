@@ -14,6 +14,11 @@
 
 #include "Mesh.h"
 
+#include "ParGeometry.h"
+
+#define PAR_SHAPES_IMPLEMENTATION
+#include "PAR/par_shapes.h"
+
 
 ModuleGUI::ModuleGUI(bool start_enabled)
 {
@@ -178,11 +183,6 @@ void ModuleGUI::CreateMainMenu()
 				else CONSOLELOG("Geometry Creator closed.");
 				
 			}
-			/*if (ImGui::MenuItem("Check AABB collisions")) {
-				CONSOLELOG("Checking AABB collisions...");
-				App->scene->CheckAABBCollisions();
-			}*/
-
 			ImGui::EndMenu();
 
 		}
@@ -443,7 +443,7 @@ void ModuleGUI::ShowConfig()
 
 void ModuleGUI::ShowGeometryCreator()
 {
-	
+	ParGeometry shapes;
 	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
 		ImGui::Text("Cube Position");
 		ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
@@ -452,17 +452,13 @@ void ModuleGUI::ShowGeometryCreator()
 
 		ImGui::Separator();
 
-		ImGui::Text("Cube Size");
-		ImGui::SliderFloat("Size",&size, -20.f, 20.f);	
+		/*ImGui::Text("Cube Size");
+		ImGui::SliderFloat("Size",&size, -20.f, 20.f);*/	
 
 
 		if (ImGui::Button("Create Cube")) {
 
-			/*Mesh* c = new Mesh();
-			c->DefineCube({ pos_x,pos_y,pos_z }, size);
-			c->LoadVertices();
-			c->LoadIndices();
-			App->scene->scene_meshes.push_back(c);*/
+			shapes.GeometryGenerator(par_shapes_create_cube(), { pos_x,pos_y,pos_z }, "Cube");
 		}
 	}
 	ImGui::End();

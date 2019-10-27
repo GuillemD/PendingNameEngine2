@@ -24,6 +24,7 @@ public:
 	void DeleteGameObject(GameObject* go_to_delete);
 
 	void AddGameObject(GameObject* go);
+	void AddGameObjectToDelete();
 
 	void SetSelectedGO(GameObject* go);
 

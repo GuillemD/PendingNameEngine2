@@ -69,6 +69,7 @@ void ModuleScene::ClearScene()
 	{
 		for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
 		{
+			//to_delete.push_back((*it));
 			if ((*it)->GetParent() == nullptr)
 				(*it)->DeleteGameObject();
 		}
@@ -103,6 +104,7 @@ void ModuleScene::DeleteGameObject(GameObject * go_to_delete)
 		if (go_to_delete == (*it))
 		{
 			scene_gameobjects.erase(it);
+			to_delete.push_back(go_to_delete);
 			return;
 		}
 	}
