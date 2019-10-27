@@ -461,6 +461,7 @@ void ModuleGUI::ShowGeometryCreator()
 				par_shapes_rotate(plane_mesh, PI, y_axis);
 				shapes.GeometryGenerator(plane_mesh, float3(pos_x, pos_y, pos_z), "Plane");
 				par_shapes_free_mesh(plane_mesh);
+				CONSOLELOG("Created Plane at pos %f, %f, %f", pos_x, pos_y, pos_z);
 			}
 		}
 		if (ImGui::CollapsingHeader("Cube"))
@@ -479,6 +480,7 @@ void ModuleGUI::ShowGeometryCreator()
 				par_shapes_translate(cube_mesh, pos_x, pos_y, pos_z);
 				shapes.GeometryGenerator(cube_mesh, float3(pos_x, pos_y, pos_z), "Cube");
 				par_shapes_free_mesh(cube_mesh);
+				CONSOLELOG("Created Cube at pos %f, %f, %f", pos_x, pos_y, pos_z);
 			}
 		}
 		if (ImGui::CollapsingHeader("Sphere"))
@@ -501,6 +503,7 @@ void ModuleGUI::ShowGeometryCreator()
 				par_shapes_translate(sphere_mesh, pos_x, pos_y, pos_z);
 				shapes.GeometryGenerator(sphere_mesh, float3(pos_x, pos_y, pos_z), "Sphere");
 				par_shapes_free_mesh(sphere_mesh);
+				CONSOLELOG("Created Sphere at pos %f, %f, %f", pos_x, pos_y, pos_z);
 			}
 		}
 		if (ImGui::CollapsingHeader("Cylinder"))
@@ -525,6 +528,7 @@ void ModuleGUI::ShowGeometryCreator()
 				par_shapes_translate(cylinder_mesh, pos_x, pos_y, pos_z);
 				shapes.GeometryGenerator(cylinder_mesh, float3(pos_x, pos_y, pos_z), "Cylinder");
 				par_shapes_free_mesh(cylinder_mesh);
+				CONSOLELOG("Created Cylinder at pos %f, %f, %f", pos_x, pos_y, pos_z);
 
 			}
 		}

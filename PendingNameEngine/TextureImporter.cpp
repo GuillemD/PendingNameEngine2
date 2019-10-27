@@ -118,7 +118,7 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("Image height: %d",t->GetHeight());
 
 
-		CONSOLELOG("Texture %s loaded correctly! :)", path);
+		CONSOLELOG("Texture %s loaded correctly", path);
 
 	}
 	else
@@ -192,7 +192,8 @@ bool TextureImporter::CreateCheckersTexture()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
-	//App->scene->textures.push_back(new Texture(ImageName,CHECKERS_WIDTH,CHECKERS_HEIGHT,"Checkers"));
+	
 	App->scene->checkers = new Texture(ImageName, CHECKERS_WIDTH, CHECKERS_HEIGHT, "Checkers");
+	CONSOLELOG("Checkers Texture created");
 	return true;
 }

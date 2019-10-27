@@ -24,7 +24,7 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::Draw()
 {
-	ImGui::SetNextWindowSize(ImVec2(400, 800));
+	ImGui::SetNextWindowSize(ImVec2(290, 600));
 	ImGui::Begin("Inspector", &active);
 	if (App->scene->selected_go != nullptr)
 	{
@@ -141,7 +141,7 @@ void PanelInspector::Draw()
 						if (aux_mat->GetMaterial() != nullptr)
 						{
 							ImGui::Text("Texture Id: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetTextureId());
-							ImGui::Text("Texture Name: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", aux_mat->GetMaterial()->GetDiffuse()->GetName());
+							ImGui::Text("Texture Path: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", aux_mat->GetMaterial()->GetDiffuse()->GetName());
 
 							ImGui::Separator();
 							ImGui::Text("Width: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetWidth());

@@ -101,6 +101,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			
 
 			App->scene->AddGameObject(go);
+			CONSOLELOG("Root GO created");
 
 		}
 		else
@@ -132,7 +133,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG(" %d vertex loaded", mesh->num_vertices);
+				CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
 
 			}
 
@@ -169,7 +170,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-				CONSOLELOG("%d indices loaded", mesh->num_indices);
+				CONSOLELOG("Mesh %s with %d indices loaded", child->go_name.c_str(), mesh->num_indices);
 
 			}
 
@@ -183,7 +184,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->normals_id);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG(" %d normals loaded", mesh->num_normals);
+				CONSOLELOG("Mesh %s with %d normals loaded", child->go_name.c_str(), mesh->num_normals);
 			}
 
 			if (imp_mesh->HasTextureCoords(0))
@@ -197,7 +198,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG(" %d texcoords loaded", mesh->num_texcoords);
+				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
 			}
 
 			
