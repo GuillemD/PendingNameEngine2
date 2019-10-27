@@ -87,6 +87,9 @@ void ComponentMesh::Draw()
 
 	if (draw_bb)
 		DrawBB();
+
+	if (GetMesh()->drawnormals)
+		GetMesh()->DrawFacesNormals();
 }
 
 Mesh * ComponentMesh::GetMesh() const
@@ -111,7 +114,7 @@ void ComponentMesh::CreateBB()
 
 void ComponentMesh::DrawBB()
 {
-	if (draw_bb) //TODO: add owner->IsSelected() when hierarchy implemented
+	if (draw_bb && owner->IsSelected()) //TODO: add owner->IsSelected() when hierarchy implemented
 	{
 		LineSegment curr_line;
 

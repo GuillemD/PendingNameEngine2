@@ -233,10 +233,25 @@ void GameObject::PrintMyHierarchy()
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
+
+	ComponentMesh* c_m = (ComponentMesh*)GetComponent(CMP_MESH);
+
 	if (this->IsSelected())
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
+
+		
+		if (c_m != nullptr)
+		{
+			c_m->draw_bb = true;
+		}
 	}
+	else
+	{
+		if(c_m != nullptr)
+			c_m->draw_bb = false;
+	}
+		
 
 	if (ImGui::TreeNodeEx(this->go_name.c_str(), flags))
 	{

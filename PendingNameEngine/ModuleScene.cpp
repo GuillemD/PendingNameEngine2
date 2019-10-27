@@ -63,16 +63,6 @@ void ModuleScene::DrawScene()
 	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
 	{
 		(*it)->Draw();
-
-
-		if ((*it)->GetComponent(CMP_MESH)!=nullptr) {
-			ComponentMesh* tmp = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-
-			if (tmp->GetMesh()->drawnormals) {
-				tmp->GetMesh()->DrawFacesNormals();
-			}
-		}
-		
 	}
 	
 }

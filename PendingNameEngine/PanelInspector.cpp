@@ -119,8 +119,12 @@ void PanelInspector::Draw()
 
 							ImGui::Columns(1);
 						}
+						ImGui::Separator();
 						if(ImGui::Checkbox("Draw Faces Normals", &aux_mesh->GetMesh()->drawnormals)) {
-							
+							if (aux_mesh->GetMesh()->drawnormals)
+							{
+
+							}
 						}
 						ImGui::Separator();
 					}
