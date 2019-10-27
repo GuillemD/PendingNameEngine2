@@ -452,8 +452,9 @@ void ModuleGUI::ShowGeometryCreator()
 
 		if (ImGui::Button("Create Cube")) {
 			par_shapes_mesh* cube_mesh = par_shapes_create_cube();
-			
+			par_shapes_translate(cube_mesh, pos_x, pos_y, pos_z);
 			shapes.GeometryGenerator(cube_mesh,float3(pos_x,pos_y,pos_z), "Cube");
+			
 			int i = 0;
 		}
 	}

@@ -46,12 +46,11 @@ void ParGeometry::GeometryGenerator(par_shapes_mesh_s * par, float3 pos, char * 
 	{
 		mesh->indices[i] = (uint)par->triangles[i];
 	}
-	//memcpy(mesh->indices, par->triangles, sizeof(int)*mesh->num_indices);
 
 
 	mesh->LoadVertices();
 	mesh->LoadIndices();
-
+	mesh->LoadNormals();
 	c_mesh->SetMesh(mesh);
 
 	App->scene->AddGameObject(primitive);
