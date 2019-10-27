@@ -11,10 +11,11 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+class PanelInspector;
 class PanelConsole;
 class PanelConfig;
 class Panel;
-
+class PanelHierarchy;
 
 class ModuleGUI : public Module
 {
@@ -46,6 +47,7 @@ private:
 	void ShowConfig();
 	void ShowGeometryCreator();
 	void ShowSavePopUp();
+	void ShowInspector();
 
 public:
 	pcg32_random_t seed = PCG32_INITIALIZER;
@@ -56,14 +58,15 @@ public:
 
 	PanelConsole* console = nullptr;
 	PanelConfig* config = nullptr;
-
+	PanelInspector* inspector = nullptr;
+	PanelHierarchy* hierarchy = nullptr;
 	//tmp needs to be moved somewhere else
 	std::vector<AABB> aabb_array;
 
 
 
-	int min_x = 0; int min_y = 0; int min_z = 0;
-	int max_x = 0; int max_y = 0; int max_z = 0;
+	float pos_x = 0.f; float pos_y = 0.f; float pos_z = 0.f;
+	float size = 1.f;
 
 private:
 	//Variables

@@ -1,23 +1,18 @@
 #include "Mesh.h"
 #include "Application.h"
 
-#include <Windows.h>
-#include "GLEW/include/glew.h" 
-#include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
-
+#include "OpenGL.h"
 
 
 Mesh::Mesh()
 {
-	color = DEFAULT_COLOR;
+
 	Reset();
 }
 
 Mesh::~Mesh()
 {
+	
 }
 
 uint Mesh::CreateBuffer()
@@ -30,9 +25,7 @@ uint Mesh::CreateBuffer()
 
 void Mesh::DefineCube(float3 _pos, float size)
 {
-	pos = _pos;
-	vertices_id = CreateBuffer();
-	indices_id = CreateBuffer();
+	/*pos = _pos;
 
 	type = MESH_TYPE::CUBE_MESH;
 
@@ -85,7 +78,7 @@ void Mesh::DefineCube(float3 _pos, float size)
 	indices[4] = 1;
 	indices[5] = 3,
 
-		indices[6] = 1;
+	indices[6] = 1;
 	indices[7] = 3;
 	indices[8] = 5;
 
@@ -124,47 +117,44 @@ void Mesh::DefineCube(float3 _pos, float size)
 	indices[33] = 6;
 	indices[34] = 0;
 	indices[35] = 2;
-
+	*/
 }
 
-void Mesh::DefinePARCube()
-{
-	par_shapes_mesh* cube = par_shapes_create_cube();
-
-	type = MESH_TYPE::CUBE_MESH;
-
-	num_vertices = cube->npoints;
-	vertices = new float3[num_vertices];
-	memcpy(vertices, cube->points, sizeof(float3)*num_vertices);
-
-	num_indices = cube->ntriangles;
-	indices = new uint[num_indices];
-	memcpy(indices, cube->triangles, sizeof(cube->triangles));
-	
-
-	if (cube->normals != nullptr)
-	{
-		num_normals = cube->npoints;
-		normals = new float3[num_normals];
-		memcpy(normals, cube->normals, sizeof(float3)*num_normals);
-	}
-	if (cube->tcoords != nullptr)
-	{
-		num_texcoords = cube->npoints;
-		texcoords = new float[num_texcoords * 3];
-		memcpy(texcoords, cube->tcoords, sizeof(float)*num_texcoords * 3);
-	}
-
-	par_shapes_free_mesh(cube);
-}
+//void Mesh::DefinePARCube()
+//{
+//	par_shapes_mesh* cube = par_shapes_create_cube();
+//
+//	type = MESH_TYPE::CUBE_MESH;
+//
+//	num_vertices = cube->npoints;
+//	vertices = new float3[num_vertices];
+//	memcpy(vertices, cube->points, sizeof(float3)*num_vertices);
+//
+//	num_indices = cube->ntriangles;
+//	indices = new uint[num_indices];
+//	memcpy(indices, cube->triangles, sizeof(cube->triangles));
+//	
+//
+//	if (cube->normals != nullptr)
+//	{
+//		num_normals = cube->npoints;
+//		normals = new float3[num_normals];
+//		memcpy(normals, cube->normals, sizeof(float3)*num_normals);
+//	}
+//	if (cube->tcoords != nullptr)
+//	{
+//		num_texcoords = cube->npoints;
+//		texcoords = new float[num_texcoords * 3];
+//		memcpy(texcoords, cube->tcoords, sizeof(float)*num_texcoords * 3);
+//	}
+//
+//	par_shapes_free_mesh(cube);
+//}
 
 void Mesh::DefinePlane(float3 _pos)
 {
 
-	pos = _pos;
-	vertices_id = CreateBuffer();
-
-	indices_id = CreateBuffer();
+	/*pos = _pos;
 
 	type = MESH_TYPE::PLANE_MESH;
 
@@ -199,13 +189,45 @@ void Mesh::DefinePlane(float3 _pos)
 	indices[3] = 2;
 	indices[4] = 1;
 	indices[5] = 3;
-
-	LoadDataToVRAM();
-
-
+	*/
 }
 
-void Mesh::LoadDataToVRAM()
+/*void Mesh::Draw()
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_id);
+	
+	if (num_normals != 0)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+	if (num_texcoords != 0)
+	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindTexture(GL_TEXTURE_2D, (GLuint)App->scene->textures.front()->GetTextureId());
+	}
+
+	
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}*/
+
+
+void Mesh::LoadVertices()
 {
 	if (num_vertices != 0)
 	{
@@ -214,7 +236,10 @@ void Mesh::LoadDataToVRAM()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+}
 
+void Mesh::LoadIndices()
+{
 	if (num_indices != 0)
 	{
 		glGenBuffers(1, &indices_id);
@@ -222,7 +247,21 @@ void Mesh::LoadDataToVRAM()
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*num_indices, indices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+}
 
+void Mesh::LoadNormals()
+{
+	if (num_normals != 0)
+	{
+		glGenBuffers(1, &normals_id);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_normals*3, normals, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+}
+
+void Mesh::LoadTexcoords()
+{
 	if (texcoords != 0)
 	{
 		glGenBuffers(1, &texcoords_id);
@@ -230,19 +269,28 @@ void Mesh::LoadDataToVRAM()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*texcoords_id * 3, texcoords, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-
-	if (num_normals != 0)
-	{
-		glGenBuffers(1, &normals_id);
-		glBindBuffer(GL_ARRAY_BUFFER, normals_id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float3)*num_normals, normals, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
 }
 
 void Mesh::Reset()
 {
 	vertices_id = indices_id = texcoords_id = normals_id = 0;
 	num_vertices = num_indices = num_texcoords = num_normals = 0;
+	vertices = nullptr;
+	indices = nullptr;
+	normals = nullptr;
+	texcoords = nullptr;
+}
+
+void Mesh::DrawFacesNormals()
+{
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+
+	for (uint i = 0; i < facesnormals.size() - 1; i++)
+	{
+		glColor3f(1.0f, 1.0f, 0.0f);
+		glVertex3fv((GLfloat*)&float3(facesnormals[i].b.x, facesnormals[i].b.y, facesnormals[i].b.z));
+		glVertex3fv((GLfloat*)&float3(facesnormals[i].a.x, facesnormals[i].a.y, facesnormals[i].a.z));
+	}
+	glEnd();
 }

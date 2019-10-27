@@ -6,17 +6,12 @@
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModuleImporter.h"
+#include "ModuleScene.h"
 #include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModuleScene.h"
 
-#include "rapidjson\rapidjson.h"
-#include "rapidjson\document.h"
-#include "rapidjson\filereadstream.h"
-#include "rapidjson\filewritestream.h"
-
-#include "gpudetect/DeviceId.h"
 
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
@@ -30,6 +25,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleScene* scene;
+	ModuleImporter* importer;
 
 private:
 

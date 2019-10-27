@@ -19,9 +19,6 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	bool Save(Document& doc, FileWriteStream& os);
-	bool Load(Document* doc);
-
 	void ShowRendererConfig();
 
 	void OnResize(int width, int height);
@@ -37,6 +34,9 @@ public:
 	void SetLighting(bool light);
 	void SetLineSmooth(bool sm);
 
+	void DebugRenderSettings();
+	void UIRenderSettings();
+	void SetDefaultSettings();
 
 public:
 
@@ -53,7 +53,7 @@ public:
 	bool lighting = false;
 	bool line_smooth = false;
 
-	bool loaded_renderer_config = false;
+
 };
 
 #endif //_MODULERENDERER3D_H

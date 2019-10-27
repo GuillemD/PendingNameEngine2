@@ -2,10 +2,7 @@
 #define _MODULE_H_
 #include "Globals.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/filewritestream.h"
-#include "rapidjson/prettywriter.h"
+#include "rjson.h"
 
 using namespace rapidjson;
 

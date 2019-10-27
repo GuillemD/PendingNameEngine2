@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "Globals.h"
 #include "Primitive.h"
-
+#include "OpenGL.h"
+#include "ComponentMesh.h"
 
 
 ModuleScene::ModuleScene()
@@ -19,73 +20,120 @@ ModuleScene::~ModuleScene()
 {
 }
 
-bool ModuleScene::Init()
-{
-	return true;
-}
 
 bool ModuleScene::Start()
 {
-	return true;
+	bool ret = true;
+	selected_go = new GameObject();
+
+	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	App->importer->first_load = false;
+	ret = App->importer->Import(".//Assets//Baker_house.png");
+
+	return ret;
 }
 
-update_status ModuleScene::PreUpdate(float dt)
-{
-	return UPDATE_CONTINUE;
-}
 
 update_status ModuleScene::Update(float dt)
 {
+
+	if (!to_delete.empty())
+		DeleteGameObjects();
+
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleScene::PostUpdate(float dt)
-{
-	return UPDATE_CONTINUE;
-}
 
 bool ModuleScene::CleanUp()
 {
 	return true;
 }
 
-void ModuleScene::CreateAABB(int min_x, int min_y,int min_z, int max_x, int max_y, int max_z)
-{
-	if (min_x < max_x &&min_y < max_y&&min_z < max_z) {
-		AABB* tmp = new AABB(float3(min_x, min_y, min_z), float3(max_x, max_y, max_z));
-		boxes.push_back(tmp);
-		CONSOLELOG("Created AABB with coordinates Minimum Coordinates: %d , %d , %d . Maximum Coordinates: %d , %d , %d .", min_x, min_y, min_z, max_x, max_y, max_z);
-
-
-	} else CONSOLELOG("Error creating an AABB with those coordinates, is any minimum coordinate higher than the maximum one?")
-
-
-	int test = 0;
-}
-
-void ModuleScene::CheckAABBCollisions()
-{
-	for (int i = 0; i < boxes.size(); i++) {
-		for (int j = 0; j < boxes.size(); j++) {
-			
-			if (i != j) {
-				if (boxes[i]->Intersects(*boxes[j])) {
-
-					CONSOLELOG("Box %d intersects with box %d", i, j);
-
-				}
-			}		
-		}	
-	}
-}
-
 
 void ModuleScene::DrawScene()
 {
+
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
-	grid.color = White;
-	grid.Render();
+	grid.color = { 1.0f,1.0f,1.0f };
 
+	App->renderer3D->DebugRenderSettings();
+	grid.Render();
+	App->renderer3D->SetDefaultSettings();
+
+	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		(*it)->Draw();
+	}
 	
+}
+
+void ModuleScene::ClearScene()
+{
+	if (!scene_gameobjects.empty())
+	{
+		for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+		{
+			if ((*it)->GetParent() == nullptr)
+				(*it)->DeleteGameObject();
+		}
+		DeleteGameObjects();
+		if (!root_gameobjects.empty())
+			root_gameobjects.clear();
+	}
+
+	App->importer->mesh_path = "";
+}
+
+void ModuleScene::DeleteGameObjects()
+{
+
+	for (auto it = to_delete.begin(); it != to_delete.end();)
+	{
+		(*it)->DeleteComponents();
+
+		if ((*it)->parent != nullptr)
+			(*it)->parent->DeleteChild((*it));
+
+		(*it)->parent = nullptr;
+
+		DeleteGameObject((*it));
+
+		it = to_delete.erase(it);
+	}
+}
+
+void ModuleScene::DeleteGameObject(GameObject * go_to_delete)
+{
+	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		if (go_to_delete == (*it))
+		{
+			scene_gameobjects.erase(it);
+			return;
+		}
+	}
+}
+
+void ModuleScene::AddGameObject(GameObject * go)
+{
+	if (go != nullptr)
+	{
+		scene_gameobjects.push_back(go);
+		if (go->GetParent() == nullptr)
+		{
+			root_gameobjects.push_back(go);
+		}
+	}
+	
+}
+
+void ModuleScene::AddGameObjectToDelete(GameObject * go_to_delete)
+{
+	to_delete.push_back(go_to_delete);
+}
+
+void ModuleScene::SetSelectedGO(GameObject * go)
+{
+	selected_go = go;
 }

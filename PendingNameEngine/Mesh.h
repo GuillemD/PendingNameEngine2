@@ -3,10 +3,10 @@
 
 #include "Globals.h"
 #include "MathGeoLib/include/MathGeoLib.h"
-#include "Primitive.h"
-#include  "PAR/par_shapes.h"
+#include <string>
+#include "Assimp.h"
 
-#define DEFAULT_COLOR {1.0f,1.0f,1.0f}
+
 
 enum MESH_TYPE {
 	CUBE_MESH = 0,
@@ -24,23 +24,30 @@ public:
 	uint CreateBuffer();
 
 	void DefineCube(float3 _pos, float size);
-	void DefinePARCube();
+	//void DefinePARCube();
 	void DefinePlane(float3 _pos);
 
-	void LoadDataToVRAM();
+	//void Draw();
+
+	void LoadVertices();
+	void LoadIndices();
+	void LoadNormals();
+	void LoadTexcoords();
+
 	void Reset();
 
-private:
+	void DrawFacesNormals();
 
-	float3 pos = { 0,0,0 };
+public:
+
 	MESH_TYPE type;
-	float3 color = { 0,0,0 };
+	AABB bb;
 
 	float3* vertices = nullptr;
 	uint num_vertices = 0;
 	uint vertices_id = 0;
 
-	uint* indices = nullptr;
+	int* indices = nullptr;
 	uint num_indices = 0;
 	uint indices_id = 0;
 
@@ -51,6 +58,10 @@ private:
 	float3* normals = nullptr;
 	uint num_normals = 0;
 	uint normals_id = 0;
+
+	bool drawnormals = false;
+
+	std::vector<LineSegment> facesnormals;
 
 };
 #endif // !_MESH_H_

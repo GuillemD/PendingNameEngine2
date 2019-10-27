@@ -2,10 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 
-#include "Glew/include/glew.h"
-#include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include "OpenGL.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -94,29 +91,28 @@ bool ModuleRenderer3D::Init()
 		}
 
 
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		glClearDepth(1.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		//Check for error
 		error = glGetError();
-		if(error != GL_NO_ERROR)
+		if (error != GL_NO_ERROR)
 		{
 			CONSOLELOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
-		
-
-
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-		glClearDepth(1.0f);
-		glClearColor(0.f, 0.f, 0.f, 1.f);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		EnableLights();
 
-		if (!loaded_renderer_config)
-		{
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_COLOR_MATERIAL);
-			glEnable(GL_TEXTURE_2D);
-		}
+		SetWireframe(false);
+		SetBackfaceCull(true);
+		SetDepthTest(true);
+		SetColorMaterial(true);
+		SetTexture2d(true);
+		SetLighting(true);
+		SetLineSmooth(false);
 		
 	}
 
@@ -144,19 +140,16 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-//Update: Draw?
-
 
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	
-	
 
-	EnableLights();
-	App->gui->DrawGUI();
 	App->scene->DrawScene();
+	App->gui->DrawGUI();
+	EnableLights();
+
 	
 	SDL_GL_SwapWindow(App->window->window);
 
@@ -173,7 +166,7 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-bool ModuleRenderer3D::Save(Document & doc, FileWriteStream & os)
+/*bool ModuleRenderer3D::Save(Document & doc, FileWriteStream & os)
 {
 	Document::AllocatorType& alloc = doc.GetAllocator();
 	Value renderer(kObjectType);
@@ -210,7 +203,7 @@ bool ModuleRenderer3D::Load(Document * doc)
 	loaded_renderer_config = true;
 
 	return ret;
-}
+}*/
 
 void ModuleRenderer3D::ShowRendererConfig()
 {
@@ -301,11 +294,13 @@ void ModuleRenderer3D::EnableLights()
 
 void ModuleRenderer3D::SetWireframe(bool wf)
 {
-	
+	if (wireframe != wf)
+	{
+		wireframe = wf;
+	}
 	if (wireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		
 	}
 	else
 	{
@@ -316,7 +311,9 @@ void ModuleRenderer3D::SetWireframe(bool wf)
 
 void ModuleRenderer3D::SetDepthTest(bool dt)
 {
-	
+	if (depth_test != dt)
+		depth_test = dt;
+
 	if (depth_test)
 		glEnable(GL_DEPTH_TEST);
 	else
@@ -327,7 +324,9 @@ void ModuleRenderer3D::SetDepthTest(bool dt)
 
 void ModuleRenderer3D::SetBackfaceCull(bool bf)
 {
-	
+	if (backface != bf)
+		backface = bf;
+
 	if (backface)
 		glEnable(GL_CULL_FACE);
 	else
@@ -337,7 +336,9 @@ void ModuleRenderer3D::SetBackfaceCull(bool bf)
 
 void ModuleRenderer3D::SetTexture2d(bool tx)
 {
-	
+	if (texture != tx)
+		texture = tx;
+
 	if (texture)
 		glEnable(GL_TEXTURE_2D);
 	else
@@ -347,7 +348,9 @@ void ModuleRenderer3D::SetTexture2d(bool tx)
 
 void ModuleRenderer3D::SetColorMaterial(bool c_m)
 {
-	
+	if (color_mat != c_m)
+		color_mat = c_m;
+
 	if (color_mat)
 		glEnable(GL_COLOR_MATERIAL);
 	else
@@ -357,7 +360,9 @@ void ModuleRenderer3D::SetColorMaterial(bool c_m)
 
 void ModuleRenderer3D::SetLighting(bool light)
 {
-	
+	if (lighting != light)
+		lighting = light;
+
 	if (lighting)
 		glEnable(GL_LIGHTING);
 	else
@@ -367,12 +372,41 @@ void ModuleRenderer3D::SetLighting(bool light)
 
 void ModuleRenderer3D::SetLineSmooth(bool sm)
 {
-	
+	if (line_smooth != sm)
+		line_smooth = sm;
+
 	if (line_smooth)
 		glEnable(GL_LINE_SMOOTH);
 	else
 		glDisable(GL_LINE_SMOOTH);
 	
+}
+
+void ModuleRenderer3D::DebugRenderSettings()
+{
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glColor3f(0.3f,1.0f,0.3f);
+}
+
+void ModuleRenderer3D::UIRenderSettings()
+{
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_COLOR_MATERIAL);
+}
+
+void ModuleRenderer3D::SetDefaultSettings()
+{
+	SetWireframe(wireframe);
+	SetBackfaceCull(backface);
+	SetDepthTest(depth_test);
+	SetColorMaterial(color_mat);
+	SetTexture2d(texture);
+	SetLighting(lighting);
+	SetLineSmooth(line_smooth);
 }
 
 

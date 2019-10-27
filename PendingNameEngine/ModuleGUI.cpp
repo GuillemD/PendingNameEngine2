@@ -3,13 +3,21 @@
 
 #include "PanelConsole.h"
 #include "PanelConfiguration.h"
+#include "PanelInspector.h"
+#include "PanelHierarchy.h"
 
-#include "Glew/include/glew.h"
-#include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include "OpenGL.h"
 
 #include "ImGui/imgui_impl_opengl2.h"
+
+#include "Assimp/include/version.h"
+
+#include "Mesh.h"
+
+#include "ParGeometry.h"
+
+#define PAR_SHAPES_IMPLEMENTATION
+#include "PAR/par_shapes.h"
 
 
 ModuleGUI::ModuleGUI(bool start_enabled)
@@ -33,11 +41,11 @@ bool ModuleGUI::Init()
 	ImGui_ImplOpenGL2_Init();
 
 
-
 	//Panels
 	console = new PanelConsole("Console");
 	config = new PanelConfig("Configuration");
-
+	inspector = new PanelInspector("Inspector");
+	hierarchy = new PanelHierarchy("Hierarchy");
 
 	return ret;
 }
@@ -45,19 +53,19 @@ bool ModuleGUI::Init()
 bool ModuleGUI::Start()
 {
 	bool ret = true;
-
 	
 	//Resetting variables
 	want_to_quit = false;
 	console->SetActive();
 	config->SetActive();
+	inspector->SetActive();
+	hierarchy->SetActive();
 	return ret;
 }
 
 update_status ModuleGUI::PreUpdate(float dt)
 {
 
-	
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
@@ -67,8 +75,6 @@ update_status ModuleGUI::PreUpdate(float dt)
 
 update_status ModuleGUI::Update(float dt)
 {
-	
-
 	return UPDATE_CONTINUE;
 }
 
@@ -76,18 +82,12 @@ update_status ModuleGUI::PostUpdate(float dt)
 {
 	if (show_save_popup)ShowSavePopUp();
 
-
-
 	CreateMainMenu();
-
-
 
 	if (want_to_quit) {
 
 		return UPDATE_STOP;
-
 	}
-		
 
 	return UPDATE_CONTINUE;
 }
@@ -99,54 +99,29 @@ bool ModuleGUI::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui_ImplOpenGL2_Shutdown();
 
-
-	int i = 0;
-
 	return true;
 }
 
 void ModuleGUI::DrawGUI()
 {
 	App->renderer3D->DisableLights(); //Lights don't affect the GUI
-	bool iswireframe = App->renderer3D->wireframe;
-	bool iscolormat = App->renderer3D->color_mat;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
 	
-	if (iswireframe || iscolormat) {
-		if (iswireframe&&iscolormat) {
-			App->renderer3D->wireframe=false;
-			App->renderer3D->color_mat=false;
-			
-			ImGui::Render();
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-			App->renderer3D->color_mat = true;
-		}
-		else if(iswireframe){
-			App->renderer3D->wireframe = false;
+	if(App->renderer3D->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-			ImGui::Render();
+	if(App->renderer3D->color_mat)
+		glEnable(GL_COLOR_MATERIAL);
 
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->wireframe = true;
-		}
-		else if (iscolormat) {
-			App->renderer3D->color_mat = false;
+	if (App->renderer3D->texture)
+		glEnable(GL_TEXTURE_2D);
 
-			ImGui::Render();
-
-			ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-			App->renderer3D->color_mat = true;
-		}
-
-	} else {
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	}
-
-
-
-	
 }
 
 void ModuleGUI::CreateMainMenu()
@@ -164,7 +139,6 @@ void ModuleGUI::CreateMainMenu()
 			}
 			if (ImGui::MenuItem("Quit")) {
 				show_save_popup = true;
-
 			}
 			ImGui::EndMenu();
 
@@ -174,19 +148,18 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::BeginMenu("Panels")) {
 				
 				ImGui::Checkbox("Configuration", &config->active );
-				//ImGui::Checkbox("Inspector", );
+				ImGui::Checkbox("Inspector", &inspector->active );
 				ImGui::Checkbox("Console", &console->active);
+				ImGui::Checkbox("Hierarchy", &hierarchy->active);
 				ImGui::Separator();
 
 				if (ImGui::SmallButton("Hide all"))
 				{
 					if (config->isActive()) config->SetInactive();
 					if (console->isActive()) console->SetInactive();
+					if (inspector->isActive()) inspector->SetInactive();
 				}
 				ImGui::EndMenu();
-			}
-			if (ImGui::MenuItem("Meshes")) {
-				
 			}
 			
 			ImGui::EndMenu();
@@ -196,19 +169,14 @@ void ModuleGUI::CreateMainMenu()
 
 		if (ImGui::BeginMenu("Geometry")) {
 
-			if (ImGui::MenuItem("Generate Geometry")) {
+			if (ImGui::MenuItem("3D Object")) {
 				geometry_creator = !geometry_creator;
 				if (geometry_creator) {
-					CONSOLELOG("Geoetry Creator opened.");
+					CONSOLELOG("Geometry Creator opened.");
 				}
 				else CONSOLELOG("Geometry Creator closed.");
 				
 			}
-			if (ImGui::MenuItem("Check AABB collisions")) {
-				CONSOLELOG("Checking AABB collisions...");
-				App->scene->CheckAABBCollisions();
-			}
-
 			ImGui::EndMenu();
 
 		}
@@ -251,7 +219,8 @@ void ModuleGUI::CreateMainMenu()
 	if (show_about)ShowAbout();
 	if (console->isActive())ShowConsole();
 	if (config->isActive())ShowConfig();
-	
+	if (inspector->isActive())ShowInspector();
+	if (hierarchy->isActive())hierarchy->Draw();
 }
 
 void ModuleGUI::ShowDemoWindow()
@@ -333,15 +302,15 @@ void ModuleGUI::ShowAbout()
 			ImGui::Text("and to permit persons to whom the Software is furnished to do so,");
 			ImGui::Text("subject to the following conditions :");
 
-ImGui::Text("The above copyright notice and this permission notice shall be included in all");
-ImGui::Text("copies or substantial portions of the Software.");
+			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
+			ImGui::Text("copies or substantial portions of the Software.");
 
-ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
-ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
-ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
-ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
-ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
-ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,");
+			ImGui::Text("INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A");
+			ImGui::Text("PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT");
+			ImGui::Text("HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION");
+			ImGui::Text("OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH");
+			ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 
 		}
 
@@ -435,6 +404,25 @@ ImGui::Text("THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 		{
 			App->OpenBrowser("https://github.com/prideout/par");
 		}
+
+		//Assimp
+		if (ImGui::Button("Assimp", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("http://www.assimp.org/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%d.%d.%d", aiGetVersionMajor(), aiGetVersionMinor(), aiGetVersionRevision());
+		ImGui::NextColumn();
+
+		//DevIL
+		if (ImGui::Button("DevIL", ImVec2(80, 15)))
+		{
+			App->OpenBrowser("http://openil.sourceforge.net/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("%d", App->importer->GetILVersion());
+		ImGui::NextColumn();
+
 		ImGui::Columns(1);
 		ImGui::Separator();
 
@@ -449,24 +437,102 @@ void ModuleGUI::ShowConfig()
 
 void ModuleGUI::ShowGeometryCreator()
 {
+	ParGeometry shapes;
 	
 	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
-		ImGui::Text("Minimum coordinates");
-		ImGui::SliderInt("Min X", &min_x, -50, 50);
-		ImGui::SliderInt("Min Y", &min_y, -50, 50);
-		ImGui::SliderInt("Min Z", &min_z, -50, 50);
+		if (ImGui::CollapsingHeader("Plane"))
+		{
+			float y_axis[3] = { 0,1,0 };
+			int p_slices = 10;
+			int p_stacks = 10;
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &p_slices, 4.f, 30.f);
+			ImGui::SliderInt("Stacks", &p_stacks, 4.f, 30.f);
+			
+			ImGui::Text("Plane Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
 
-		ImGui::Separator();
-
-		ImGui::Text("Minimum coordinates");
-		ImGui::SliderInt("Max X", &max_x, -50, 50);	
-		ImGui::SliderInt("Max Y", &max_y, -50, 50);
-		ImGui::SliderInt("Max Z", &max_z, -50, 50);
-
-
-		if (ImGui::Button("Create AABB")) {
-			App->scene->CreateAABB(min_x, min_y, min_z, max_x, max_y, max_z);
+			ImGui::Separator();
+			if (ImGui::Button("Create Plane")) {
+				par_shapes_mesh* plane_mesh = par_shapes_create_plane(p_slices, p_stacks);
+				par_shapes_translate(plane_mesh, pos_x, pos_y, pos_z);
+				par_shapes_rotate(plane_mesh, PI, y_axis);
+				shapes.GeometryGenerator(plane_mesh, float3(pos_x, pos_y, pos_z), "Plane");
+				par_shapes_free_mesh(plane_mesh);
+				CONSOLELOG("Created Plane at pos %f, %f, %f", pos_x, pos_y, pos_z);
+			}
 		}
+		if (ImGui::CollapsingHeader("Cube"))
+		{
+			ImGui::Text("Cube Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Cube")) {
+				par_shapes_mesh* cube_mesh = par_shapes_create_cube();
+				par_shapes_unweld(cube_mesh, true);
+				par_shapes_compute_normals(cube_mesh);
+				par_shapes_translate(cube_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(cube_mesh, float3(pos_x, pos_y, pos_z), "Cube");
+				par_shapes_free_mesh(cube_mesh);
+				CONSOLELOG("Created Cube at pos %f, %f, %f", pos_x, pos_y, pos_z);
+			}
+		}
+		if (ImGui::CollapsingHeader("Sphere"))
+		{
+			int s_slices = 16;
+			int s_stacks = 16;
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &s_slices, 6.f, 64.f);
+			ImGui::SliderInt("Stacks", &s_stacks, 6.f, 64.f);
+
+			ImGui::Text("Sphere Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Sphere")) {
+				par_shapes_mesh* sphere_mesh = par_shapes_create_parametric_sphere(s_slices,s_stacks);
+				par_shapes_translate(sphere_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(sphere_mesh, float3(pos_x, pos_y, pos_z), "Sphere");
+				par_shapes_free_mesh(sphere_mesh);
+				CONSOLELOG("Created Sphere at pos %f, %f, %f", pos_x, pos_y, pos_z);
+			}
+		}
+		if (ImGui::CollapsingHeader("Cylinder"))
+		{
+			int c_slices = 8;
+			int c_stacks = 8;
+			float x_axis[3] = { 1,0,0 };
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &c_slices, 4.f, 64.f);
+			ImGui::SliderInt("Stacks", &c_stacks, 4.f, 64.f);
+
+			ImGui::Text("Cylinder Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Cylinder")) {
+				par_shapes_mesh* cylinder_mesh = par_shapes_create_cylinder(c_slices,c_stacks);
+				par_shapes_rotate(cylinder_mesh, -HALF_PI, x_axis);
+				par_shapes_translate(cylinder_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(cylinder_mesh, float3(pos_x, pos_y, pos_z), "Cylinder");
+				par_shapes_free_mesh(cylinder_mesh);
+				CONSOLELOG("Created Cylinder at pos %f, %f, %f", pos_x, pos_y, pos_z);
+
+			}
+		}
+		
 	}
 	ImGui::End();
 }
@@ -494,6 +560,11 @@ void ModuleGUI::ShowSavePopUp()
 	}
 	ImGui::End();
 	
+}
+
+void ModuleGUI::ShowInspector()
+{
+	inspector->Draw();
 }
 
 

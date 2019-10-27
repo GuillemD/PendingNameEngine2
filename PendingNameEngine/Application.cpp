@@ -1,15 +1,19 @@
 #include "Application.h"
 
 #include "mmgr/mmgr.h"
+#include "rjson.h"
+#include "gpudetect/DeviceId.h"
 
 Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	renderer3D = new ModuleRenderer3D(this);
-	camera = new ModuleCamera3D(this);
+	importer = new ModuleImporter(this);
 	scene = new ModuleScene(this);
 	gui = new ModuleGUI(this);
+	renderer3D = new ModuleRenderer3D(this);
+	camera = new ModuleCamera3D(this);
+
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -19,12 +23,12 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(gui);
+	AddModule(importer);
+
 	AddModule(scene);
-	
-	
 
 	// Renderer last!
+	AddModule(gui);
 	AddModule(renderer3D);
 	
 }
@@ -170,14 +174,16 @@ bool Application::CleanUp()
 
 	fps_buffer.clear();
 	ms_buffer.clear();
-	
-	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++) {
-		ret = (*item)->CleanUp();
+
+	for (std::list<Module*>::reverse_iterator item = list_modules.rbegin(); item != list_modules.rend(); item++)
+	{
+		if (ret == true)
+		{
+			ret = (*item)->CleanUp();
+		}
 	}
 
 	return ret;
-
-	
 }
 
 void Application::AddModule(Module* mod)

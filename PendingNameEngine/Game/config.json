@@ -1,1 +1,1 @@
-{"App":{"app_name":"PendingNameEngine2","organization":"CITM (UPC)","version":"0.1.1"},"window":{"width":932,"height":651,"fullscreen":false,"resizable":true,"borderless":false,"fs_desktop":false},"renderer3d":{"wireframe":false,"depth test":true,"backface cull":false,"texture2d":true,"color material":true,"lighting":false,"smooth lines":false}}
+{"App":{"app_name":"PendingNameEngine2","organization":"CITM (UPC)","version":"1.0.0"},"window":{"width":1440,"height":900,"fullscreen":false,"resizable":true,"borderless":false,"fs_desktop":false}}
