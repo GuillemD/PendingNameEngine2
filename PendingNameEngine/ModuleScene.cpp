@@ -83,6 +83,7 @@ void ModuleScene::ClearScene()
 	}
 
 	App->importer->mesh_path = "";
+	App->importer->texture_path = "";
 }
 
 void ModuleScene::DeleteGameObjects()

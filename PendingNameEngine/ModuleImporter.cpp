@@ -57,7 +57,7 @@ bool ModuleImporter::Import(string path)
 				App->scene->ClearScene();
 				ret = mesh_import->ImportMesh(path.c_str());
 				mesh_path = path;
-				texture_path = "";
+				
 			}
 			else
 			{

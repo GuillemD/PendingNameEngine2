@@ -267,10 +267,14 @@ void GameObject::PrintMyHierarchy()
 				}
 			}
 		}
-		for (std::vector<GameObject*>::iterator it = this->childs.begin(); it != this->childs.end(); it++)
+		if (!this->childs.empty())
 		{
-			(*it)->PrintMyHierarchy();
+			for (std::vector<GameObject*>::iterator it = this->childs.begin(); it != this->childs.end(); it++)
+			{
+				(*it)->PrintMyHierarchy();
+			}
 		}
+		
 		ImGui::TreePop();
 	}
 
