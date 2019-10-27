@@ -27,6 +27,7 @@ bool ModuleScene::Start()
 	selected_go = new GameObject();
 
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	App->importer->first_load = false;
 	ret = App->importer->Import(".//Assets//Baker_house.png");
 
 	return ret;

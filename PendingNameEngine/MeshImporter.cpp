@@ -74,18 +74,30 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	if (_node->mNumMeshes < 1)
 	{
 		go = new GameObject();
-		string aux_name(_full_path);
+		string aux_name = _full_path;
 
 		if (string(_node->mName.C_Str()) == string("RootNode"))
 		{
+			if (App->importer->first_load == true)
+			{
+				int pos = aux_name.find_last_of('/');
+				int len = aux_name.length() - pos;
+				aux_name = aux_name.substr(pos + 1, len);
 
-			int pos = aux_name.find_last_of('//');
-			int len = aux_name.length() - pos;
-			aux_name = aux_name.substr(pos + 1, len);
+				int pos2 = aux_name.find_last_of('.');
+				aux_name = aux_name.substr(0, pos2);
+				go->go_name = aux_name;
+			}
+			else
+			{
+				int pos = aux_name.find_last_of('\\');
+				int len = aux_name.length() - pos;
+				aux_name = aux_name.substr(pos + 1, len);
 
-			int pos2 = aux_name.find_last_of('.');
-			aux_name = aux_name.substr(0, pos2);
-			go->go_name = aux_name;
+				int pos2 = aux_name.find_last_of('.');
+				aux_name = aux_name.substr(0, pos2);
+				go->go_name = aux_name;
+			}
 			
 
 			App->scene->AddGameObject(go);
