@@ -158,6 +158,7 @@ void ModuleGUI::CreateMainMenu()
 					if (config->isActive()) config->SetInactive();
 					if (console->isActive()) console->SetInactive();
 					if (inspector->isActive()) inspector->SetInactive();
+					if (hierarchy->isActive()) hierarchy->SetInactive();
 				}
 				ImGui::EndMenu();
 			}
