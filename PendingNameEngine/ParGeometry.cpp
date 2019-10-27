@@ -31,24 +31,27 @@ void ParGeometry::GeometryGenerator(par_shapes_mesh_s * par, float3 pos, char * 
 	//ComponentMaterial* c_material = (ComponentMaterial*)primitive->AddComponent(CMP_MATERIAL);
 
 	Mesh* mesh = new Mesh();
-	mesh->num_vertices = par->npoints * 3;
+	mesh->num_vertices = par->npoints;
 	mesh->vertices = new float3[mesh->num_vertices];
-	for (uint i = 0; i < mesh->num_vertices; i+=3)
+	/*for (uint i = 0; i < mesh->num_vertices; i+=3)
 	{
 		mesh->vertices[i].x = par->points[i];
 		mesh->vertices[i].y = par->points[i+1];
 		mesh->vertices[i].z = par->points[i+2];
-	}
-
-	mesh->num_indices = par->ntriangles * 3;
+	}*/
+	memcpy(mesh->vertices, par->points, sizeof(float3)*mesh->num_vertices);
+	mesh->num_indices = mesh->num_vertices * 3;
 	mesh->indices = new int[mesh->num_indices];
 	for (uint i = 0; i < mesh->num_indices; i++)
 	{
 		mesh->indices[i] = (uint)par->triangles[i];
 	}
+	//memcpy(mesh->indices, par->triangles, sizeof(int)*mesh->num_indices);
+
 
 	mesh->LoadVertices();
 	mesh->LoadIndices();
+
 	c_mesh->SetMesh(mesh);
 
 	App->scene->AddGameObject(primitive);

@@ -178,7 +178,7 @@ void ModuleGUI::CreateMainMenu()
 			if (ImGui::MenuItem("3D Object")) {
 				geometry_creator = !geometry_creator;
 				if (geometry_creator) {
-					CONSOLELOG("Geoetry Creator opened.");
+					CONSOLELOG("Geometry Creator opened.");
 				}
 				else CONSOLELOG("Geometry Creator closed.");
 				
@@ -457,8 +457,10 @@ void ModuleGUI::ShowGeometryCreator()
 
 
 		if (ImGui::Button("Create Cube")) {
-
-			shapes.GeometryGenerator(par_shapes_create_cube(), { pos_x,pos_y,pos_z }, "Cube");
+			par_shapes_mesh* cube_mesh = par_shapes_create_cube();
+			
+			shapes.GeometryGenerator(cube_mesh,float3(pos_x,pos_y,pos_z), "Cube");
+			int i = 0;
 		}
 	}
 	ImGui::End();

@@ -10,7 +10,7 @@ public:
 	~Transform();
 
 
-	float3 pos;;
+	float3 pos;
 	Quat rot;
 	float3 scale;
 
