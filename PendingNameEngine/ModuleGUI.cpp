@@ -438,25 +438,97 @@ void ModuleGUI::ShowConfig()
 void ModuleGUI::ShowGeometryCreator()
 {
 	ParGeometry shapes;
+	
 	if (ImGui::Begin("Geometry Creator", &geometry_creator)) {
-		ImGui::Text("Cube Position");
-		ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
-		ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
-		ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
-
-		ImGui::Separator();
-
-		/*ImGui::Text("Cube Size");
-		ImGui::SliderFloat("Size",&size, -20.f, 20.f);*/	
-
-
-		if (ImGui::Button("Create Cube")) {
-			par_shapes_mesh* cube_mesh = par_shapes_create_cube();
-			par_shapes_translate(cube_mesh, pos_x, pos_y, pos_z);
-			shapes.GeometryGenerator(cube_mesh,float3(pos_x,pos_y,pos_z), "Cube");
+		if (ImGui::CollapsingHeader("Plane"))
+		{
+			float y_axis[3] = { 0,1,0 };
+			int p_slices = 10;
+			int p_stacks = 10;
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &p_slices, 4.f, 30.f);
+			ImGui::SliderInt("Stacks", &p_stacks, 4.f, 30.f);
 			
-			int i = 0;
+			ImGui::Text("Plane Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+			if (ImGui::Button("Create Plane")) {
+				par_shapes_mesh* plane_mesh = par_shapes_create_plane(p_slices, p_stacks);
+				par_shapes_translate(plane_mesh, pos_x, pos_y, pos_z);
+				par_shapes_rotate(plane_mesh, PI, y_axis);
+				shapes.GeometryGenerator(plane_mesh, float3(pos_x, pos_y, pos_z), "Plane");
+				par_shapes_free_mesh(plane_mesh);
+			}
 		}
+		if (ImGui::CollapsingHeader("Cube"))
+		{
+			ImGui::Text("Cube Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Cube")) {
+				par_shapes_mesh* cube_mesh = par_shapes_create_cube();
+				par_shapes_unweld(cube_mesh, true);
+				par_shapes_compute_normals(cube_mesh);
+				par_shapes_translate(cube_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(cube_mesh, float3(pos_x, pos_y, pos_z), "Cube");
+				par_shapes_free_mesh(cube_mesh);
+			}
+		}
+		if (ImGui::CollapsingHeader("Sphere"))
+		{
+			int s_slices = 16;
+			int s_stacks = 16;
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &s_slices, 6.f, 64.f);
+			ImGui::SliderInt("Stacks", &s_stacks, 6.f, 64.f);
+
+			ImGui::Text("Sphere Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Sphere")) {
+				par_shapes_mesh* sphere_mesh = par_shapes_create_parametric_sphere(s_slices,s_stacks);
+				par_shapes_translate(sphere_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(sphere_mesh, float3(pos_x, pos_y, pos_z), "Sphere");
+				par_shapes_free_mesh(sphere_mesh);
+			}
+		}
+		if (ImGui::CollapsingHeader("Cylinder"))
+		{
+			int c_slices = 8;
+			int c_stacks = 8;
+			float x_axis[3] = { 1,0,0 };
+			ImGui::Text("Slices & Stacks");
+			ImGui::SliderInt("Slices", &c_slices, 4.f, 64.f);
+			ImGui::SliderInt("Stacks", &c_stacks, 4.f, 64.f);
+
+			ImGui::Text("Cylinder Position");
+			ImGui::SliderFloat("X", &pos_x, -50.f, 50.f);
+			ImGui::SliderFloat("Y", &pos_y, -50.f, 50.f);
+			ImGui::SliderFloat("Z", &pos_z, -50.f, 50.f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create Cylinder")) {
+				par_shapes_mesh* cylinder_mesh = par_shapes_create_cylinder(c_slices,c_stacks);
+				par_shapes_rotate(cylinder_mesh, -HALF_PI, x_axis);
+				par_shapes_translate(cylinder_mesh, pos_x, pos_y, pos_z);
+				shapes.GeometryGenerator(cylinder_mesh, float3(pos_x, pos_y, pos_z), "Cylinder");
+				par_shapes_free_mesh(cylinder_mesh);
+
+			}
+		}
+		
 	}
 	ImGui::End();
 }
