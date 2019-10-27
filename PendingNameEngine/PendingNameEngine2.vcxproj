@@ -224,6 +224,7 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="ParGeometry.h" />
     <ClInclude Include="PAR\par_bluenoise.h" />
     <ClInclude Include="PAR\par_bubbles.h" />
     <ClInclude Include="PAR\par_easings.h" />
@@ -400,6 +401,7 @@
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="ParGeometry.cpp" />
     <ClCompile Include="PCG_c_basic\pcg_basic.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Texture.cpp" />

@@ -3,10 +3,9 @@
 
 #include "Globals.h"
 #include "MathGeoLib/include/MathGeoLib.h"
-#include "Primitive.h"
 #include <string>
 #include "Assimp.h"
-//#include  "PAR/par_shapes.h"
+
 
 
 enum MESH_TYPE {

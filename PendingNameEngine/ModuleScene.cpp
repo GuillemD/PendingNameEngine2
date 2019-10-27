@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "Globals.h"
 #include "Primitive.h"
-
 #include "OpenGL.h"
 
 
