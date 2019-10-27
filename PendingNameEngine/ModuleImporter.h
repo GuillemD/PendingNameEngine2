@@ -20,6 +20,7 @@ public:
 
 	 bool Import(string path);
 
+
 	 int GetILVersion() const;
 public:
 	MeshImporter* mesh_import;

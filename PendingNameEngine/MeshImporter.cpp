@@ -143,6 +143,16 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 						memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
 					}
 				}
+				for (int i = 0; i < imp_mesh->mNumVertices; i++) {
+					int u = i + 1;
+					int v = i + 2;
+					LineSegment face_normal = GetTriNormal(mesh->vertices[i], mesh->vertices[u], mesh->vertices[v]);
+					if (face_normal.a.y < 0) {
+						face_normal.a.y = face_normal.a.y * -1;
+					}
+					mesh->facesnormals.push_back(face_normal);
+				}
+
 				glGenBuffers(1, (GLuint*)&mesh->indices_id);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
@@ -232,10 +242,48 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 }
 
+LineSegment MeshImporter::GetTriNormal(float3 p1, float3 p2, float3 p3)
+{
+	LineSegment ret; //a = N, b = A
+
+	vec3 pv1;
+	pv1.x = p1.x;
+	pv1.y = p1.y;
+	pv1.z = p1.z;
+
+	vec3 pv2;
+	pv2.x = p2.x;
+	pv2.y = p2.y;
+	pv2.z = p2.z;
+
+	vec3 pv3;
+	pv3.x = p3.x;
+	pv3.y = p3.y;
+	pv3.z = p3.z;
+
+	float3 u = p2 - p1;
+	float3 v = p3 - p1;
+
+	vec3 retcros = cross(pv2 - pv1, pv3 - pv1);
+	retcros = normalize(retcros);
+	float3 n = float3(retcros.x, retcros.y, retcros.z);
+	ret.b = n;
+
+	ret.a.x = (p1.x + p2.x + p3.x) / 3;
+	ret.a.y = (p1.y + p2.y + p3.y) / 3;
+	ret.a.z = (p1.z + p2.z + p3.z) / 3;
+	ret.b = ret.b + ret.a;
+
+	return ret;
+}
+
 
 void AssimpToConsoleLog(const char * str, char * userData)
 {
 	CONSOLELOG("%s", str);
 }
+
+
+
 
 

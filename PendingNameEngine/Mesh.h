@@ -36,6 +36,8 @@ public:
 
 	void Reset();
 
+	void DrawFacesNormals();
+
 public:
 
 	MESH_TYPE type;
@@ -56,6 +58,10 @@ public:
 	float3* normals = nullptr;
 	uint num_normals = 0;
 	uint normals_id = 0;
+
+	bool drawnormals = false;
+
+	std::vector<LineSegment> facesnormals;
 
 };
 #endif // !_MESH_H_

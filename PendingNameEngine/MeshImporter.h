@@ -22,6 +22,8 @@ public:
 	bool ImportMesh(const char* full_path);
 	void LoadMesh(const aiScene* _scene, const aiNode* _node, GameObject* parent, const char* _full_path);
 
+	LineSegment GetTriNormal(float3 p1, float3 p2, float3 p3);
+
 
 };
 
