@@ -1,6 +1,8 @@
 #include "TextureImporter.h"
 #include "Application.h"
 #include "Texture.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"
@@ -50,7 +52,10 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 {
 	CONSOLELOG("Importing texture %s ...", path);
 
-	Texture* t = new Texture();
+	if (App->scene->scene_gameobjects.empty())
+		return nullptr;
+
+	Texture* t = nullptr;
 
 	ILuint image_id;
 	GLuint tex_id;
@@ -80,7 +85,7 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 			exit(-1);
 		}
 
-		
+		t = new Texture();
 		t->SetWidth(ilGetInteger(IL_IMAGE_WIDTH));
 		t->SetHeight(ilGetInteger(IL_IMAGE_HEIGHT));
 		t->SetName(path); //temporary
@@ -118,12 +123,36 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 	}
 	else
 	{
-		tex_id = 0;
 		error = ilGetError();
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
 		
 	}
 
+	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
+	{
+		if (*it != nullptr)
+		{
+			if ((*it)->IsActive())
+			{
+				ComponentMesh* c_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+				if (c_mesh != nullptr)
+				{
+					ComponentMaterial* c_mat = (ComponentMaterial*)(*it)->GetComponent(CMP_MATERIAL);
+					if (c_mat != nullptr)
+					{
+						c_mat->GetMaterial()->SetDiffuse(t);
+					}
+					else
+					{
+						(*it)->AddComponent(CMP_MATERIAL);
+						c_mat = (ComponentMaterial*)(*it)->GetComponent(CMP_MATERIAL);
+						c_mat->GetMaterial()->SetDiffuse(t);
+					}
+				}
+				
+			}
+		}
+	}
 	
 	return t;
 }
