@@ -53,7 +53,18 @@ update_status ModuleCamera3D::Update(float dt)
 	
 		//Same here orbit needs to look into the center of the GO
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(0) == KEY_REPEAT) {
+
+		if (App->scene->selected_go->go_bb != nullptr) {
+
+			LookAt(vec3(App->scene->selected_go->go_bb->CenterPoint().x, App->scene->selected_go->go_bb->CenterPoint().y, App->scene->selected_go->go_bb->CenterPoint().z));
+
+			}
+		else {
+
 			LookAt(vec3(0, 0, 0));
+		}
+
+
 			int dx = -App->input->GetMouseXMotion();
 			int dy = -App->input->GetMouseYMotion();
 
@@ -159,19 +170,14 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) {
-		if (App->scene->scene_gameobjects.empty())
-		{
-			Reference = { 0,0,0 };
-			Position = Reference + (Z * 3);
+		if (App->scene->selected_go->go_bb != nullptr) {
+
+			Focus(*App->scene->selected_go->go_bb);
+
 		}
-		else
-		{
-			if (can_focus)
-			{
-				ComponentMesh* tmp = (ComponentMesh*)App->scene->selected_go->GetComponent(CMP_MESH);
-				Focus(tmp->GetMesh()->bb);
-				can_focus = false;
-			}
+		else {
+
+			LookAt(vec3(0, 0, 0));
 		}
 	}
 
