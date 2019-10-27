@@ -15,10 +15,9 @@ It has Unity-like camera controls:
 In the Main menu, you have several features:
 - Saving configuration
 - Show/Hide configuration panel -> ( information about performance, debug functionalities)
-- Inspector panel to show geometry properties
-- Hierarchy Panel displaying all the game objects
+- Inspector panel to show geometry properties of a selected game object
+- Hierarchy Panel displaying all the game objects in a tree (also able to delete all scene game objects)
 - Show/hide console
-- Delete all the scene game objects
 - Create primitives using par_shapes
 - Random number generator
 
@@ -33,6 +32,8 @@ In this version we are using SDL/OpenGL and several external libraries:
 - PCG RNG: http://www.pcg-random.org/
 - Par_Shapes: https://prideout.net/shapes
 - RapidJson: https://rapidjson.org/
+- gpudetect: https://github.com/GameTechDev/gpudetect
+- mmgr: http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml
 
 ### MIT LICENSE
 
