@@ -11,6 +11,9 @@ public:
 	PanelInspector(const char* _name);
 	~PanelInspector();
 
+	bool usecheckers = false;
+	Texture* prevtex = nullptr;
+
 	void Draw() override;
 
 };

@@ -31,7 +31,7 @@ bool TextureImporter::Start()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 	
-	//CreateCheckersTexture();
+	CreateCheckersTexture();
 
 	return ret;
 }
@@ -133,7 +133,7 @@ int TextureImporter::GetVersion() const
 	return IL_VERSION;
 }
 #define CHECKERS_WIDTH 64
-#define CHECKERS_HEIGHT 32
+#define CHECKERS_HEIGHT 64
 
 bool TextureImporter::CreateCheckersTexture()
 {
@@ -164,6 +164,6 @@ bool TextureImporter::CreateCheckersTexture()
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
 	//App->scene->textures.push_back(new Texture(ImageName,CHECKERS_WIDTH,CHECKERS_HEIGHT,"Checkers"));
-	
+	App->scene->checkers = new Texture(ImageName, CHECKERS_WIDTH, CHECKERS_HEIGHT, "Checkers");
 	return true;
 }

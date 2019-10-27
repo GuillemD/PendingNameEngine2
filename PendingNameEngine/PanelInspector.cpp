@@ -144,6 +144,19 @@ void PanelInspector::Draw()
 							size.y = size.x;
 							ImGui::Image(tex, size);
 						}
+						
+						if (ImGui::Checkbox("Enable checkers texture", &usecheckers)) {
+							if (usecheckers) {
+								prevtex = aux_mat->GetMaterial()->GetDiffuse();
+								aux_mat->GetMaterial()->SetDiffuse(App->scene->checkers);
+							}
+							else {
+								aux_mat->GetMaterial()->SetDiffuse(prevtex);
+
+							}
+
+						}
+						
 					}
 				}
 			}

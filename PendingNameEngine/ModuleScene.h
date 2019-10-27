@@ -32,8 +32,13 @@ public:
 	std::vector<GameObject*> scene_gameobjects;
 	std::list<GameObject*> root_gameobjects;
 
+
+	Texture* checkers=nullptr;
+	
 private:
 	std::vector<GameObject*> to_delete;
+
+	
 
 };
 
