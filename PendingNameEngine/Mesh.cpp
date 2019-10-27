@@ -280,3 +280,17 @@ void Mesh::Reset()
 	normals = nullptr;
 	texcoords = nullptr;
 }
+
+void Mesh::DrawFacesNormals()
+{
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+
+	for (uint i = 0; i < facesnormals.size() - 1; i++)
+	{
+		glColor3f(1.0f, 1.0f, 0.0f);
+		glVertex3fv((GLfloat*)&float3(facesnormals[i].b.x, facesnormals[i].b.y, facesnormals[i].b.z));
+		glVertex3fv((GLfloat*)&float3(facesnormals[i].a.x, facesnormals[i].a.y, facesnormals[i].a.z));
+	}
+	glEnd();
+}
