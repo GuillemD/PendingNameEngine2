@@ -12,6 +12,8 @@ public:
 	ComponentTransform(GameObject* p);
 	~ComponentTransform();
 
+	bool CleanUp();
+
 	float3 GetPosition() const;
 	void SetPosition(float3 _pos);
 

@@ -35,6 +35,10 @@ bool ModuleScene::Start()
 
 update_status ModuleScene::Update(float dt)
 {
+
+	if (!to_delete.empty())
+		DeleteGameObjects();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -69,17 +73,18 @@ void ModuleScene::ClearScene()
 	{
 		for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
 		{
-			//to_delete.push_back((*it));
 			if ((*it)->GetParent() == nullptr)
 				(*it)->DeleteGameObject();
 		}
-		DeleteAllGOs();
+		DeleteGameObjects();
+		if (!root_gameobjects.empty())
+			root_gameobjects.clear();
 	}
-	//scene_gameobjects.clear();
+
 	App->importer->mesh_path = "";
 }
 
-void ModuleScene::DeleteAllGOs()
+void ModuleScene::DeleteGameObjects()
 {
 
 	for (auto it = to_delete.begin(); it != to_delete.end();)
@@ -104,7 +109,6 @@ void ModuleScene::DeleteGameObject(GameObject * go_to_delete)
 		if (go_to_delete == (*it))
 		{
 			scene_gameobjects.erase(it);
-			to_delete.push_back(go_to_delete);
 			return;
 		}
 	}
@@ -121,6 +125,11 @@ void ModuleScene::AddGameObject(GameObject * go)
 		}
 	}
 	
+}
+
+void ModuleScene::AddGameObjectToDelete(GameObject * go_to_delete)
+{
+	to_delete.push_back(go_to_delete);
 }
 
 void ModuleScene::SetSelectedGO(GameObject * go)

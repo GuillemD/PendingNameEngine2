@@ -29,7 +29,8 @@ bool ComponentMaterial::CleanUp()
 {
 	if (material != nullptr)
 	{
-		material->UnloadMaterial();
+		material = nullptr;
+		material->SetDiffuse(nullptr);
 	}
 	return true;
 }
