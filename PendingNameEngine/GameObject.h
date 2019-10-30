@@ -54,6 +54,9 @@ public:
 
 	void PrintMyHierarchy();
 
+	//Matrices
+	const float* GetGLMatrix();
+
 public:
 	GameObject* parent = nullptr;
 	bool selected;

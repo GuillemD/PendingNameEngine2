@@ -12,6 +12,8 @@ ComponentTransform::ComponentTransform(GameObject* p)
 	transform.scale = float3::one;
 	transform.euler_rot = float3::zero;
 
+	global_mat.SetIdentity();
+
 	type = CMP_TRANSFORM;
 	active = true;
 
@@ -27,42 +29,107 @@ bool ComponentTransform::CleanUp()
 	return true;
 }
 
-float3 ComponentTransform::GetPosition() const
+float3 ComponentTransform::GetGlobalPosition() const
+{
+	if (owner->IsRoot())
+		return transform.pos;
+	else
+	{
+		ComponentTransform* parent = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+		return (transform.pos + parent->transform.pos);
+	}
+}
+
+float3 ComponentTransform::GetLocalPosition() const
 {
 	return transform.pos;
 }
 
+
+
 void ComponentTransform::SetPosition(float3 _pos)
 {
 	transform.pos = _pos;
+	CalculateGlobalMatrix();
 }
 
-Quat ComponentTransform::GetRotation() const
+float3 ComponentTransform::GetGlobalRotation() const
 {
-	return transform.rot;
+	if (owner->GetParent() != nullptr)
+	{
+		ComponentTransform* parent = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+		return GetLocalRotation() + parent->GetLocalRotation();
+	}
+	return GetLocalRotation();
 }
 
-void ComponentTransform::SetRotation(Quat _rot)
-{
-	transform.rot = _rot;
-}
-
-float3 ComponentTransform::GetScale() const
-{
-	return transform.scale;
-}
-
-void ComponentTransform::SetScale(float3 _scale)
-{
-	transform.scale = _scale;
-}
-
-float3 ComponentTransform::GetEulerRotation() const
+float3 ComponentTransform::GetLocalRotation() const
 {
 	return transform.euler_rot;
 }
 
-void ComponentTransform::SetEulerRotation(float3 _euler)
+void ComponentTransform::SetRotation(float3 _euler)
 {
 	transform.euler_rot = _euler;
+	transform.rot = Quat::FromEulerXYZ(DEGTORAD*_euler.x, DEGTORAD*_euler.y, DEGTORAD*_euler.z);
+	CalculateGlobalMatrix();
 }
+
+float3 ComponentTransform::GetGlobalScale() const
+{
+	if (owner->IsRoot())
+		return transform.scale;
+	else
+	{
+		ComponentTransform* parent = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+		return (transform.scale + parent->transform.scale);
+	}
+}
+
+float3 ComponentTransform::GetLocalScale() const
+{
+	return transform.scale;
+}
+
+
+void ComponentTransform::SetScale(float3 _scale)
+{
+	transform.scale = _scale;
+	CalculateGlobalMatrix();
+}
+
+const float4x4 ComponentTransform::GetGlobalMatrix() const
+{
+	return global_mat;
+}
+
+void ComponentTransform::CalculateGlobalMatrix()
+{
+
+	if (owner->IsRoot())
+	{
+		global_mat = float4x4::FromTRS(transform.pos, transform.rot, transform.scale);
+		auto child = owner->GetAllChilds()->begin();
+		while (child != owner->GetAllChilds()->end())
+		{
+			ComponentTransform* child_trans = (ComponentTransform*)(*child)->GetComponent(CMP_TRANSFORM);
+			child_trans->CalculateGlobalMatrix();
+			child++;
+		}
+	}
+	else
+	{
+		ComponentTransform* parent_trans = (ComponentTransform*)GetOwner()->GetParent()->GetComponent(CMP_TRANSFORM);
+
+		global_mat = global_mat.FromTRS(transform.pos, transform.rot, transform.scale);
+		global_mat = parent_trans->global_mat * global_mat;
+	}
+}
+
+const float * ComponentTransform::GetGLMatrix()
+{
+	return global_mat.Transposed().ptr();
+}
+
+
+

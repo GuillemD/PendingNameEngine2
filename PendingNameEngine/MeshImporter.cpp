@@ -227,13 +227,12 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				aiVector3D euler_rotation = rotation.GetEuler();
 				euler_rotation *= RADTODEG;
 
-				float3 euler_angles = { euler_rotation.x,euler_rotation.y, euler_rotation.z };
+				float3 euler_angles = math::RadToDeg(rot.ToEulerXYZ());
 
 
 				child->trans->SetPosition(pos);
-				child->trans->SetRotation(rot);
+				child->trans->SetRotation(euler_angles);
 				child->trans->SetScale(scale);
-				child->trans->SetEulerRotation(euler_angles);
 
 			}
 			

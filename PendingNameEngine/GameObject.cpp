@@ -285,4 +285,9 @@ void GameObject::PrintMyHierarchy()
 
 }
 
+const float * GameObject::GetGLMatrix()
+{
+	return trans->GetGLMatrix();
+}
+
 

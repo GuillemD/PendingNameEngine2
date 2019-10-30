@@ -63,26 +63,15 @@ void PanelInspector::Draw()
 
 						if ((*it).GetOwner()->IsRoot())
 						{
-							position = aux_trans->GetPosition();
-							rotation = aux_trans->GetEulerRotation();
-							scale = aux_trans->GetScale();
+							position = aux_trans->GetGlobalPosition();
+							rotation = aux_trans->GetGlobalRotation();
+							scale = aux_trans->GetGlobalScale();
 						}
 						else
 						{
-							
-							if ((*it).GetOwner()->GetParent() != nullptr)
-							{
-								ComponentTransform* parent_trans = (ComponentTransform*)(*it).GetOwner()->GetParent()->GetComponent(CMP_TRANSFORM);
-								position = aux_trans->GetPosition() - parent_trans->GetPosition();
-								rotation = aux_trans->GetEulerRotation() - parent_trans->GetEulerRotation();
-								scale = (aux_trans->GetScale() - parent_trans->GetScale()) + float3(1.f, 1.f, 1.f);
-							}
-							else
-							{
-								position = aux_trans->GetPosition();
-								rotation = aux_trans->GetEulerRotation();
-								scale = aux_trans->GetScale();
-							}
+							position = aux_trans->GetLocalPosition();
+							rotation = aux_trans->GetLocalRotation();
+							scale = aux_trans->GetLocalScale();							
 						}
 
 						ImGui::Text("Position: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", position.x, position.y, position.z);

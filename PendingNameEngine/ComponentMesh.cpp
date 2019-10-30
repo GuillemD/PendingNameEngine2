@@ -49,6 +49,10 @@ void ComponentMesh::Draw()
 		return;
 
 	ComponentMaterial* mat = (ComponentMaterial*)owner->GetComponent(CMP_MATERIAL);
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+
+	glPushMatrix();
+	glMultMatrixf(owner->GetGLMatrix());
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
@@ -84,6 +88,9 @@ void ComponentMesh::Draw()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glPopMatrix();
+
+	owner->trans->CalculateGlobalMatrix();
 
 	if (draw_bb)
 		DrawBB();

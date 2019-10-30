@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include "Transform.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentTransform :
 	public Component
@@ -14,20 +15,28 @@ public:
 
 	bool CleanUp();
 
-	float3 GetPosition() const;
+	float3 GetGlobalPosition() const;
+	float3 GetLocalPosition() const;
 	void SetPosition(float3 _pos);
 
-	Quat GetRotation() const;
-	void SetRotation(Quat _rot);
+	float3 GetGlobalRotation() const;
+	float3 GetLocalRotation() const;
+	void SetRotation(float3 _euler);
 
-	float3 GetScale() const;
+	float3 GetGlobalScale() const;
+	float3 GetLocalScale() const;
 	void SetScale(float3 _scale);
 
-	float3 GetEulerRotation() const;
-	void SetEulerRotation(float3 _euler);
+	const float4x4 GetGlobalMatrix() const;
+	void CalculateGlobalMatrix();
+
+	const float* GetGLMatrix();
+
 
 public:
 	Transform transform;
+private:
+	float4x4 global_mat;
 	
 };
 
