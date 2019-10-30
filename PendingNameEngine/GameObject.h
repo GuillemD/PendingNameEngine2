@@ -31,6 +31,7 @@ public:
 	void SetChild(GameObject* child);
 	GameObject* GetChild(uint id)const;
 	void DeleteChild(GameObject* child_to_delete);
+	std::vector<GameObject*>* GetAllChilds();
 
 	//components
 	Component* GetComponent(ComponentTYPE _type) const;

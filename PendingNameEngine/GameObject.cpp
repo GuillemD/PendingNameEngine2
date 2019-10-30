@@ -128,6 +128,11 @@ void GameObject::DeleteChild(GameObject * child_to_delete)
 	}
 }
 
+std::vector<GameObject*>* GameObject::GetAllChilds() 
+{
+	return &childs;
+}
+
 Component * GameObject::GetComponent(ComponentTYPE _type) const
 {
 	for (auto it = components.begin(); it != components.end(); it++)
