@@ -28,8 +28,14 @@ bool ComponentMesh::Update()
 	{
 		return false;
 	}
+	ComponentTransform* aux_trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
 
 	//update bb when transform changes
+	if (aux_trans->ToUpdate())
+	{
+		UpdateBB();
+		aux_trans->SetUpdate(false);
+	}
 	return true;
 }
 

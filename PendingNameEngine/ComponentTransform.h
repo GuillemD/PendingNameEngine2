@@ -32,11 +32,15 @@ public:
 
 	const float* GetGLMatrix();
 
+	bool ToUpdate() const;
+	void SetUpdate(bool set);
+
 
 public:
 	Transform transform;
 private:
 	float4x4 global_mat;
+	bool update = false;
 	
 };
 

@@ -122,11 +122,22 @@ void ComponentTransform::CalculateGlobalMatrix()
 		global_mat = global_mat.FromTRS(transform.pos, transform.rot, transform.scale);
 		global_mat = parent_trans->global_mat * global_mat;
 	}
+	update = true;
 }
 
 const float * ComponentTransform::GetGLMatrix()
 {
 	return global_mat.Transposed().ptr();
+}
+
+bool ComponentTransform::ToUpdate() const
+{
+	return update;
+}
+
+void ComponentTransform::SetUpdate(bool set)
+{
+	update = set;
 }
 
 
