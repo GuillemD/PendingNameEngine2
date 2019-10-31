@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 #include <list>
 
 enum ComponentTYPE;
@@ -56,6 +57,7 @@ public:
 
 	//Matrices
 	const float* GetGLMatrix();
+	math::float4x4 GetGlobalMatrix();
 
 public:
 	GameObject* parent = nullptr;

@@ -135,7 +135,18 @@ void ComponentMesh::DrawBB()
 			glVertex3f(curr_line.a.x, curr_line.a.y, curr_line.a.z);
 			glVertex3f(curr_line.b.x, curr_line.b.y, curr_line.b.z);
 		}
-
+		App->renderer3D->SetDefaultSettings();
 		glEnd();
+	}
+}
+
+void ComponentMesh::UpdateBB()
+{
+	if (GetMesh() != nullptr)
+	{
+		mesh->bb.SetNegativeInfinity();
+		mesh->bb.Enclose((float3*)mesh->vertices, mesh->num_vertices);
+		math::OBB obb = mesh->bb.Transform(owner->GetGlobalMatrix());
+		mesh->bb = obb.MinimalEnclosingAABB();
 	}
 }

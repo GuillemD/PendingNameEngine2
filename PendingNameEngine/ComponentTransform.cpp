@@ -1,7 +1,6 @@
 #include "ComponentTransform.h"
 #include "GameObject.h"
-
-
+#include "ComponentMesh.h"
 
 
 ComponentTransform::ComponentTransform(GameObject* p)
@@ -105,7 +104,6 @@ const float4x4 ComponentTransform::GetGlobalMatrix() const
 
 void ComponentTransform::CalculateGlobalMatrix()
 {
-
 	if (owner->IsRoot())
 	{
 		global_mat = float4x4::FromTRS(transform.pos, transform.rot, transform.scale);

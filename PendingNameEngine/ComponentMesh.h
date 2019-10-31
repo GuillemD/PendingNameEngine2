@@ -19,6 +19,7 @@ public:
 
 	void CreateBB();
 	void DrawBB();
+	void UpdateBB();
 
 public:
 	bool draw_bb = false;

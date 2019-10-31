@@ -290,4 +290,9 @@ const float * GameObject::GetGLMatrix()
 	return trans->GetGLMatrix();
 }
 
+math::float4x4 GameObject::GetGlobalMatrix()
+{
+	return trans->GetGlobalMatrix();
+}
+
 

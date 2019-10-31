@@ -44,10 +44,7 @@ void PanelInspector::Draw()
 			{
 				App->scene->selected_go->SetStatic(is_go_static);
 			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("Not yet functional");
-			}
+		
 			ImGui::Separator();
 
 			for (auto it : App->scene->selected_go->components)
@@ -73,10 +70,18 @@ void PanelInspector::Draw()
 							rotation = aux_trans->GetLocalRotation();
 							scale = aux_trans->GetLocalScale();							
 						}
-
-						ImGui::Text("Position: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", position.x, position.y, position.z);
-						ImGui::Text("Rotation: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", rotation.x, rotation.y, rotation.z);
-						ImGui::Text("Scale: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%f | %f | %f", scale.x, scale.y, scale.z);
+						if (ImGui::DragFloat3("Position", (float*)&position, 0.25f) && (*it).GetOwner()->IsStatic() == false) 
+						{
+							aux_trans->SetPosition(position);
+						}
+						if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.25f, -360, 360)) 
+						{
+							aux_trans->SetRotation(rotation);
+						}
+						if (ImGui::DragFloat3("Scale", (float*)&scale, 0.25f))
+						{
+							aux_trans->SetScale(scale);
+						}
 					}
 				}
 				else if ((*it).GetType() == CMP_MESH)
