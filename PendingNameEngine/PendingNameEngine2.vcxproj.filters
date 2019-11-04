@@ -218,6 +218,9 @@
     <ClCompile Include="ParGeometry.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>GameObjects\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -988,6 +991,9 @@
     </ClInclude>
     <ClInclude Include="ParGeometry.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>GameObjects\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
