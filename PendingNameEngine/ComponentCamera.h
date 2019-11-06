@@ -7,10 +7,9 @@
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/Plane.h"
 
-#define NEAR 1.0f
-#define FAR 1000.0f
-#define H_FOV 90
-#define ASPECT_RATIO 0.992f
+
+#define NEAR 0.25f
+#define FAR 300.0f
 
 class ComponentCamera :
 	public Component
@@ -19,23 +18,55 @@ public:
 	ComponentCamera(GameObject* p);
 	~ComponentCamera();
 
+
+	bool Update();
+	bool CleanUp();
+	void Draw();
+
+	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
+	void LookAt(const float3 &Spot);
+	void Move(const float3 &Movement);
+
+	void CalculateViewMatrix();
+	float* GetViewMatrix();
+	const float* GetGLViewMatrix();
+	void UpdateProjectionMatrix();
+
 	bool ContainsAABB(AABB& bb);
-	float GetNearPlaneDistance() const;
-	float GetFarPlaneDistance() const;
+	math::Frustum* GetFrustum();
+
+	void SetNearPlaneDist(float np);
+	float GetNearPlaneDist() const;
+
+	void SetFarPlaneDist(float fp);
+	float GetFarPlaneDist() const;
 
 	void SetFOV(float new_fov);
 	float GetFOV() const;
 
-	void SetAspectRatio(float new_ar);
+	float GetAspectRatio()const;
+
+	void SetEditor(bool set);
+
+	//Frustum
+	void UpdateFrustum();
+	void DrawFrustum();
 
 public:
+
+	float3 X, Y, Z, Position, Reference;
 
 	Frustum camera_frustum;
 	Color bg_color;
 
-	float horizontal_fov;
+	bool is_editor;
+	bool draw_frustum;
+	float sensitivity;
 
-	float aspect_ratio;
+private:
+
+	float4x4 ViewMatrix, ViewMatrixInverse;
+
 };
 
 

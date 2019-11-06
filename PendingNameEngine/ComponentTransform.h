@@ -32,6 +32,8 @@ public:
 
 	const float* GetGLMatrix();
 
+	void SetViewMatrixFromCam(float4x4 mat);
+
 	bool ToUpdate() const;
 	void SetUpdate(bool set);
 

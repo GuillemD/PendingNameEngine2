@@ -3,8 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
-
-
+#include "GameObject.h"
 
 class ModuleCamera3D : public Module
 {
@@ -16,25 +15,20 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
-	float* GetViewMatrix();
 	void ShowCameraConfig();
 
 	void Focus(const AABB& box);
-
+	float3 RotateCam(const float3& u, const float3& v, float angle);
+	float* GetViewMat();
 
 private:
 	
-	void CalculateViewMatrix();
-	mat4x4 ViewMatrix, ViewMatrixInverse;
+	GameObject* editor_cam;
+
 	bool isPlaying = false;
 public:
-	
-	vec3 X, Y, Z, Position, Reference;
 
-	bool can_focus = false;
+	bool can_focus = false;	
 	
 };
 

@@ -5,6 +5,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 
 #include "OpenGL.h"
 
@@ -51,6 +52,7 @@ void GameObject::DeleteGameObject()
 	if (this->IsSelected())
 	{
 		App->scene->SetSelectedGO(nullptr);
+		selected = false;
 	}
 	if (!childs.empty())
 	{
@@ -160,6 +162,9 @@ Component * GameObject::AddComponent(ComponentTYPE _type)
 				break;
 			case CMP_MATERIAL:
 				aux = new ComponentMaterial(this);
+				break;
+			case CMP_CAMERA:
+				aux = new ComponentCamera(this);
 				break;
 		}
 

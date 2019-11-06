@@ -4,6 +4,9 @@
 
 #include "OpenGL.h"
 
+#include "ComponentCamera.h"
+#include "ComponentTransform.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib,"Glew/libx86/glew32.lib") /*link glew lib */
@@ -125,11 +128,12 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetViewMat());
 	
 	// light 0 on cam pos
 	/*lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);

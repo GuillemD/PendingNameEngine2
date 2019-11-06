@@ -21,15 +21,15 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
-	AddModule(camera);
 	AddModule(input);
 	AddModule(importer);
 
 	AddModule(scene);
 
-	// Renderer last!
+	// Renderer 
 	AddModule(gui);
 	AddModule(renderer3D);
+	AddModule(camera);
 	
 }
 

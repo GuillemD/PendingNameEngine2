@@ -4,6 +4,7 @@
 #include "Primitive.h"
 #include "OpenGL.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 
 
 ModuleScene::ModuleScene()
@@ -52,6 +53,7 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::DrawScene()
 {
+	ComponentCamera* cam = App->renderer3D->active_camera;
 
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
@@ -65,6 +67,8 @@ void ModuleScene::DrawScene()
 	{
 		(*it)->Draw();
 	}
+
+	cam->Draw();
 	
 }
 

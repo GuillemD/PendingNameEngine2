@@ -5,8 +5,11 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include <list>
 
 #define MAX_LIGHTS 8
+
+class ComponentCamera;
 
 class ModuleRenderer3D : public Module
 {
@@ -44,6 +47,8 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	std::list<ComponentCamera*> rendering_cameras;
+	ComponentCamera* active_camera;
 
 	bool wireframe = false;
 	bool depth_test = true;

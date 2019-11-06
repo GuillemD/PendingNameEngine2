@@ -1,24 +1,39 @@
 #include "ComponentCamera.h"
+#include "Application.h"
 #include "GameObject.h"
+#include "ComponentTransform.h"
+
+#include "OpenGL.h"
 
 
 
 ComponentCamera::ComponentCamera(GameObject* p)
 {
 	SetOwner(p);
-
 	type = CMP_CAMERA;
-	active = true;
 
+	//CalculateViewMatrix();
+
+	X = float3(1.0f, 0.0f, 0.0f);
+	Y = float3(0.0f, 1.0f, 0.0f);
+	Z = float3(0.0f, 0.0f, 1.0f);
+
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+	Position = trans->GetLocalPosition();
+	Reference = float3(0.0f, 0.0f, 0.0f);
+	
 	camera_frustum.type = FrustumType::PerspectiveFrustum;
 	camera_frustum.nearPlaneDistance = NEAR;
 	camera_frustum.farPlaneDistance = FAR;
+	camera_frustum.horizontalFov = (float)App->window->GetWidth() / (float)App->window->GetHeight();
 	bg_color = Black;
 
-	horizontal_fov = 90;
-	aspect_ratio = ASPECT_RATIO;
+	SetFOV(60);
 
-	SetFOV(DegToRad(60));
+	draw_frustum = true;
+	sensitivity = 0.25f;
+	active = true;
+	is_editor = false;
 
 }
 
@@ -27,46 +42,240 @@ ComponentCamera::~ComponentCamera()
 {
 }
 
+bool ComponentCamera::Update()
+{
+	if (!is_editor)
+	{
+		UpdateFrustum();
+	}
+	return UPDATE_CONTINUE;
+}
+
+bool ComponentCamera::CleanUp()
+{
+	//clean renderer cameras
+	App->renderer3D->rendering_cameras.pop_back();
+	return true;
+}
+
+void ComponentCamera::Draw()
+{
+	if (is_editor)
+	{
+
+		if (draw_frustum)
+		{
+			DrawFrustum();
+		}
+			
+	}
+}
+
+void ComponentCamera::Look(const float3 & Position, const float3 & Reference, bool RotateAroundReference)
+{
+	this->Position = Position;
+	this->Reference = Reference;
+
+	Z = (Position - Reference).Normalized();
+	X = (Cross(float3(0.0f, 1.0f, 0.0f), Z)).Normalized();
+	Y = Cross(Z, X);
+
+	if (!RotateAroundReference)
+	{
+		this->Reference = this->Position;
+		this->Position += Z * 0.05f;
+	}
+
+	CalculateViewMatrix();
+}
+
+void ComponentCamera::LookAt(const float3 & Spot)
+{
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+
+	if (trans != nullptr)
+	{
+		Reference = Spot;
+
+		Z = (Position - Reference).Normalized();
+		X = (Cross(float3(0.0f, 1.0f, 0.0f), Z)).Normalized();
+		Y = Cross(Z, X);
+
+		CalculateViewMatrix();
+	}
+}
+
+void ComponentCamera::Move(const float3 & Movement)
+{
+	Position += Movement;
+	Reference += Movement;
+
+	CalculateViewMatrix();
+}
+
+void ComponentCamera::CalculateViewMatrix()
+{
+	ViewMatrix = float4x4(
+		X.x, Y.x, Z.x, 0.0f,
+		X.y, Y.y, Z.y, 0.0f,
+		X.z, Y.z, Z.z, 0.0f,
+		-X.Dot(Position), -Y.Dot(Position), -Z.Dot(Position), 1.0f);
+
+	ViewMatrixInverse = ViewMatrix.Inverted();
+
+}
+
+float * ComponentCamera::GetViewMatrix()
+{
+	return &ViewMatrix[0][0];
+}
+
+const float * ComponentCamera::GetGLViewMatrix()
+{
+	float4x4 m;
+
+	m = camera_frustum.ViewMatrix();
+	m.Transpose();
+
+	return &m[0][0];
+}
+
+void ComponentCamera::UpdateProjectionMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf((GLfloat*)camera_frustum.ProjectionMatrix().Transposed().v);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
 bool ComponentCamera::ContainsAABB(AABB & bb)
 {
 	int num_vertices = bb.NumVertices();
 	for (int i = 0; i < 6; i++) 
 	{
+		int out = 0;
 		for (int j = 0; j < num_vertices; j++)
 		{
 			Plane plane = camera_frustum.GetPlane(i);
-			if (plane.Contains(bb.CornerPoint(j)))
+			if (plane.IsOnPositiveSide(bb.CornerPoint(j)))
 			{
-				return true;
+				out++;
 			}
 		}
+		if (out == 8) return false; //all points outside of a plane
 	}
-	return false;
+	return true;
 }
 
-float ComponentCamera::GetNearPlaneDistance() const
+math::Frustum* ComponentCamera::GetFrustum() 
+{
+	return &camera_frustum;
+}
+
+void ComponentCamera::SetNearPlaneDist(float np)
+{
+	camera_frustum.nearPlaneDistance = np;
+	UpdateProjectionMatrix();
+}
+
+float ComponentCamera::GetNearPlaneDist() const
 {
 	return camera_frustum.nearPlaneDistance;
 }
 
-float ComponentCamera::GetFarPlaneDistance() const
+void ComponentCamera::SetFarPlaneDist(float fp)
+{
+	camera_frustum.farPlaneDistance = fp;
+	UpdateProjectionMatrix();
+}
+
+float ComponentCamera::GetFarPlaneDist() const
 {
 	return camera_frustum.farPlaneDistance;
 }
 
 void ComponentCamera::SetFOV(float new_fov)
 {
-	camera_frustum.verticalFov = new_fov;
-	camera_frustum.horizontalFov = math::Atan(aspect_ratio * math::Tan(camera_frustum.verticalFov / 2)) * 2;
+	camera_frustum.verticalFov = new_fov * DEGTORAD;
+	camera_frustum.horizontalFov = atanf(tanf(camera_frustum.verticalFov / 2)*camera_frustum.AspectRatio()) * 2;
+	UpdateProjectionMatrix();
 }
 
 float ComponentCamera::GetFOV() const
 {
-	return camera_frustum.verticalFov;
+	return camera_frustum.verticalFov * RADTODEG;
 }
 
-void ComponentCamera::SetAspectRatio(float new_ar)
+float ComponentCamera::GetAspectRatio() const
 {
-	aspect_ratio = new_ar;
-	camera_frustum.horizontalFov = math::Atan(aspect_ratio * math::Tan(camera_frustum.verticalFov / 2)) * 2;
+	return camera_frustum.AspectRatio();
 }
+
+void ComponentCamera::SetEditor(bool set)
+{
+	is_editor = set;
+}
+
+void ComponentCamera::UpdateFrustum()
+{
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+
+	camera_frustum.pos = trans->GetLocalPosition();
+
+	float3 euler = trans->GetLocalRotation();
+
+	camera_frustum.front = App->camera->RotateCam({ 0,0,-1 }, { 1,0,0 }, euler.x * DEGTORAD);
+	camera_frustum.up = App->camera->RotateCam({ 0,1,0 }, { 1,0,0 }, euler.x * DEGTORAD);
+
+	camera_frustum.front = App->camera->RotateCam(camera_frustum.front, { 0,1,0 }, euler.y * DEGTORAD);
+	camera_frustum.up = App->camera->RotateCam(camera_frustum.up, { 0,1,0 }, euler.y * DEGTORAD);
+
+	camera_frustum.front = App->camera->RotateCam(camera_frustum.front, { 0,0,1 }, euler.z * DEGTORAD);
+	camera_frustum.up = App->camera->RotateCam(camera_frustum.up, { 0,0,1 }, euler.z * DEGTORAD);
+}
+
+void ComponentCamera::DrawFrustum()
+{
+	App->renderer3D->DebugRenderSettings();
+	float3 vertices[8];
+	camera_frustum.GetCornerPoints(vertices);
+
+	glBegin(GL_QUADS);
+
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy, sz);
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f( sx, -sy, sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f( sx,  sy, sz);
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx,  sy, sz);
+
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f( sx,  sy, -sz);
+
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f(sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f(sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f(sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f(sx,  sy,  sz);
+
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx,  sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx,  sy, -sz);
+
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx, sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f( sx, sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f( sx, sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx, sy, -sz);
+
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f( sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy,  sz);
+
+	glEnd();
+
+	App->renderer3D->SetDefaultSettings();
+}
+

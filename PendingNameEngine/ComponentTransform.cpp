@@ -130,6 +130,27 @@ const float * ComponentTransform::GetGLMatrix()
 	return global_mat.Transposed().ptr();
 }
 
+void ComponentTransform::SetViewMatrixFromCam(float4x4 mat)
+{
+	float3 pos = { 0,0,0 };
+	Quat rot = { 0,0,0,0 };
+	float3 scale = { 0,0,0 };
+
+	float4x4 rotation = rot.ToFloat4x4();
+
+	mat.Transpose();
+	mat.Inverse();
+	mat.Decompose(pos, rotation, scale);
+
+	float3 euler = rotation.ToEulerXYZ();
+
+	rot = rot.FromEulerXYZ(euler.x, euler.y, euler.z);
+
+	SetUpdate(true);
+	transform.pos = pos;
+	SetRotation(euler);
+}
+
 bool ComponentTransform::ToUpdate() const
 {
 	return update;
