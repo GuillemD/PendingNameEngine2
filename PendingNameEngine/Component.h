@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 
-enum ComponentTYPE { CMP_TRANSFORM = 0, CMP_MESH, CMP_MATERIAL };
+enum ComponentTYPE { CMP_TRANSFORM = 0, CMP_MESH, CMP_MATERIAL, CMP_CAMERA };
 
 class GameObject;
 
