@@ -28,8 +28,9 @@ Application::Application()
 
 	// Renderer 
 	AddModule(gui);
-	AddModule(renderer3D);
 	AddModule(camera);
+	AddModule(renderer3D);
+	
 	
 }
 

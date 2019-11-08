@@ -24,6 +24,7 @@ bool ModuleCamera3D::Start()
 
 	editor_cam = new GameObject();
 	editor_cam->go_name = "editor_camera";
+	editor_cam->is_root = true;
 
 	ComponentTransform* trans = (ComponentTransform*)editor_cam->GetComponent(CMP_TRANSFORM);
 
