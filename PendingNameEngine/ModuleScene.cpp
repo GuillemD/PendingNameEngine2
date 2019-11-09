@@ -53,7 +53,7 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::DrawScene()
 {
-	ComponentCamera* cam = App->renderer3D->active_camera;
+	ComponentCamera* cam = (ComponentCamera*)App->camera->GetEditorCam()->GetComponent(CMP_CAMERA);
 
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
@@ -68,7 +68,7 @@ void ModuleScene::DrawScene()
 		(*it)->Draw();
 	}
 
-	cam->Draw();
+	//cam->Draw();
 	
 }
 

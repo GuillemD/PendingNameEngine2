@@ -127,7 +127,7 @@ void ComponentTransform::CalculateGlobalMatrix()
 
 const float * ComponentTransform::GetGLMatrix()
 {
-	return global_mat.Transposed().ptr();
+	return (float*)global_mat.Transposed().v;
 }
 
 void ComponentTransform::SetViewMatrixFromCam(float4x4 mat)

@@ -23,12 +23,13 @@ Application::Application()
 	AddModule(window);
 	AddModule(input);
 	AddModule(importer);
+	AddModule(camera);
 
 	AddModule(scene);
 
 	// Renderer 
 	AddModule(gui);
-	AddModule(camera);
+	
 	AddModule(renderer3D);
 	
 	

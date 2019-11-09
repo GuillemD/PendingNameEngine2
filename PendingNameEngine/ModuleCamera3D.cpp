@@ -24,20 +24,17 @@ bool ModuleCamera3D::Start()
 
 	editor_cam = new GameObject();
 	editor_cam->go_name = "editor_camera";
-	editor_cam->is_root = true;
-
-	ComponentTransform* trans = (ComponentTransform*)editor_cam->GetComponent(CMP_TRANSFORM);
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)editor_cam->AddComponent(CMP_CAMERA);
 	cmp_cam->SetEditor(true);
 	cmp_cam->draw_frustum = false;
-	cmp_cam->Move({ 0,10,5 });
+	//cmp_cam->Move({ 0,10,5 });
 	cmp_cam->camera_frustum.pos = { 0.f,10.f,5.f };
 	cmp_cam->LookAt({ 0,0,0 });
 
-	App->renderer3D->active_camera = cmp_cam;
+	//App->renderer3D->active_camera = cmp_cam;
 	//add camera to render list
-	App->renderer3D->rendering_cameras.push_back(cmp_cam);
+	//App->renderer3D->rendering_cameras.push_back(cmp_cam);
 
 	return ret;
 }
@@ -68,70 +65,52 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			speed = 60.f * dt;
 
-		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos -=  camera->Y * speed;
-		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos += camera->Y *speed;
+		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y -= speed;
+		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y += speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= camera->Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += camera->Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += camera->camera_frustum.front * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= camera->camera_frustum.front * speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->camera_frustum.WorldRight() * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->camera_frustum.WorldRight() * speed;
 
-		if (App->input->GetMouseZ() > 0) newPos -= camera->Z * speed;
-		if (App->input->GetMouseZ() < 0) newPos += camera->Z * speed;
+		if (App->input->GetMouseZ() > 0) newPos += camera->camera_frustum.front * speed;
+		if (App->input->GetMouseZ() < 0) newPos -= camera->camera_frustum.front * speed;
 
 		if (!newPos.IsZero())
 		{
-			camera->Move(newPos);
-			camera->GetFrustum()->Translate(camera->Position);
+			camera->camera_frustum.Translate(newPos);
 			can_focus = true;
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
 
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
+			float dx = -App->input->GetMouseXMotion() * camera->sensitivity * dt;
+			float dy = -App->input->GetMouseYMotion() * camera->sensitivity * dt;
 
-			if (dy != 0 || dx != 0) {
 
-				if (App->input->GetKey(SDL_SCANCODE_LALT))
-					camera->Position -= camera->Reference;
-
-				if (dx != 0)
-				{
-					float DeltaX = (float)dx * camera->sensitivity;
-
-					camera->X = RotateCam(camera->X, float3(0.0f, 1.0f, 0.0f), DeltaX);
-					camera->Y = RotateCam(camera->Y, float3(0.0f, 1.0f, 0.0f), DeltaX);
-					camera->Z = RotateCam(camera->Z, float3(0.0f, 1.0f, 0.0f), DeltaX);
-				}
-
-				if (dy != 0)
-				{
-					float DeltaY = (float)dy * camera->sensitivity;
-
-					camera->Y = RotateCam(camera->Y, camera->X, DeltaY);
-					camera->Z = RotateCam(camera->Z, camera->X, DeltaY);
-
-					if (camera->Y.y < 0.0f)
-					{
-						camera->Z = float3(0.0f, camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-						camera->Y = Cross(camera->Z, camera->X);
-					}
-				}
-
-				if (App->input->GetKey(SDL_SCANCODE_LALT))
-					camera->Position = camera->Reference + camera->Z * Length(camera->Position);
+			if (dx != 0)
+			{
+				Quat rotation_x = Quat::RotateY(dx);
+				camera->camera_frustum.front = rotation_x.Mul(camera->camera_frustum.front).Normalized();
+				camera->camera_frustum.up = rotation_x.Mul(camera->camera_frustum.up).Normalized();
 			}
+
+			if (dy != 0)
+			{
+				Quat rotation_y = Quat::RotateAxisAngle(camera->camera_frustum.WorldRight(), dy);
+
+				float3 up = rotation_y.Mul(camera->camera_frustum.up).Normalized();
+				if (up.y > 0.0f)
+				{
+					camera->camera_frustum.up = up;
+					camera->camera_frustum.front = rotation_y.Mul(camera->camera_frustum.front).Normalized();
+				}
+			}
+			
 			can_focus = true;
 		}
-
-		camera->CalculateViewMatrix();
-		ComponentTransform* camera_transform = (ComponentTransform*)editor_cam->GetComponent(CMP_TRANSFORM);
-
-		float4x4* mat = (float4x4*)camera->GetViewMatrix();
-		camera_transform->SetViewMatrixFromCam(*mat);
 		
 	}
 
@@ -181,4 +160,9 @@ float * ModuleCamera3D::GetViewMat()
 	ComponentCamera* aux = (ComponentCamera*)editor_cam->GetComponent(CMP_CAMERA);
 
 	return aux->GetViewMatrix();
+}
+
+GameObject * ModuleCamera3D::GetEditorCam() const
+{
+	return editor_cam != nullptr ? editor_cam : nullptr;
 }

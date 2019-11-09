@@ -20,7 +20,7 @@ public:
 	void Focus(const AABB& box);
 	float3 RotateCam(const float3& u, const float3& v, float angle);
 	float* GetViewMat();
-
+	GameObject* GetEditorCam() const;
 private:
 	
 	GameObject* editor_cam;

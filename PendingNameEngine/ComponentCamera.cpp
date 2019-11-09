@@ -12,7 +12,6 @@ ComponentCamera::ComponentCamera(GameObject* p)
 	SetOwner(p);
 	type = CMP_CAMERA;
 
-	//CalculateViewMatrix();
 
 	X = float3(1.0f, 0.0f, 0.0f);
 	Y = float3(0.0f, 1.0f, 0.0f);
@@ -22,13 +21,18 @@ ComponentCamera::ComponentCamera(GameObject* p)
 	Position = trans->GetLocalPosition();
 	Reference = float3(0.0f, 0.0f, 0.0f);
 	
+	camera_frustum.pos = float3::zero;
+	camera_frustum.front = float3::unitZ;
+	camera_frustum.up = float3::unitY;
 	camera_frustum.type = FrustumType::PerspectiveFrustum;
 	camera_frustum.nearPlaneDistance = NEAR;
 	camera_frustum.farPlaneDistance = FAR;
-	camera_frustum.horizontalFov = (float)App->window->GetWidth() / (float)App->window->GetHeight();
+	camera_frustum.horizontalFov = 90; //(float)App->window->GetWidth() / (float)App->window->GetHeight()
 	bg_color = Black;
 
 	SetFOV(60);
+
+	camera_frustum.SetWorldMatrix(float3x4::identity);
 
 	draw_frustum = true;
 	sensitivity = 0.25f;
@@ -54,7 +58,7 @@ bool ComponentCamera::Update()
 bool ComponentCamera::CleanUp()
 {
 	//clean renderer cameras
-	App->renderer3D->rendering_cameras.pop_back();
+	//App->renderer3D->rendering_cameras.pop_back();
 	return true;
 }
 
@@ -62,7 +66,6 @@ void ComponentCamera::Draw()
 {
 	if (is_editor)
 	{
-
 		if (draw_frustum)
 		{
 			DrawFrustum();
@@ -91,18 +94,11 @@ void ComponentCamera::Look(const float3 & Position, const float3 & Reference, bo
 
 void ComponentCamera::LookAt(const float3 & Spot)
 {
-	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+	float3 dir = Spot - camera_frustum.pos;
+	float3x3 m = float3x3::LookAt(camera_frustum.front, dir.Normalized(), camera_frustum.up, float3::unitY);
 
-	if (trans != nullptr)
-	{
-		Reference = Spot;
-
-		Z = (Position - Reference).Normalized();
-		X = (Cross(float3(0.0f, 1.0f, 0.0f), Z)).Normalized();
-		Y = Cross(Z, X);
-
-		CalculateViewMatrix();
-	}
+	camera_frustum.front = m.MulDir(camera_frustum.front).Normalized();
+	camera_frustum.up = m.MulDir(camera_frustum.up).Normalized();
 }
 
 void ComponentCamera::Move(const float3 & Movement)
@@ -130,6 +126,15 @@ float * ComponentCamera::GetViewMatrix()
 	return &ViewMatrix[0][0];
 }
 
+float * ComponentCamera::GetProjectionMatrix()
+{
+	static float4x4 matrix;
+	matrix = camera_frustum.ProjectionMatrix();
+	matrix.Transpose();
+
+	return (float*)matrix.v;
+}
+
 const float * ComponentCamera::GetGLViewMatrix()
 {
 	float4x4 m;
@@ -137,14 +142,14 @@ const float * ComponentCamera::GetGLViewMatrix()
 	m = camera_frustum.ViewMatrix();
 	m.Transpose();
 
-	return &m[0][0];
+	return (float*)m.v;
 }
 
 void ComponentCamera::UpdateProjectionMatrix()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)camera_frustum.ProjectionMatrix().Transposed().v);
+	glLoadMatrixf(GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

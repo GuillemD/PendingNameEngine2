@@ -29,6 +29,7 @@ public:
 
 	void CalculateViewMatrix();
 	float* GetViewMatrix();
+	float* GetProjectionMatrix();
 	const float* GetGLViewMatrix();
 	void UpdateProjectionMatrix();
 
