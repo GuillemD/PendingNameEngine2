@@ -23,18 +23,12 @@ public:
 	bool CleanUp();
 	void Draw();
 
-	void Look(const float3 &Position, const float3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const float3 &Spot);
-	void Move(const float3 &Movement);
 
-	void CalculateViewMatrix();
 	float* GetViewMatrix();
-	float* GetProjectionMatrix();
+	float* GetProjectionMatrix() const;
 	const float* GetGLViewMatrix();
 	void UpdateProjectionMatrix();
 
-	bool ContainsAABB(AABB& bb);
-	math::Frustum* GetFrustum();
 
 	void SetNearPlaneDist(float np);
 	float GetNearPlaneDist() const;
@@ -50,12 +44,12 @@ public:
 	void SetEditor(bool set);
 
 	//Frustum
+	math::Frustum GetFrustum() const;
 	void UpdateFrustum();
 	void DrawFrustum();
+	bool ContainsAABB(AABB& bb);
 
 public:
-
-	float3 X, Y, Z, Position, Reference;
 
 	Frustum camera_frustum;
 	Color bg_color;
@@ -63,10 +57,6 @@ public:
 	bool is_editor;
 	bool draw_frustum;
 	float sensitivity;
-
-private:
-
-	float4x4 ViewMatrix, ViewMatrixInverse;
 
 };
 

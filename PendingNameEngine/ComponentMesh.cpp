@@ -96,7 +96,7 @@ void ComponentMesh::Draw()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glPopMatrix();
 
-	//owner->trans->CalculateGlobalMatrix();
+	owner->trans->CalculateGlobalMatrix();
 
 	if (draw_bb)
 		DrawBB();

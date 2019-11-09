@@ -133,8 +133,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	//glLoadMatrixf(App->camera->GetViewMat());
-	glLoadIdentity();
+	glLoadMatrixf(App->camera->GetViewMat());
+
 	
 	// light 0 on cam pos
 	/*lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -152,15 +152,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	if (App->camera->GetEditorCam() != nullptr)
 	{
-		ComponentCamera* aux_cam = (ComponentCamera*)App->camera->GetEditorCam()->GetComponent(CMP_CAMERA);
-		
-		aux_cam->UpdateProjectionMatrix();
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity();
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(aux_cam->GetGLViewMatrix());
 
 		App->scene->DrawScene();
 	}

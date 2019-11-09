@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+
+class ComponentCamera;
 
 class ModuleCamera3D : public Module
 {
@@ -18,12 +21,16 @@ public:
 	void ShowCameraConfig();
 
 	void Focus(const AABB& box);
+	void LookAt(const float3& Spot);
+
 	float3 RotateCam(const float3& u, const float3& v, float angle);
+	void SetCamPos(float3 pos);
+
+	ComponentCamera* GetEditorCam() const;
 	float* GetViewMat();
-	GameObject* GetEditorCam() const;
 private:
 	
-	GameObject* editor_cam;
+	ComponentCamera* editor_cam;
 
 	bool isPlaying = false;
 public:

@@ -5,6 +5,8 @@
 #include "Mesh.h"
 #include "Texture.h"
 #include "GameObject.h"
+
+class ComponentCamera;
 class ModuleScene :
 	public Module {
 public:
@@ -32,6 +34,7 @@ public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
 	std::list<GameObject*> root_gameobjects;
+	std::list<ComponentCamera*> cameras;
 
 
 	Texture* checkers=nullptr;

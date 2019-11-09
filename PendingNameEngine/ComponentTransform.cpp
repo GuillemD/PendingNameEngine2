@@ -123,11 +123,12 @@ void ComponentTransform::CalculateGlobalMatrix()
 		global_mat = parent_trans->global_mat * global_mat;
 	}
 	update = true;
+	owner->UpdateCam();
 }
 
 const float * ComponentTransform::GetGLMatrix()
 {
-	return (float*)global_mat.Transposed().v;
+	return global_mat.Transposed().ptr();
 }
 
 void ComponentTransform::SetViewMatrixFromCam(float4x4 mat)

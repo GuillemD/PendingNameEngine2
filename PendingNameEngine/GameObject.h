@@ -59,6 +59,8 @@ public:
 	const float* GetGLMatrix();
 	math::float4x4 GetGlobalMatrix();
 
+	void UpdateCam();
+
 public:
 	GameObject* parent = nullptr;
 	bool selected;

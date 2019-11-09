@@ -300,4 +300,13 @@ math::float4x4 GameObject::GetGlobalMatrix()
 	return trans->GetGlobalMatrix();
 }
 
+void GameObject::UpdateCam()
+{
+	ComponentCamera* cam = (ComponentCamera*)this->GetComponent(CMP_CAMERA);
+	if (cam != nullptr)
+	{
+		cam->Update();
+	}
+}
+
 

@@ -11,33 +11,24 @@ ComponentCamera::ComponentCamera(GameObject* p)
 {
 	SetOwner(p);
 	type = CMP_CAMERA;
+	active = true;
+	is_editor = false;
+	draw_frustum = true;
 
-
-	X = float3(1.0f, 0.0f, 0.0f);
-	Y = float3(0.0f, 1.0f, 0.0f);
-	Z = float3(0.0f, 0.0f, 1.0f);
-
-	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
-	Position = trans->GetLocalPosition();
-	Reference = float3(0.0f, 0.0f, 0.0f);
+	(p) ? camera_frustum.pos = p->GetGlobalMatrix().TranslatePart() : camera_frustum.pos = float3::zero;
+	(p) ? camera_frustum.front = p->GetGlobalMatrix().WorldZ() : camera_frustum.front = float3::unitZ;
+	(p) ? camera_frustum.up = p->GetGlobalMatrix().WorldY() : camera_frustum.up = float3::unitY;
 	
-	camera_frustum.pos = float3::zero;
-	camera_frustum.front = float3::unitZ;
-	camera_frustum.up = float3::unitY;
+
 	camera_frustum.type = FrustumType::PerspectiveFrustum;
 	camera_frustum.nearPlaneDistance = NEAR;
 	camera_frustum.farPlaneDistance = FAR;
-	camera_frustum.horizontalFov = 90; //(float)App->window->GetWidth() / (float)App->window->GetHeight()
+	camera_frustum.horizontalFov = (float)App->window->GetWidth() / (float)App->window->GetHeight(); //
 	bg_color = Black;
 
 	SetFOV(60);
 
-	camera_frustum.SetWorldMatrix(float3x4::identity);
-
-	draw_frustum = true;
-	sensitivity = 0.25f;
-	active = true;
-	is_editor = false;
+	App->scene->cameras.push_back(this);
 
 }
 
@@ -74,65 +65,16 @@ void ComponentCamera::Draw()
 	}
 }
 
-void ComponentCamera::Look(const float3 & Position, const float3 & Reference, bool RotateAroundReference)
-{
-	this->Position = Position;
-	this->Reference = Reference;
-
-	Z = (Position - Reference).Normalized();
-	X = (Cross(float3(0.0f, 1.0f, 0.0f), Z)).Normalized();
-	Y = Cross(Z, X);
-
-	if (!RotateAroundReference)
-	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
-	}
-
-	CalculateViewMatrix();
-}
-
-void ComponentCamera::LookAt(const float3 & Spot)
-{
-	float3 dir = Spot - camera_frustum.pos;
-	float3x3 m = float3x3::LookAt(camera_frustum.front, dir.Normalized(), camera_frustum.up, float3::unitY);
-
-	camera_frustum.front = m.MulDir(camera_frustum.front).Normalized();
-	camera_frustum.up = m.MulDir(camera_frustum.up).Normalized();
-}
-
-void ComponentCamera::Move(const float3 & Movement)
-{
-	Position += Movement;
-	Reference += Movement;
-
-	CalculateViewMatrix();
-}
-
-void ComponentCamera::CalculateViewMatrix()
-{
-	ViewMatrix = float4x4(
-		X.x, Y.x, Z.x, 0.0f,
-		X.y, Y.y, Z.y, 0.0f,
-		X.z, Y.z, Z.z, 0.0f,
-		-X.Dot(Position), -Y.Dot(Position), -Z.Dot(Position), 1.0f);
-
-	ViewMatrixInverse = ViewMatrix.Inverted();
-
-}
 
 float * ComponentCamera::GetViewMatrix()
 {
-	return &ViewMatrix[0][0];
+	float4x4 m = camera_frustum.ViewMatrix();
+	return (float*)m.Transposed().v;
 }
 
-float * ComponentCamera::GetProjectionMatrix()
+float * ComponentCamera::GetProjectionMatrix() const
 {
-	static float4x4 matrix;
-	matrix = camera_frustum.ProjectionMatrix();
-	matrix.Transpose();
-
-	return (float*)matrix.v;
+		return (float*)camera_frustum.ProjectionMatrix().Transposed().v;
 }
 
 const float * ComponentCamera::GetGLViewMatrix()
@@ -149,7 +91,7 @@ void ComponentCamera::UpdateProjectionMatrix()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf(GetProjectionMatrix());
+	glLoadMatrixf((GLfloat*)camera_frustum.ProjectionMatrix().Transposed().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -174,9 +116,9 @@ bool ComponentCamera::ContainsAABB(AABB & bb)
 	return true;
 }
 
-math::Frustum* ComponentCamera::GetFrustum() 
+math::Frustum ComponentCamera::GetFrustum() const
 {
-	return &camera_frustum;
+	return camera_frustum;
 }
 
 void ComponentCamera::SetNearPlaneDist(float np)
@@ -225,20 +167,9 @@ void ComponentCamera::SetEditor(bool set)
 
 void ComponentCamera::UpdateFrustum()
 {
-	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
-
-	camera_frustum.pos = trans->GetLocalPosition();
-
-	float3 euler = trans->GetLocalRotation();
-
-	camera_frustum.front = App->camera->RotateCam({ 0,0,-1 }, { 1,0,0 }, euler.x * DEGTORAD);
-	camera_frustum.up = App->camera->RotateCam({ 0,1,0 }, { 1,0,0 }, euler.x * DEGTORAD);
-
-	camera_frustum.front = App->camera->RotateCam(camera_frustum.front, { 0,1,0 }, euler.y * DEGTORAD);
-	camera_frustum.up = App->camera->RotateCam(camera_frustum.up, { 0,1,0 }, euler.y * DEGTORAD);
-
-	camera_frustum.front = App->camera->RotateCam(camera_frustum.front, { 0,0,1 }, euler.z * DEGTORAD);
-	camera_frustum.up = App->camera->RotateCam(camera_frustum.up, { 0,0,1 }, euler.z * DEGTORAD);
+	camera_frustum.pos = owner->GetGlobalMatrix().TranslatePart();
+	camera_frustum.front = owner->GetGlobalMatrix().WorldZ();
+	camera_frustum.up = owner->GetGlobalMatrix().WorldY();
 }
 
 void ComponentCamera::DrawFrustum()

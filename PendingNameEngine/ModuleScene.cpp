@@ -14,6 +14,7 @@ ModuleScene::ModuleScene()
 
 ModuleScene::ModuleScene(bool start_enabled)
 {
+	name = "Scene";
 }
 
 
@@ -27,6 +28,11 @@ bool ModuleScene::Start()
 	bool ret = true;
 	selected_go = new GameObject();
 
+	//Editor Camera
+	App->camera->SetCamPos({0.0,10.f,5.f});
+	App->camera->LookAt({ 0,0,0 });
+
+	//Initial Mesh
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	App->importer->first_load = false;
 	ret = App->importer->Import(".//Assets//Baker_house.png");
@@ -53,8 +59,6 @@ bool ModuleScene::CleanUp()
 
 void ModuleScene::DrawScene()
 {
-	ComponentCamera* cam = (ComponentCamera*)App->camera->GetEditorCam()->GetComponent(CMP_CAMERA);
-
 	PPlane grid(0, 1, 0, 5);
 	grid.axis = true;
 	grid.color = { 1.0f,1.0f,1.0f };
@@ -68,8 +72,6 @@ void ModuleScene::DrawScene()
 		(*it)->Draw();
 	}
 
-	//cam->Draw();
-	
 }
 
 void ModuleScene::ClearScene()
