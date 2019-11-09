@@ -18,7 +18,6 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void ShowCameraConfig();
 
 	void Focus(const AABB& box);
 	void LookAt(const float3& Spot);

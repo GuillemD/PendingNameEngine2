@@ -167,8 +167,7 @@ void ModuleGUI::CreateMainMenu()
 
 		}
 
-
-		if (ImGui::BeginMenu("Geometry")) {
+		/*if (ImGui::BeginMenu("Geometry")) {
 
 			if (ImGui::MenuItem("3D Object")) {
 				geometry_creator = !geometry_creator;
@@ -180,7 +179,7 @@ void ModuleGUI::CreateMainMenu()
 			}
 			ImGui::EndMenu();
 
-		}
+		}*/
 
 		if (ImGui::BeginMenu("Misc.")) {
 			if (ImGui::MenuItem("ImGui Demo Window")) {

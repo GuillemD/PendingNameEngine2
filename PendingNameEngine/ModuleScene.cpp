@@ -90,6 +90,7 @@ void ModuleScene::ClearScene()
 
 	App->importer->mesh_path = "";
 	App->importer->texture_path = "";
+	App->scene->selected_go = nullptr;
 }
 
 void ModuleScene::DeleteGameObjects()

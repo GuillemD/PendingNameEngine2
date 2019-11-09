@@ -71,11 +71,12 @@ update_status ModuleCamera3D::Update(float dt)
 			can_focus = true;
 		}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		
+		if (App->input->GetMouseButton(3) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT)
 		{
 
-			float dx = -(float)App->input->GetMouseXMotion() * editor_cam->sensitivity * dt;
-			float dy = -(float)App->input->GetMouseYMotion() * editor_cam->sensitivity * dt;
+			float dx = -(float)App->input->GetMouseXMotion() * dt;
+			float dy = -(float)App->input->GetMouseYMotion() * dt;
 
 
 			if (dx != 0)
@@ -99,6 +100,26 @@ update_status ModuleCamera3D::Update(float dt)
 			
 			can_focus = true;
 		}
+
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		{
+			if (can_focus)
+			{
+				if (App->scene->selected_go != nullptr)
+				{
+					ComponentTransform* transform = (ComponentTransform*)App->scene->selected_go->GetComponent(CMP_TRANSFORM);
+
+					LookAt(transform->GetGlobalPosition());
+
+				}
+				else
+				{
+					LookAt({ 0,0,0 });
+				}
+				can_focus = false;
+			}
+			
+		}
 		
 	}
 
@@ -106,17 +127,6 @@ update_status ModuleCamera3D::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-
-
-
-
-void ModuleCamera3D::ShowCameraConfig() {
-	if (ImGui::CollapsingHeader("Camera")) {
-		
-
-	}
-
-}
 
 void ModuleCamera3D::Focus(const AABB& box)
 {
@@ -156,8 +166,6 @@ void ModuleCamera3D::SetCamPos(float3 pos)
 {
 	editor_cam->camera_frustum.Translate(pos);
 }
-
-
 
 ComponentCamera * ModuleCamera3D::GetEditorCam() const
 {
