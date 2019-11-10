@@ -56,7 +56,7 @@ bool ComponentCamera::CleanUp()
 
 void ComponentCamera::Draw()
 {
-	if (is_editor)
+	if (!is_editor)
 	{
 		if (draw_frustum)
 		{

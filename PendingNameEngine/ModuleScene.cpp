@@ -38,6 +38,7 @@ bool ModuleScene::Start()
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
 	game_cam->SetSelected(true);
+	game_cam->is_root = true;
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
 

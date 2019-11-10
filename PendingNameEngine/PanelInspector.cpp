@@ -156,17 +156,14 @@ void PanelInspector::Draw()
 								aux_mat->GetMaterial()->SetDiffuse(prevtex);
 
 							}
-
 						}
-						
 					}
-					
 				}
 				else if ((*it).GetType() == CMP_CAMERA)
 				{
 					if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
+						/*ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
 						Color bg = aux_cam->bg_color;
 						if (ImGui::ColorEdit4("Background Color", &bg.r))
 						{
@@ -192,6 +189,8 @@ void PanelInspector::Draw()
 						ImGui::Spacing();
 
 						ImGui::Checkbox("Frustum Culling", &aux_cam->draw_frustum);
+
+						aux_cam->Update();*/
 					}
 
 				}

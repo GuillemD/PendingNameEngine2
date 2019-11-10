@@ -409,6 +409,7 @@ void ModuleRenderer3D::UIRenderSettings()
 
 void ModuleRenderer3D::SetDefaultSettings()
 {
+	glColor3f(1.0f, 1.0f, 1.0f);
 	SetWireframe(wireframe);
 	SetBackfaceCull(backface);
 	SetDepthTest(depth_test);
