@@ -14,6 +14,7 @@ ComponentCamera::ComponentCamera(GameObject* p)
 	active = true;
 	is_editor = false;
 	draw_frustum = true;
+	speed = 20.f;
 
 	(p) ? camera_frustum.pos = p->GetGlobalMatrix().TranslatePart() : camera_frustum.pos = float3::zero;
 	(p) ? camera_frustum.front = p->GetGlobalMatrix().WorldZ() : camera_frustum.front = float3::unitZ;
@@ -163,6 +164,16 @@ float ComponentCamera::GetAspectRatio() const
 void ComponentCamera::SetEditor(bool set)
 {
 	is_editor = set;
+}
+
+float ComponentCamera::GetSpeed() const
+{
+	return speed;
+}
+
+void ComponentCamera::SetSpeed(const float new_speed)
+{
+	speed = new_speed;
 }
 
 void ComponentCamera::UpdateFrustum()

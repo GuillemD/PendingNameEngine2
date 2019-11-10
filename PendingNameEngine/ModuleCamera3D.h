@@ -18,6 +18,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void ShowCameraConfig();
 
 	void Focus(const AABB& box);
 	void LookAt(const float3& Spot);
@@ -30,7 +31,6 @@ public:
 private:
 	
 	ComponentCamera* editor_cam;
-
 	bool isPlaying = false;
 public:
 

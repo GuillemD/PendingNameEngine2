@@ -24,8 +24,6 @@ bool ModuleCamera3D::Start()
 
 	editor_cam = new ComponentCamera(nullptr);
 
-
-
 	return ret;
 }
 
@@ -35,6 +33,37 @@ bool ModuleCamera3D::CleanUp()
 	LOG("Cleaning camera");
 
 	return true;
+}
+
+void ModuleCamera3D::ShowCameraConfig()
+{
+	if (ImGui::CollapsingHeader("Camera"))
+	{
+		ImGui::Text("Editor Camera");
+
+		if (editor_cam != nullptr)
+		{
+			float show_speed = editor_cam->GetSpeed();
+			if (ImGui::SliderFloat("Speed", &show_speed, 0.1f, 50.0f, "%.2f"))
+			{
+				editor_cam->SetSpeed(show_speed);
+			}
+
+			Color bg = editor_cam->bg_color;
+			if (ImGui::ColorEdit4("Background Color", &bg.r))
+			{
+				editor_cam->bg_color = bg;
+			}
+			ImGui::Separator();
+
+			float fov = editor_cam->GetFOV();
+			if (ImGui::SliderFloat("Field of View", &fov, 1, 150))
+			{
+				editor_cam->SetFOV(fov);
+			}
+			
+		}
+	}
 }
 
 // -----------------------------------------------------------------
@@ -48,10 +77,10 @@ update_status ModuleCamera3D::Update(float dt)
 	if (editor_cam != nullptr)
 	{
 		float3 newPos(0, 0, 0);
-		float speed = 20.0f * dt;
+		float speed = editor_cam->GetSpeed() * dt;
 
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			speed = 60.f * dt;
+			speed = (editor_cam->GetSpeed()*3) * dt;
 
 		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y -= speed;
 		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y += speed;

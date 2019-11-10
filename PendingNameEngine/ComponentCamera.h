@@ -43,6 +43,9 @@ public:
 
 	void SetEditor(bool set);
 
+	float GetSpeed() const;
+	void SetSpeed(const float new_speed);
+
 	//Frustum
 	math::Frustum GetFrustum() const;
 	void UpdateFrustum();
@@ -56,7 +59,7 @@ public:
 
 	bool is_editor;
 	bool draw_frustum;
-	float sensitivity;
+	float speed;
 
 };
 
