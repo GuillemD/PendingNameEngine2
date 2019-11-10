@@ -32,6 +32,15 @@ bool ModuleScene::Start()
 	App->camera->SetCamPos({0.0,10.f,5.f});
 	App->camera->LookAt({ 0,0,0 });
 
+	//Game Cam Test
+	GameObject* game_cam = new GameObject();
+	game_cam->go_name = "Main Camera";
+	AddGameObject(game_cam);
+	SetSelectedGO(game_cam);
+	game_cam->SetSelected(true);
+
+	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
+
 	//Initial Mesh
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	App->importer->first_load = false;

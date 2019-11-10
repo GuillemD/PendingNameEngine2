@@ -98,9 +98,9 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				aux_name = aux_name.substr(0, pos2);
 				go->go_name = aux_name;
 			}
-			go->is_root = true;
-			App->scene->SetSelectedGO(go);
-			go->SetSelected(true);
+			//go->is_root = true;
+			//App->scene->SetSelectedGO(go);
+			//go->SetSelected(true);
 
 			App->scene->AddGameObject(go);
 			CONSOLELOG("Root GO created");

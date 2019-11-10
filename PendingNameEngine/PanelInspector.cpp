@@ -4,6 +4,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 #include "Transform.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -117,10 +118,7 @@ void PanelInspector::Draw()
 						if (aux_mesh->GetMesh()->num_normals > 0)
 						{
 							if (ImGui::Checkbox("Draw Faces Normals", &aux_mesh->GetMesh()->drawnormals)) {
-								if (aux_mesh->GetMesh()->drawnormals)
-								{
-
-								}
+								
 							}
 						}
 						ImGui::Separator();
@@ -162,6 +160,40 @@ void PanelInspector::Draw()
 						}
 						
 					}
+					
+				}
+				else if ((*it).GetType() == CMP_CAMERA)
+				{
+					if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
+						Color bg = aux_cam->bg_color;
+						if (ImGui::ColorEdit4("Background Color", &bg.r))
+						{
+							aux_cam->bg_color = bg;
+						}
+						ImGui::Separator();
+
+						float fov = aux_cam->GetFOV();
+						if (ImGui::SliderFloat("Field of View", &fov, 1, 150))
+						{
+							aux_cam->SetFOV(fov);
+						}
+						float near_plane = aux_cam->GetNearPlaneDist();
+						float far_plane = aux_cam->GetFarPlaneDist();
+						if (ImGui::DragFloat("Near Plane", &near_plane, 0.02f, 0.01, far_plane - 0.1f))
+						{
+							aux_cam->SetNearPlaneDist(near_plane);
+						}
+						if (ImGui::DragFloat("Far Plane", &far_plane, 0.02f, 0.01, near_plane + 0.1f))
+						{
+							aux_cam->SetFarPlaneDist(far_plane);
+						}
+						ImGui::Spacing();
+
+						ImGui::Checkbox("Frustum Culling", &aux_cam->draw_frustum);
+					}
+
 				}
 			}
 
