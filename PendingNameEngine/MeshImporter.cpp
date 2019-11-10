@@ -239,6 +239,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			App->scene->AddGameObject(child);
 
 			App->camera->can_focus = true;
+			m_cmp->UpdateBB();
 			App->camera->Focus(m_cmp->GetMesh()->bb);
 			App->camera->can_focus = false;
 

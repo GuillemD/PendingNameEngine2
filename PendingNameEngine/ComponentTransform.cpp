@@ -123,6 +123,7 @@ void ComponentTransform::CalculateGlobalMatrix()
 		global_mat = parent_trans->global_mat * global_mat;
 	}
 	update = true;
+	owner->UpdateBoundingBox();
 	owner->UpdateCam();
 }
 

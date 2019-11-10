@@ -74,11 +74,11 @@ void PanelInspector::Draw()
 						{
 							aux_trans->SetPosition(position);
 						}
-						if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.25f, -360, 360)) 
+						if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.25f, -360, 360) && (*it).GetOwner()->IsStatic() == false)
 						{
 							aux_trans->SetRotation(rotation);
 						}
-						if (ImGui::DragFloat3("Scale", (float*)&scale, 0.25f))
+						if (ImGui::DragFloat3("Scale", (float*)&scale, 0.25f) && (*it).GetOwner()->IsStatic() == false)
 						{
 							aux_trans->SetScale(scale);
 						}

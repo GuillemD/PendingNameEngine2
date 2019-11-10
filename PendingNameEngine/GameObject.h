@@ -60,6 +60,7 @@ public:
 	math::float4x4 GetGlobalMatrix();
 
 	void UpdateCam();
+	void UpdateBoundingBox();
 
 public:
 	GameObject* parent = nullptr;
@@ -68,7 +69,6 @@ public:
 	std::string go_name;
 	std::list<Component*> components;
 	ComponentTransform* trans;
-	AABB* go_bb;
 
 private:
 	bool is_active;

@@ -166,7 +166,6 @@ void ModuleGUI::CreateMainMenu()
 			ImGui::EndMenu();
 
 		}
-
 		/*if (ImGui::BeginMenu("Geometry")) {
 
 			if (ImGui::MenuItem("3D Object")) {

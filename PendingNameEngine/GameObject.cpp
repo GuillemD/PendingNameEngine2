@@ -16,7 +16,6 @@ GameObject::GameObject()
 	is_root = false;
 	is_active = true;
 	is_static = false;
-	go_bb = nullptr;
 
 	//create component transform
 	Component* cmp = new ComponentTransform(this);
@@ -306,6 +305,16 @@ void GameObject::UpdateCam()
 	if (cam != nullptr)
 	{
 		cam->Update();
+	}
+}
+
+void GameObject::UpdateBoundingBox()
+{
+	ComponentMesh* mesh = (ComponentMesh*)this->GetComponent(CMP_MESH);
+
+	if (mesh != nullptr)
+	{
+		mesh->UpdateBB();
 	}
 }
 

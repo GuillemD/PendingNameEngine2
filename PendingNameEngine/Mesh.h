@@ -21,14 +21,6 @@ public:
 	Mesh();
 	~Mesh();
 
-	uint CreateBuffer();
-
-	void DefineCube(float3 _pos, float size);
-	//void DefinePARCube();
-	void DefinePlane(float3 _pos);
-
-	//void Draw();
-
 	void LoadVertices();
 	void LoadIndices();
 	void LoadNormals();

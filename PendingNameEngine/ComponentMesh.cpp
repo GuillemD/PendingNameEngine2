@@ -121,7 +121,6 @@ void ComponentMesh::CreateBB()
 	{
 		mesh->bb.SetNegativeInfinity();
 		mesh->bb = mesh->bb.MinimalEnclosingAABB(GetMesh()->vertices, GetMesh()->num_vertices);
-		owner->go_bb = &mesh->bb;
 	}
 }
 
