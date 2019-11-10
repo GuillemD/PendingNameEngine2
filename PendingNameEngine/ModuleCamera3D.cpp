@@ -61,7 +61,18 @@ void ModuleCamera3D::ShowCameraConfig()
 			{
 				editor_cam->SetFOV(fov);
 			}
-			
+			float near_plane = editor_cam->GetNearPlaneDist();
+			float far_plane = editor_cam->GetFarPlaneDist();
+			if (ImGui::DragFloat("Near Plane", &near_plane, 0.02f, 0.01, far_plane - 0.1f))
+			{
+				editor_cam->SetNearPlaneDist(near_plane);
+			}
+			if (ImGui::DragFloat("Far Plane", &far_plane, 0.02f, 0.01, near_plane + 0.1f))
+			{
+				editor_cam->SetFarPlaneDist(far_plane);
+			}
+
+			ImGui::Spacing();
 		}
 	}
 }
