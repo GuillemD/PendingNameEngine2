@@ -163,7 +163,7 @@ void PanelInspector::Draw()
 				{
 					if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						/*ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
+						ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
 						Color bg = aux_cam->bg_color;
 						if (ImGui::ColorEdit4("Background Color", &bg.r))
 						{
@@ -190,7 +190,7 @@ void PanelInspector::Draw()
 
 						ImGui::Checkbox("Frustum Culling", &aux_cam->draw_frustum);
 
-						aux_cam->Update();*/
+						aux_cam->Update();
 					}
 
 				}

@@ -113,7 +113,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		
-		if (App->input->GetMouseButton(3) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_N) == KEY_REPEAT)
+		if (App->input->GetMouseButton(2) == KEY_REPEAT)
 		{
 
 			float dx = -(float)App->input->GetMouseXMotion() * dt;
