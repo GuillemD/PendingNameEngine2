@@ -15,6 +15,7 @@
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled)
 {
 	name = "Renderer3D";
+	active_cam = nullptr;
 }
 
 // Destructor

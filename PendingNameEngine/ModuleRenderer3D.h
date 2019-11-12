@@ -48,6 +48,9 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
+	std::list<ComponentCamera*> rendering_cameras;
+	ComponentCamera* active_cam;
+
 	bool wireframe = false;
 	bool depth_test = true;
 	bool backface = false;

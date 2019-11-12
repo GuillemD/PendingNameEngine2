@@ -29,7 +29,8 @@ ComponentCamera::ComponentCamera(GameObject* p)
 
 	SetFOV(60);
 
-	App->scene->cameras.push_back(this);
+	if(p)
+		App->scene->cameras.push_back(this);
 
 }
 
@@ -49,8 +50,6 @@ bool ComponentCamera::Update()
 
 bool ComponentCamera::CleanUp()
 {
-	//clean renderer cameras
-	//App->renderer3D->rendering_cameras.pop_back();
 	return true;
 }
 

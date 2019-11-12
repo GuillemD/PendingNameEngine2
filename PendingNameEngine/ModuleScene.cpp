@@ -10,11 +10,13 @@
 ModuleScene::ModuleScene()
 {
 	name = "Scene";
+
 }
 
 ModuleScene::ModuleScene(bool start_enabled)
 {
 	name = "Scene";
+
 }
 
 
@@ -53,7 +55,19 @@ bool ModuleScene::Start()
 
 update_status ModuleScene::Update(float dt)
 {
+	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		ComponentCamera* aux_cam = (ComponentCamera*)(*it)->GetComponent(CMP_CAMERA);
 
+		if (aux_cam != nullptr)
+		{
+			if (aux_cam->GetOwner()->IsActive())
+			{
+				App->renderer3D->rendering_cameras.push_back(aux_cam);
+			}
+
+		}
+	}
 	if (!to_delete.empty())
 		DeleteGameObjects();
 
@@ -63,13 +77,14 @@ update_status ModuleScene::Update(float dt)
 
 bool ModuleScene::CleanUp()
 {
+
 	return true;
 }
 
 
 void ModuleScene::DrawScene()
 {
-	PPlane grid(0, 1, 0, 5);
+	PPlane grid(0, 1, 0, 20);
 	grid.axis = true;
 	grid.color = { 1.0f,1.0f,1.0f };
 
@@ -77,11 +92,27 @@ void ModuleScene::DrawScene()
 	grid.Render();
 	App->renderer3D->SetDefaultSettings();
 
-	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	for (std::list<ComponentCamera*>::iterator it = App->renderer3D->rendering_cameras.begin(); it != App->renderer3D->rendering_cameras.end(); it++)
 	{
+		DrawGameObjects(*it);
+	}
+	//DrawGameObjects(App->renderer3D->active_cam);
+	App->renderer3D->rendering_cameras.clear();
+
+}
+
+void ModuleScene::DrawGameObjects(ComponentCamera * cam_to_draw)
+{
+	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+		if (cam_to_draw->GetOwner() && aux_mesh)
+		{
+			if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
+				continue;
+		}
 		(*it)->Draw();
 	}
-
 }
 
 void ModuleScene::ClearScene()

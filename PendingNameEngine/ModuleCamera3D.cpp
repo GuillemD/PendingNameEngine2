@@ -11,6 +11,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled)
 {
 	name = "Camera3D";
 	editor_cam = nullptr;
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -24,6 +25,7 @@ bool ModuleCamera3D::Start()
 
 	editor_cam = new ComponentCamera(nullptr);
 	editor_cam->SetEditor(true);
+	App->renderer3D->active_cam = editor_cam;
 
 	return ret;
 }
@@ -33,6 +35,7 @@ bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
 	RELEASE(editor_cam);
+	App->renderer3D->active_cam = nullptr;
 
 	return true;
 }

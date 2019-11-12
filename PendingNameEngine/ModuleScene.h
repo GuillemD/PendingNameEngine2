@@ -21,6 +21,7 @@ public:
 	bool CleanUp();
 
 	void DrawScene();
+	void DrawGameObjects(ComponentCamera* cam_to_draw);
 	void ClearScene();
 	void DeleteGameObjects();
 	void DeleteGameObject(GameObject* go_to_delete);
@@ -35,7 +36,6 @@ public:
 	std::vector<GameObject*> scene_gameobjects;
 	std::list<GameObject*> root_gameobjects;
 	std::list<ComponentCamera*> cameras;
-
 
 	Texture* checkers=nullptr;
 	
