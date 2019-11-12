@@ -9,7 +9,11 @@
 #include "TextureImporter.h"
 
 #include "OpenGL.h"
+
 #include <string>
+#include <iostream>
+#include <fstream> 
+#include "Globals.h"
 #include "Assimp.h"
 
 void AssimpToConsoleLog(const char* str, char* userData);
@@ -242,8 +246,20 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			App->camera->Focus(m_cmp->GetMesh()->bb);
 			App->camera->can_focus = false;
 
+			const char* tmp = imp_mesh->mName.C_Str();
+
+			string test = imp_mesh->mName.C_Str();
+
+			SaveInOwnFileFormat(mesh, test);
+			
 		}
-		go = parent;
+
+		
+		
+
+	
+
+		
 	}
 
 	if (_node->mNumChildren > 0)
@@ -254,13 +270,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		}
 	}
 
+
+	
 }
 
-void MeshImporter::SaveInOwnFileFormat(const char * path, Mesh * mesh)
+void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 {
 	uint ranges[4] = { mesh->num_indices,mesh->num_normals,mesh->num_texcoords,mesh->num_vertices };
 
-	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices*3 + sizeof(float)*mesh->num_normals*3 + sizeof(float*)*mesh->num_texcoords; // i el size de num_normals i num texcoords? esta be?
+	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices*3 + sizeof(float)*mesh->num_normals*3 + sizeof(float)*mesh->num_texcoords * 3; 
 
 	char* data = new char[size];
 	char* cursor = data;
@@ -281,10 +299,13 @@ void MeshImporter::SaveInOwnFileFormat(const char * path, Mesh * mesh)
 	memcpy(cursor, mesh->normals, bytes);
 
 	cursor += bytes;
-	bytes = sizeof(float*)*mesh->num_texcoords;
+	bytes = sizeof(float)*mesh->num_texcoords * 3;
 	memcpy(cursor, mesh->texcoords, bytes);
 
-	//App->fs->Save(mesh.name ? , data, size);
+	ofstream newfile("Library/Meshes/amesh.txt", ofstream::binary);
+	newfile.write(data, size);
+	newfile.close();
+		
 
 }
 
