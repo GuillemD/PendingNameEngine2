@@ -27,173 +27,32 @@ void PanelInspector::Draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(290, 600));
 	ImGui::Begin("Inspector", &active);
+	GameObject* selected = nullptr;
 	if (App->scene->selected_go != nullptr)
 	{
-		if (App->scene->selected_go->go_name != "")
+		selected = App->scene->selected_go;
+		if (selected->go_name != "")
 		{
 			ImGui::Text("Name:");
 			ImGui::SameLine();
-			ImGui::TextColored(YELLOW, "%s", App->scene->selected_go->go_name.c_str());
-			bool is_go_active = App->scene->selected_go->IsActive();
+			ImGui::TextColored(YELLOW, "%s", selected->go_name.c_str());
+			bool is_go_active = selected->IsActive();
 			if (ImGui::Checkbox("Active", &is_go_active))
 			{
-				App->scene->selected_go->SetActive(is_go_active);
+				selected->SetActive(is_go_active);
 			}
 			ImGui::SameLine();
-			bool is_go_static = App->scene->selected_go->IsStatic();
+			bool is_go_static = selected->IsStatic();
 			if (ImGui::Checkbox("Static", &is_go_static))
 			{
-				App->scene->selected_go->SetStatic(is_go_static);
+				selected->SetStatic(is_go_static);
 			}
 		
 			ImGui::Separator();
 
-			for (auto it : App->scene->selected_go->components)
+			for (std::list<Component*>::iterator it = selected->components.begin(); it != selected->components.end(); it++ )
 			{
-				if ((*it).GetType() == CMP_TRANSFORM)
-				{
-					if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
-					{
-						ComponentTransform* aux_trans = (ComponentTransform*)App->scene->selected_go->GetComponent(CMP_TRANSFORM);
-						float3 position;
-						float3 rotation;
-						float3 scale;
-
-						if ((*it).GetOwner()->IsRoot())
-						{
-							position = aux_trans->GetGlobalPosition();
-							rotation = aux_trans->GetGlobalRotation();
-							scale = aux_trans->GetGlobalScale();
-						}
-						else
-						{
-							position = aux_trans->GetLocalPosition();
-							rotation = aux_trans->GetLocalRotation();
-							scale = aux_trans->GetLocalScale();							
-						}
-						if (ImGui::DragFloat3("Position", (float*)&position, 0.25f) && (*it).GetOwner()->IsStatic() == false) 
-						{
-							aux_trans->SetPosition(position);
-						}
-						if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.25f, -360, 360) && (*it).GetOwner()->IsStatic() == false)
-						{
-							aux_trans->SetRotation(rotation);
-						}
-						if (ImGui::DragFloat3("Scale", (float*)&scale, 0.25f) && (*it).GetOwner()->IsStatic() == false)
-						{
-							aux_trans->SetScale(scale);
-						}
-					}
-				}
-				else if ((*it).GetType() == CMP_MESH)
-				{
-					if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
-					{
-						ComponentMesh* aux_mesh = (ComponentMesh*)App->scene->selected_go->GetComponent(CMP_MESH);
-						if (aux_mesh->GetMesh() != nullptr)
-						{
-							ImGui::Columns(2, "Mesh Info", true);
-							ImGui::Text("Num Vertices: ");
-							ImGui::Text("Num Indices: ");
-							ImGui::Text("Num Faces: ");
-							ImGui::Text("Has Normals: ");
-							ImGui::Text("Has TexCoords: ");
-							ImGui::NextColumn();
-							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_vertices);
-							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_indices);
-							ImGui::TextColored(YELLOW, "%d", aux_mesh->GetMesh()->num_indices / 3);
-							if(aux_mesh->GetMesh()->normals_id > 0)
-								ImGui::TextColored(YELLOW, "yes");
-							else
-								ImGui::TextColored(YELLOW, "-");
-
-							if (aux_mesh->GetMesh()->texcoords_id > 0)
-								ImGui::TextColored(YELLOW, "yes");
-							else
-								ImGui::TextColored(YELLOW, "-");
-
-							ImGui::Columns(1);
-						}
-						ImGui::Separator();
-						if (aux_mesh->GetMesh()->num_normals > 0)
-						{
-							if (ImGui::Checkbox("Draw Faces Normals", &aux_mesh->GetMesh()->drawnormals)) {
-								
-							}
-						}
-						ImGui::Separator();
-					}
-				}
-				else if ((*it).GetType() == CMP_MATERIAL)
-				{
-					if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
-					{
-						ComponentMaterial* aux_mat = (ComponentMaterial*)App->scene->selected_go->GetComponent(CMP_MATERIAL);
-						
-						if (aux_mat->GetMaterial() != nullptr)
-						{
-							ImGui::Text("Texture Id: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetTextureId());
-							ImGui::Text("Texture Path: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", aux_mat->GetMaterial()->GetDiffuse()->GetName());
-
-							ImGui::Separator();
-							ImGui::Text("Width: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetWidth());
-							ImGui::SameLine();
-							ImGui::Text("Height: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", aux_mat->GetMaterial()->GetDiffuse()->GetHeight());
-							ImGui::Separator();
-
-							ImTextureID tex = (uint*)aux_mat->GetMaterial()->GetDiffuse()->GetTextureId();
-							ImVec2 size = ImGui::GetContentRegionAvail();
-							size.y = size.x;
-							ImGui::Image(tex, size);
-						}
-						
-						if (ImGui::Checkbox("Enable checkers texture", &usecheckers)) {
-							if (usecheckers) {
-								prevtex = aux_mat->GetMaterial()->GetDiffuse();
-								aux_mat->GetMaterial()->SetDiffuse(App->scene->checkers);
-							}
-							else {
-								aux_mat->GetMaterial()->SetDiffuse(prevtex);
-
-							}
-						}
-					}
-				}
-				else if ((*it).GetType() == CMP_CAMERA)
-				{
-					if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
-					{
-						ComponentCamera* aux_cam = (ComponentCamera*)App->scene->selected_go->GetComponent(CMP_CAMERA);
-						Color bg = aux_cam->bg_color;
-						if (ImGui::ColorEdit4("Background Color", &bg.r))
-						{
-							aux_cam->bg_color = bg;
-						}
-						ImGui::Separator();
-
-						float fov = aux_cam->GetFOV();
-						if (ImGui::SliderFloat("Field of View", &fov, 1, 150))
-						{
-							aux_cam->SetFOV(fov);
-						}
-						float near_plane = aux_cam->GetNearPlaneDist();
-						float far_plane = aux_cam->GetFarPlaneDist();
-						if (ImGui::DragFloat("Near Plane", &near_plane, 0.02f, 0.01, far_plane - 0.1f))
-						{
-							aux_cam->SetNearPlaneDist(near_plane);
-						}
-						if (ImGui::DragFloat("Far Plane", &far_plane, 0.02f, 0.01, near_plane + 0.1f))
-						{
-							aux_cam->SetFarPlaneDist(far_plane);
-						}
-						ImGui::Spacing();
-
-						ImGui::Checkbox("Frustum Culling", &aux_cam->draw_frustum);
-
-						aux_cam->Update();
-					}
-
-				}
+				DrawComponent((*it));
 			}
 
 		}
@@ -201,4 +60,170 @@ void PanelInspector::Draw()
 	
 
 	ImGui::End();
+}
+
+void PanelInspector::DrawComponent(Component * cmp)
+{
+	switch (cmp->GetType())
+	{
+	case CMP_TRANSFORM:
+		DrawComponentTransform((ComponentTransform*)cmp);
+		break;
+	case CMP_MESH:
+		DrawComponentMesh((ComponentMesh*)cmp);
+		break;
+	case CMP_MATERIAL:
+		DrawComponentMaterial((ComponentMaterial*)cmp);
+		break;
+	case CMP_CAMERA:
+		DrawComponentCamera((ComponentCamera*)cmp);
+		break;
+	default:
+		break;
+	}
+}
+
+void PanelInspector::DrawComponentTransform(ComponentTransform * trans)
+{
+
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		float3 position;
+		float3 rotation;
+		float3 scale;
+
+		if (trans->GetOwner()->IsRoot())
+		{
+			position = trans->GetGlobalPosition();
+			rotation = trans->GetGlobalRotation();
+			scale = trans->GetGlobalScale();
+		}
+		else
+		{
+			position = trans->GetLocalPosition();
+			rotation = trans->GetLocalRotation();
+			scale = trans->GetLocalScale();
+		}
+		if (ImGui::DragFloat3("Position", (float*)&position, 0.25f) && trans->GetOwner()->IsStatic() == false)
+		{
+			trans->SetPosition(position);
+		}
+		if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.25f, -360, 360) && trans->GetOwner()->IsStatic() == false)
+		{
+			trans->SetRotation(rotation);
+		}
+		if (ImGui::DragFloat3("Scale", (float*)&scale, 0.25f) && trans->GetOwner()->IsStatic() == false)
+		{
+			trans->SetScale(scale);
+		}
+	}
+}
+
+void PanelInspector::DrawComponentMesh(ComponentMesh * mesh)
+{
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		
+		if (mesh->GetMesh() != nullptr)
+		{
+			ImGui::Columns(2, "Mesh Info", true);
+			ImGui::Text("Num Vertices: ");
+			ImGui::Text("Num Indices: ");
+			ImGui::Text("Num Faces: ");
+			ImGui::Text("Has Normals: ");
+			ImGui::Text("Has TexCoords: ");
+			ImGui::NextColumn();
+			ImGui::TextColored(YELLOW, "%d", mesh->GetMesh()->num_vertices);
+			ImGui::TextColored(YELLOW, "%d", mesh->GetMesh()->num_indices);
+			ImGui::TextColored(YELLOW, "%d", mesh->GetMesh()->num_indices / 3);
+			if (mesh->GetMesh()->normals_id > 0)
+				ImGui::TextColored(YELLOW, "yes");
+			else
+				ImGui::TextColored(YELLOW, "-");
+
+			if (mesh->GetMesh()->texcoords_id > 0)
+				ImGui::TextColored(YELLOW, "yes");
+			else
+				ImGui::TextColored(YELLOW, "-");
+
+			ImGui::Columns(1);
+		}
+		ImGui::Separator();
+		if (mesh->GetMesh()->num_normals > 0)
+		{
+			if (ImGui::Checkbox("Draw Faces Normals", &mesh->GetMesh()->drawnormals)) {
+
+			}
+		}
+		ImGui::Separator();
+	}
+}
+
+void PanelInspector::DrawComponentMaterial(ComponentMaterial * mat)
+{
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+
+		if (mat->GetMaterial() != nullptr)
+		{
+			ImGui::Text("Texture Id: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", mat->GetMaterial()->GetDiffuse()->GetTextureId());
+			ImGui::Text("Texture Path: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", mat->GetMaterial()->GetDiffuse()->GetName());
+
+			ImGui::Separator();
+			ImGui::Text("Width: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", mat->GetMaterial()->GetDiffuse()->GetWidth());
+			ImGui::SameLine();
+			ImGui::Text("Height: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", mat->GetMaterial()->GetDiffuse()->GetHeight());
+			ImGui::Separator();
+
+			ImTextureID tex = (uint*)mat->GetMaterial()->GetDiffuse()->GetTextureId();
+			ImVec2 size = ImGui::GetContentRegionAvail();
+			size.y = size.x;
+			ImGui::Image(tex, size);
+		}
+
+		if (ImGui::Checkbox("Enable checkers texture", &usecheckers)) {
+			if (usecheckers) {
+				prevtex = mat->GetMaterial()->GetDiffuse();
+				mat->GetMaterial()->SetDiffuse(App->scene->checkers);
+			}
+			else {
+				mat->GetMaterial()->SetDiffuse(prevtex);
+
+			}
+		}
+	}
+}
+
+void PanelInspector::DrawComponentCamera(ComponentCamera * cam)
+{
+	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		Color bg = cam->bg_color;
+		if (ImGui::ColorEdit4("Background Color", &bg.r))
+		{
+			cam->bg_color = bg;
+		}
+		ImGui::Separator();
+
+		float fov = cam->GetFOV();
+		if (ImGui::SliderFloat("Field of View", &fov, 1, 150))
+		{
+			cam->SetFOV(fov);
+		}
+		float near_plane = cam->GetNearPlaneDist();
+		float far_plane = cam->GetFarPlaneDist();
+		if (ImGui::DragFloat("Near Plane", &near_plane, 0.02f, 0.01, far_plane - 0.1f))
+		{
+			cam->SetNearPlaneDist(near_plane);
+		}
+		if (ImGui::DragFloat("Far Plane", &far_plane, 0.02f, 0.01, near_plane + 0.1f))
+		{
+			cam->SetFarPlaneDist(far_plane);
+		}
+		ImGui::Spacing();
+
+		ImGui::Checkbox("Frustum Culling", &cam->draw_frustum);
+
+		cam->Update();
+	}
 }

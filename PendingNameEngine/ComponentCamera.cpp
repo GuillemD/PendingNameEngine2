@@ -125,7 +125,7 @@ math::Frustum ComponentCamera::GetFrustum() const
 void ComponentCamera::SetNearPlaneDist(float np)
 {
 	camera_frustum.nearPlaneDistance = np;
-	UpdateProjectionMatrix();
+	//UpdateProjectionMatrix();
 }
 
 float ComponentCamera::GetNearPlaneDist() const
@@ -136,7 +136,7 @@ float ComponentCamera::GetNearPlaneDist() const
 void ComponentCamera::SetFarPlaneDist(float fp)
 {
 	camera_frustum.farPlaneDistance = fp;
-	UpdateProjectionMatrix();
+	//UpdateProjectionMatrix();
 }
 
 float ComponentCamera::GetFarPlaneDist() const
@@ -148,7 +148,7 @@ void ComponentCamera::SetFOV(float new_fov)
 {
 	camera_frustum.verticalFov = new_fov * DEGTORAD;
 	camera_frustum.horizontalFov = atanf(tanf(camera_frustum.verticalFov / 2)*camera_frustum.AspectRatio()) * 2;
-	UpdateProjectionMatrix();
+	//UpdateProjectionMatrix();
 }
 
 float ComponentCamera::GetFOV() const

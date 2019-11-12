@@ -23,6 +23,7 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 
 	editor_cam = new ComponentCamera(nullptr);
+	editor_cam->SetEditor(true);
 
 	return ret;
 }
@@ -36,7 +37,7 @@ bool ModuleCamera3D::CleanUp()
 	return true;
 }
 
-void ModuleCamera3D::ShowCameraConfig()
+/*void ModuleCamera3D::ShowCameraConfig()
 {
 	if (ImGui::CollapsingHeader("Camera"))
 	{
@@ -76,7 +77,7 @@ void ModuleCamera3D::ShowCameraConfig()
 			ImGui::Spacing();
 		}
 	}
-}
+}*/
 
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
@@ -159,11 +160,8 @@ update_status ModuleCamera3D::Update(float dt)
 				}
 				can_focus = false;
 			}
-			
 		}
-		
 	}
-
 
 	return UPDATE_CONTINUE;
 }

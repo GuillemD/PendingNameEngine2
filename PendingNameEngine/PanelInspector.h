@@ -3,6 +3,12 @@
 
 #include "Panel.h"
 
+class Component;
+class ComponentTransform;
+class ComponentMesh;
+class ComponentMaterial;
+class ComponentCamera;
+
 class PanelInspector :
 	public Panel
 {
@@ -15,6 +21,14 @@ public:
 	Texture* prevtex = nullptr;
 
 	void Draw() override;
+	void DrawComponent(Component* cmp);
+
+private:
+
+	void DrawComponentTransform(ComponentTransform* trans);
+	void DrawComponentMesh(ComponentMesh* mesh);
+	void DrawComponentMaterial(ComponentMaterial* mat);
+	void DrawComponentCamera(ComponentCamera* cam);
 
 };
 #endif // !_PANEL_INSPECTOR_H_

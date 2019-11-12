@@ -56,8 +56,6 @@ bool ModuleRenderer3D::Init()
 		CONSOLELOG("Glew initialized properly. :) \n ~ Version: %s", glewGetString(GLEW_VERSION));
 	}
 
-
-
 	if(ret == true)
 	{
 		//Use Vsync
@@ -152,7 +150,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	if (App->camera->GetEditorCam() != nullptr)
 	{
-
 		App->scene->DrawScene();
 	}
 	
