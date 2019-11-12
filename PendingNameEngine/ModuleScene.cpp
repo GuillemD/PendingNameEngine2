@@ -106,7 +106,7 @@ void ModuleScene::DrawGameObjects(ComponentCamera * cam_to_draw)
 	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
 	{
 		ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-		if (cam_to_draw->GetOwner() && aux_mesh)
+		if (cam_to_draw->GetOwner() && aux_mesh && cam_to_draw->frustum_cull)
 		{
 			if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
 				continue;

@@ -14,6 +14,7 @@ ComponentCamera::ComponentCamera(GameObject* p)
 	active = true;
 	is_editor = false;
 	draw_frustum = true;
+	frustum_cull = true;
 	speed = 20.f;
 
 	(p) ? camera_frustum.pos = p->GetGlobalMatrix().TranslatePart() : camera_frustum.pos = float3::zero;

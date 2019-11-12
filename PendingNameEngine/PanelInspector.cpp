@@ -222,7 +222,7 @@ void PanelInspector::DrawComponentCamera(ComponentCamera * cam)
 		}
 		ImGui::Spacing();
 
-		ImGui::Checkbox("Draw Frustum", &cam->draw_frustum);
+		ImGui::Checkbox("Frustum Cull", &cam->frustum_cull);
 
 		cam->Update();
 	}

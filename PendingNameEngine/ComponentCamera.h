@@ -59,6 +59,7 @@ public:
 
 	bool is_editor;
 	bool draw_frustum;
+	bool frustum_cull;
 	float speed;
 
 };
