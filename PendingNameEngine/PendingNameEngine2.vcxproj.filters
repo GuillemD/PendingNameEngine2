@@ -218,6 +218,9 @@
     <ClCompile Include="ParGeometry.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -989,6 +992,12 @@
     <ClInclude Include="ParGeometry.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="PhysFS\include\physfs.h">
+      <Filter>External Libraries\PhysFS</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -1080,6 +1089,9 @@
     </Filter>
     <Filter Include="GameObjects\Components">
       <UniqueIdentifier>{c545aa51-d39c-42e9-8ae7-1b542a43cea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\PhysFS">
+      <UniqueIdentifier>{ba49a8cc-354c-4ec5-a2a5-c58ed4cc81bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

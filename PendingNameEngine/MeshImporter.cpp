@@ -256,6 +256,38 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 }
 
+void MeshImporter::SaveInOwnFileFormat(const char * path, Mesh * mesh)
+{
+	uint ranges[4] = { mesh->num_indices,mesh->num_normals,mesh->num_texcoords,mesh->num_vertices };
+
+	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices*3 + sizeof(float)*mesh->num_normals*3 + sizeof(float*)*mesh->num_texcoords; // i el size de num_normals i num texcoords? esta be?
+
+	char* data = new char[size];
+	char* cursor = data;
+
+	uint bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(uint)* mesh->num_indices;
+	memcpy(cursor, mesh->indices, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_vertices * 3;
+	memcpy(cursor, mesh->vertices, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_normals * 3;
+	memcpy(cursor, mesh->normals, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float*)*mesh->num_texcoords;
+	memcpy(cursor, mesh->texcoords, bytes);
+
+	//App->fs->Save(mesh.name ? , data, size);
+
+}
+
 LineSegment MeshImporter::GetTriNormal(float3 p1, float3 p2, float3 p3)
 {
 	LineSegment ret; //a = N, b = A
