@@ -48,18 +48,29 @@ bool TextureImporter::CleanUp()
 }
 
 
-//Texture * TextureImporter::AddTextureToLibrary()
-//{
-//	ILuint size;
-//	ILubyte *data;
-//	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-//	size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
-//	if (size > 0) {
-//		data = new ILubyte[size]; // allocate data buffer
-//		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-//			ret = App->fs->SaveUnique(output_file, data, size, LIBRARY_TEXTURES_FOLDER, "texture", "dds");
-//		RELEASE_ARRAY(data);//
-//}
+void  TextureImporter::AddTextureToLibrary(string name)
+{
+	//Chop the extension and the path from the actual name
+	string thename;
+	string tmp;
+	
+	thename = name;
+
+	uint last_bar = (thename.find(".//Assets//") != std::string::npos) ? thename.find_last_of('/') : thename.find_last_of('/');
+	uint ext_point = thename.find_last_of('.');
+
+	for (int i = last_bar + 1; i < ext_point; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	ILuint size;
+	ILubyte *data;
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+	if (ilSave(IL_DDS, ("Library/Textures/" + tmp + ".dds").c_str())) {
+		CONSOLELOG("Textured saved in library/textures");
+	}
+
+}
 
 Texture* TextureImporter::LoadTextureFromPath(const char * path)
 {
@@ -140,6 +151,8 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
 		
 	}
+	string textname = t->GetName();
+	AddTextureToLibrary(textname);
 
 	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
 	{

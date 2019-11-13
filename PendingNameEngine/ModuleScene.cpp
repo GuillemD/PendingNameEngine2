@@ -5,6 +5,9 @@
 #include "OpenGL.h"
 #include "ComponentMesh.h"
 
+#include "ModuleImporter.h"
+#include "MeshImporter.h"
+#include "ModuleInput.h"
 
 ModuleScene::ModuleScene()
 {
@@ -29,7 +32,7 @@ bool ModuleScene::Start()
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	App->importer->first_load = false;
 	ret = App->importer->Import(".//Assets//Baker_house.png");
-
+	
 	return ret;
 }
 
@@ -39,6 +42,18 @@ update_status ModuleScene::Update(float dt)
 
 	if (!to_delete.empty())
 		DeleteGameObjects();
+
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+		GameObject* testGo= new GameObject();
+		testGo->AddComponent(CMP_MESH);
+		testGo->AddComponent(CMP_TRANSFORM);
+		ComponentMesh* second =(ComponentMesh*)testGo->GetComponent(CMP_MESH);
+		second->SetMesh(App->importer->mesh_import->LoadOwnFileFormat("Library/Meshes/Baker_house.caca"));
+		
+	
+		
+		
+	}
 
 	return UPDATE_CONTINUE;
 }

@@ -246,9 +246,9 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			App->camera->Focus(m_cmp->GetMesh()->bb);
 			App->camera->can_focus = false;
 
-			const char* tmp = imp_mesh->mName.C_Str();
+			const char* tmp = _node->mName.C_Str();
 
-			string test = imp_mesh->mName.C_Str();
+			string test = _node->mName.C_Str();
 
 			SaveInOwnFileFormat(mesh, test);
 			
@@ -302,11 +302,68 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 	bytes = sizeof(float)*mesh->num_texcoords * 3;
 	memcpy(cursor, mesh->texcoords, bytes);
 
-	ofstream newfile("Library/Meshes/amesh.txt", ofstream::binary);
+	ofstream newfile((LIBRARY_MESH_FOLDER + name+".caca").c_str(), ofstream::binary);
 	newfile.write(data, size);
 	newfile.close();
 		
 
+}
+
+Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
+{
+	Mesh* ret= nullptr;
+
+	std::ifstream file(path, std::ifstream::binary);
+
+	if(file.is_open())
+	{
+		file.seekg(0, file.end);
+		int filesize = file.tellg();
+		file.seekg(0, file.beg);
+
+		char* buffer = new char[filesize];
+		file.read(buffer, filesize);
+		if (file) {
+			char* cursor = buffer;
+			ret = new Mesh();
+			uint ranges[4];
+			uint bytes = sizeof(ranges);
+			memcpy(ranges, cursor, bytes);
+
+			ret->num_indices = ranges[0];
+			ret->num_vertices = ranges[1];
+			ret->num_normals = ranges[2];
+			ret->num_texcoords = ranges[3];
+
+
+			cursor += bytes;
+			bytes = sizeof(uint) * ret->num_indices;
+			ret->indices = new int[ret->num_indices];
+			memcpy(ret->indices, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float)*ret->num_vertices*3;
+			ret->vertices = new float3[ret->num_vertices*3];
+			memcpy(ret->vertices, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float)*ret->num_normals * 3;
+			ret->normals = new float3[ret->num_normals * 3];
+			memcpy(ret->normals, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float*)*ret->num_texcoords;
+			ret->texcoords = new float[ret->num_texcoords];
+			memcpy(ret->texcoords, cursor, bytes);
+
+			
+
+		}
+		
+	}
+
+
+	return ret;
 }
 
 LineSegment MeshImporter::GetTriNormal(float3 p1, float3 p2, float3 p3)
