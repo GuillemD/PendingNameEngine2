@@ -39,7 +39,7 @@ void consolelog(const char file[], int line, const char* format, ...);
 
 
 typedef unsigned int uint;
-
+typedef long long UID;
 // Deletes a buffer
 #define RELEASE( x )\
     {\

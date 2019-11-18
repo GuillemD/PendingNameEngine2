@@ -7,6 +7,10 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include <list>
 
+#include "PCG_c_basic/pcg_basic.h"
+
+
+
 enum ComponentTYPE;
 class Component;
 class ComponentTransform;
@@ -67,7 +71,7 @@ public:
 	std::list<Component*> components;
 	ComponentTransform* trans;
 	AABB* go_bb;
-
+	UID UniqueId=0;
 private:
 	bool is_active;
 	bool is_static;
