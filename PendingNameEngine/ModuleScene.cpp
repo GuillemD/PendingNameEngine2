@@ -211,3 +211,20 @@ void ModuleScene::SetSelectedGO(GameObject * go)
 {
 	selected_go = go;
 }
+
+void ModuleScene::AddStaticGO(GameObject * go)
+{
+	static_gameobjects.push_back(go);
+}
+
+void ModuleScene::RemoveGoFromStaticList(GameObject * go)
+{
+	for (auto it = static_gameobjects.begin(); it != static_gameobjects.end(); it++)
+	{
+		if ((*it) == go)
+		{
+			static_gameobjects.erase(it);
+			return;
+		}
+	}
+}

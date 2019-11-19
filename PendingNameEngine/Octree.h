@@ -17,7 +17,7 @@ public:
 	void DrawNode();
 	void CleanUpNode();
 	void SplitNode();
-	void InsertInNode(GameObject* insert_go);
+	void InsertInNode(GameObject* insert_go, int& num_go);
 
 public:
 	AABB bb;
@@ -25,7 +25,7 @@ public:
 	OctreeNode* childs[8];
 
 	bool is_root;
-
+	bool leaf;
 	int div_level;
 
 	std::list<GameObject*> node_objects;
@@ -49,6 +49,7 @@ private:
 	OctreeNode* root_node;
 	int max_num_go;
 	int subdiv_limit;
+	int num_go;
 
 };
 	

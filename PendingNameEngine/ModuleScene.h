@@ -32,9 +32,13 @@ public:
 
 	void SetSelectedGO(GameObject* go);
 
+	void AddStaticGO(GameObject* go);
+	void RemoveGoFromStaticList(GameObject* go);
+
 public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
+	std::list<GameObject*> static_gameobjects;
 	std::list<GameObject*> root_gameobjects;
 	std::list<ComponentCamera*> cameras;
 

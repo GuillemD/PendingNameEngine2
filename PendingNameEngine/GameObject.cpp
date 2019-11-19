@@ -230,7 +230,25 @@ bool GameObject::IsStatic() const
 
 void GameObject::SetStatic(bool st)
 {
+	if (st)
+	{
+		if (!is_static)
+			App->scene->AddStaticGO(this);
+	}
+	else
+	{
+		if (is_static)
+			App->scene->RemoveGoFromStaticList(this);
+	}
+
 	is_static = st;
+
+	auto child_list = this->childs.begin();
+	while (child_list != this->childs.end())
+	{
+		(*child_list)->SetStatic(st);
+		child_list++;
+	}
 }
 
 bool GameObject::IsSelected() const
