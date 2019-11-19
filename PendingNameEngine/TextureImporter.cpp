@@ -56,7 +56,7 @@ void  TextureImporter::AddTextureToLibrary(string name)
 	
 	thename = name;
 
-	uint last_bar = (thename.find(".//Assets//") != std::string::npos) ? thename.find_last_of('/') : thename.find_last_of('/');
+	uint last_bar = (thename.find("\\Assets\\") != std::string::npos) ? thename.find_last_of('\\') : thename.find_last_of('\\');
 	uint ext_point = thename.find_last_of('.');
 
 	for (int i = last_bar + 1; i < ext_point; i++) {
@@ -66,7 +66,7 @@ void  TextureImporter::AddTextureToLibrary(string name)
 	ILuint size;
 	ILubyte *data;
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-	if (ilSave(IL_DDS, ("Library/Textures/" + tmp + ".dds").c_str())) {
+	if (ilSave(IL_DDS, ( "Library/Textures/" + tmp + ".dds").c_str())) {
 		CONSOLELOG("Textured saved in library/textures");
 	}
 
