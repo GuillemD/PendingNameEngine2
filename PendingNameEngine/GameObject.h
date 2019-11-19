@@ -20,6 +20,7 @@ public:
 
 	void Update();
 	void Draw();
+	void Delete();
 
 	void DeleteGameObject();
 

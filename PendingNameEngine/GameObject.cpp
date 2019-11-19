@@ -46,6 +46,11 @@ void GameObject::Draw()
 
 }
 
+void GameObject::Delete()
+{
+	App->scene->AddGameObjectToDelete(this);
+}
+
 void GameObject::DeleteGameObject()
 {
 	if (this->IsSelected())
@@ -275,6 +280,22 @@ void GameObject::PrintMyHierarchy()
 					App->scene->SetSelectedGO(this);
 				}
 			}
+		}
+		if (ImGui::IsMouseClicked(1) && ImGui::IsItemHovered())
+		{
+			ImGui::SetNextWindowPos(ImGui::GetMousePos());
+			ImGui::OpenPopup("Options");
+		}
+		if (ImGui::BeginPopup("Options"))
+		{
+			if (App->scene->selected_go != nullptr)
+			{
+				if (ImGui::MenuItem("Delete"))
+				{
+					this->Delete();
+				}
+			}
+			ImGui::EndPopup();
 		}
 		if (!this->childs.empty())
 		{
