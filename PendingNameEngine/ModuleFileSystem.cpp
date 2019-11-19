@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "PhysFS/include/physfs.h"
 #include "Assimp/include/cfileio.h"
@@ -432,6 +434,38 @@ const char * ModuleFileSystem::GetReadPaths() const
 	}
 
 	return paths;
+}
+
+void ModuleFileSystem::SaveScene()
+{
+	string SceneName = "NewScene";
+	string buffer;
+	string uniqueidstring;
+
+	if (Exists((LIBRARY_SCENE_FOLDER + SceneName + ".scene").c_str())) {
+		//TODO Make a menu appear to choose if overwrite o no
+		CONSOLELOG("Scene %s already exists, overwriting it", (SceneName + ".scene").c_str());
+	}
+	//Save GameObjects
+	buffer += "GameObjects { \n";
+	for (int i = 0; i < App->scene->scene_gameobjects.size(); i++) {
+		buffer += App->scene->scene_gameobjects[i]->go_name.c_str();
+		buffer += "\n UniqueId: ";
+		/*char* info = (char*)App->scene->scene_gameobjects[i]->UniqueId;
+		buffer += info;*/
+		buffer += "\n Components{";
+
+		buffer += "\n}\n";
+	}
+	buffer += "}";
+
+
+
+	Save((LIBRARY_SCENE_FOLDER + SceneName + ".scene").c_str(),buffer.c_str(),buffer.size());
+
+
+
+
 }
 
 // -----------------------------------------------------

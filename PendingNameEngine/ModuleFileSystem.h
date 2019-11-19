@@ -55,6 +55,8 @@ public:
 	const char* GetWritePath() const;
 	const char* GetReadPaths() const;
 
+	void SaveScene();
+
 private:
 
 	void CreateAssimpIO();

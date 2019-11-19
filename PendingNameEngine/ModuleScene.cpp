@@ -50,7 +50,7 @@ update_status ModuleScene::Update(float dt)
 		ComponentMesh* second =(ComponentMesh*)testGo->GetComponent(CMP_MESH);
 		second->SetMesh(App->importer->mesh_import->LoadOwnFileFormat("Library/Meshes/Baker_house.caca"));
 		
-	
+		
 		
 		
 	}

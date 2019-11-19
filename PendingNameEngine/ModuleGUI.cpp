@@ -137,6 +137,9 @@ void ModuleGUI::CreateMainMenu()
 			{
 				App->want_to_save_config = true;
 			}
+			if (ImGui::MenuItem("Save Scene")) {
+				App->fs->SaveScene();
+			}
 			if (ImGui::MenuItem("Quit")) {
 				show_save_popup = true;
 			}
