@@ -6,6 +6,8 @@
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
 
+#include "mmgr/mmgr.h"
+
 
 ModuleScene::ModuleScene()
 {
@@ -53,6 +55,14 @@ bool ModuleScene::Start()
 }
 
 
+update_status ModuleScene::PreUpdate(float dt)
+{
+	if (!to_delete.empty())
+		DeleteGameObjects();
+
+	return UPDATE_CONTINUE;
+}
+
 update_status ModuleScene::Update(float dt)
 {
 	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
@@ -68,8 +78,7 @@ update_status ModuleScene::Update(float dt)
 
 		}
 	}
-	if (!to_delete.empty())
-		DeleteGameObjects();
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -125,13 +134,14 @@ void ModuleScene::ClearScene()
 				(*it)->DeleteGameObject();
 		}
 		DeleteGameObjects();
+
 		if (!root_gameobjects.empty())
 			root_gameobjects.clear();
 	}
-
 	App->importer->mesh_path = "";
 	App->importer->texture_path = "";
 	App->scene->selected_go = nullptr;
+	
 }
 
 void ModuleScene::DeleteGameObjects()
@@ -139,6 +149,14 @@ void ModuleScene::DeleteGameObjects()
 
 	for (auto it = to_delete.begin(); it != to_delete.end();)
 	{
+		if ((*it)->IsRoot())
+		{
+			root_gameobjects.remove(*it);
+		}
+		if ((*it)->IsStatic())
+		{
+			(*it)->SetStatic(false);
+		}
 		(*it)->DeleteComponents();
 
 		if ((*it)->parent != nullptr)
@@ -147,6 +165,12 @@ void ModuleScene::DeleteGameObjects()
 		(*it)->parent = nullptr;
 
 		DeleteGameObject((*it));
+
+		if ((*it) != App->renderer3D->GetCamObject())
+		{
+			delete (*it);
+			(*it) = nullptr;
+		}
 
 		it = to_delete.erase(it);
 	}
@@ -172,6 +196,7 @@ void ModuleScene::AddGameObject(GameObject * go)
 		if (go->GetParent() == nullptr)
 		{
 			root_gameobjects.push_back(go);
+			go->is_root = true;
 		}
 	}
 	

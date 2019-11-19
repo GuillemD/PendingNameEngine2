@@ -41,6 +41,8 @@ public:
 	void UIRenderSettings();
 	void SetDefaultSettings();
 
+	GameObject* GetCamObject() const;
+
 public:
 
 	Light lights[MAX_LIGHTS];

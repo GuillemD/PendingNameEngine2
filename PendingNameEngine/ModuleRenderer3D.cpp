@@ -417,6 +417,11 @@ void ModuleRenderer3D::SetDefaultSettings()
 	SetLineSmooth(line_smooth);
 }
 
+GameObject * ModuleRenderer3D::GetCamObject() const
+{
+	return active_cam->GetOwner();
+}
+
 
 
 

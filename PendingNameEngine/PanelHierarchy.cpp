@@ -23,6 +23,11 @@ void PanelHierarchy::Draw()
 {
 	ImGui::SetNextWindowSize(ImVec2(190, 600));
 	ImGui::Begin("Hierarchy", &active);
+
+	if (ImGui::Button("Clear Scene"))
+	{
+		App->scene->ClearScene();
+	}
 	
 	for (std::list<GameObject*>::iterator it = App->scene->root_gameobjects.begin(); it != App->scene->root_gameobjects.end(); it++)
 	{

@@ -9,6 +9,8 @@
 
 #include "OpenGL.h"
 
+#include "mmgr/mmgr.h"
+
 GameObject::GameObject()
 {
 	go_name = "";
@@ -62,11 +64,17 @@ void GameObject::DeleteGameObject()
 	{
 		for (auto it = childs.begin(); it != childs.end(); it++)
 		{
+			if ((*it)->IsStatic())
+			{
+				(*it)->SetStatic(false);
+
+				//recalculate octree
+			}
+
 			(*it)->DeleteGameObject();
 		}
 	}
-	App->scene->AddGameObjectToDelete(this);
-
+	this->Delete();
 }
 
 GameObject * GameObject::GetParent() const
@@ -199,6 +207,7 @@ void GameObject::DeleteComponents()
 	for (auto it = components.begin(); it != components.end(); it++)
 	{
 		(*it)->CleanUp();
+		delete (*it);
 	}
 		
 	components.clear();
@@ -269,19 +278,21 @@ void GameObject::PrintMyHierarchy()
 
 	if (ImGui::TreeNodeEx(this->go_name.c_str(), flags))
 	{
-		if (ImGui::IsMouseClicked(0))
+		
+		if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
 		{
-			if (ImGui::IsItemHovered())
+			for (auto it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
 			{
-				if (string(App->scene->selected_go->go_name) != string(this->go_name))
+				if ((*it)->IsSelected())
 				{
-					App->scene->selected_go->SetSelected(false);
-					this->SetSelected(true);
-					App->scene->SetSelectedGO(this);
+					(*it)->SetSelected(false);
 				}
 			}
+			this->SetSelected(true);
+			App->scene->SetSelectedGO(this);
+			
 		}
-		if (ImGui::IsMouseClicked(1) && ImGui::IsItemHovered())
+		if (ImGui::IsItemClicked(1))
 		{
 			ImGui::SetNextWindowPos(ImGui::GetMousePos());
 			ImGui::OpenPopup("Options");
@@ -292,7 +303,8 @@ void GameObject::PrintMyHierarchy()
 			{
 				if (ImGui::MenuItem("Delete"))
 				{
-					this->Delete();
+					//recalculate octree
+					App->scene->selected_go->DeleteGameObject();
 				}
 			}
 			ImGui::EndPopup();
