@@ -46,6 +46,9 @@ bool ModuleScene::Start()
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
 
+	//Octree
+	octree = new Octree();
+
 	//Initial Mesh
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	App->importer->first_load = false;
@@ -75,17 +78,28 @@ update_status ModuleScene::Update(float dt)
 			{
 				App->renderer3D->rendering_cameras.push_back(aux_cam);
 			}
-
 		}
 	}
-	
 
+
+	if (octree != nullptr)
+	{
+		octree->Update();
+		octree->Draw();
+	}
+		
 	return UPDATE_CONTINUE;
 }
 
 
 bool ModuleScene::CleanUp()
 {
+	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		delete (*it);
+	}
+
+	delete octree;
 
 	return true;
 }

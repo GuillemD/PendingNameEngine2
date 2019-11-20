@@ -64,6 +64,7 @@ void ComponentCamera::Draw()
 		}
 			
 	}
+
 }
 
 

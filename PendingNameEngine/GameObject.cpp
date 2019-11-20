@@ -321,8 +321,8 @@ void GameObject::PrintMyHierarchy()
 			{
 				if (ImGui::MenuItem("Delete"))
 				{
-					//recalculate octree
 					App->scene->selected_go->DeleteGameObject();
+					//App->scene->octree->Update();
 				}
 			}
 			ImGui::EndPopup();

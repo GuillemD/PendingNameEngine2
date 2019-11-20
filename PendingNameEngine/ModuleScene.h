@@ -6,6 +6,8 @@
 #include "Texture.h"
 #include "GameObject.h"
 
+#include "Octree.h"
+
 class ComponentCamera;
 class ModuleScene :
 	public Module {
@@ -41,6 +43,8 @@ public:
 	std::list<GameObject*> static_gameobjects;
 	std::list<GameObject*> root_gameobjects;
 	std::list<ComponentCamera*> cameras;
+
+	Octree* octree;
 
 	Texture* checkers=nullptr;
 	

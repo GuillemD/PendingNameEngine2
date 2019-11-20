@@ -42,7 +42,10 @@ public:
 	void Draw();
 
 	bool Insert(GameObject* insert_go);
-	bool Erase(GameObject* erase_go);
+
+public:
+
+	bool draw_octree = true;
 
 private:
 

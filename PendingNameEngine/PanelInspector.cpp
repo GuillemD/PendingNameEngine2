@@ -46,6 +46,7 @@ void PanelInspector::Draw()
 			if (ImGui::Checkbox("Static", &is_go_static))
 			{
 				selected->SetStatic(is_go_static);
+				App->scene->octree->Update();
 			}
 		
 			ImGui::Separator();
