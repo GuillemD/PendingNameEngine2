@@ -70,7 +70,16 @@ bool ModuleImporter::Import(string path)
 			{
 				if (texture_path != path)
 				{
-					texture_import->LoadTextureFromPath(path.c_str());
+					if (TextureExistsInLibrary(path)) {
+						string libpath = GetLibraryTexturePath(path).c_str();
+						
+						texture_import->LoadTextureFromPath(libpath.c_str());
+					}
+					else {
+						texture_import->LoadTextureFromPath(path.c_str());
+					}
+					
+					
 					texture_path = path;
 				}
 
@@ -83,6 +92,76 @@ bool ModuleImporter::Import(string path)
 	}
 
 	return ret;
+}
+
+bool ModuleImporter::TextureExistsInLibrary(string path)
+{
+	
+	string thename;
+	string tmp;
+
+	thename = path;
+
+	uint last_bar = (thename.find(".//Assets//") != std::string::npos) ? thename.find_last_of('/') : thename.find_last_of('/');
+	uint ext_point = thename.find_last_of('.');
+
+	for (int i = last_bar + 1; i < ext_point; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	if (App->fs->Exists((LIBRARY_TEXTURES_FOLDER + tmp + ".dds").c_str())) {
+		return true;
+	}
+
+	thename = path;
+	tmp.clear();
+
+	uint lastbar = (thename.find("\\Assets\\") != std::string::npos) ? thename.find_last_of('\\') : thename.find_last_of('\\');
+	uint extpoint = thename.find_last_of('.');
+
+	for (int i = lastbar + 1; i < extpoint; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	if (App->fs->Exists((LIBRARY_TEXTURES_FOLDER + tmp + ".dds").c_str())) {
+		return true;
+	}
+
+
+	return false;
+}
+
+string  ModuleImporter::GetLibraryTexturePath(string path)
+{
+	string thename;
+	string tmp;
+
+	thename = path;
+
+	uint last_bar = (thename.find(".//Assets//") != std::string::npos) ? thename.find_last_of('/') : thename.find_last_of('/');
+	uint ext_point = thename.find_last_of('.');
+
+	for (int i = last_bar + 1; i < ext_point; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	if (App->fs->Exists((LIBRARY_TEXTURES_FOLDER + tmp + ".dds").c_str())) {
+		return ("Library/Textures/" + tmp + ".dds");
+	}
+
+	thename = path;
+	tmp.clear();
+
+	uint lastbar = (thename.find("\\Assets\\") != std::string::npos) ? thename.find_last_of('\\') : thename.find_last_of('\\');
+	uint extpoint = thename.find_last_of('.');
+
+	for (int i = lastbar + 1; i < extpoint; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	if (App->fs->Exists((LIBRARY_TEXTURES_FOLDER + tmp + ".dds").c_str())) {
+		return ("Library/Textures/" + tmp + ".dds");
+	}
 }
 
 
