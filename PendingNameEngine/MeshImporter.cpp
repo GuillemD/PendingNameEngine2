@@ -75,6 +75,8 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	GameObject* go = nullptr;
 	bool correct_num_faces = true;
 
+
+	int i = 1;
 	if (_node->mNumMeshes < 1)
 	{
 		go = new GameObject();
@@ -118,8 +120,23 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	}
 	else if (_node->mNumMeshes > 0)
 	{
+		string thename;
+		thename = _node->mName.C_Str();
+		string test1 = ("Library/Meshes/" + thename + ".caca").c_str();
+		
+		if (App->fs->Exists(test1.c_str())) {
+			CONSOLELOG(test1.c_str());
+			Mesh* mesh = nullptr;
+			mesh = LoadOwnFileFormat(test1.c_str());
+			
+		}
+
+
+
+
 		for (int i = 0; i < _node->mNumMeshes; i++)
 		{
+			
 			GameObject* child = new GameObject();
 			child->go_name = _node->mName.C_Str();
 
@@ -362,7 +379,10 @@ Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 		
 	}
 
-
+	ret->LoadIndices();
+	ret->LoadNormals();
+	ret->LoadTexcoords();
+	ret->LoadVertices();
 	return ret;
 }
 
