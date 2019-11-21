@@ -37,6 +37,8 @@ public:
 	void AddStaticGO(GameObject* go);
 	void RemoveGoFromStaticList(GameObject* go);
 
+	void ShowOctreeConfig();
+
 public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;

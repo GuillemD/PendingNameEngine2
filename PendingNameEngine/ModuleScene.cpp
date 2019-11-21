@@ -30,6 +30,14 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Start()
 {
 	bool ret = true;
+
+	//Octree
+	octree = new Octree();
+	octree->Create(float3::zero, float3::zero);
+	octree->update_octree = true;
+	octree->draw_octree = false;
+
+	//Selected go
 	selected_go = new GameObject();
 
 	//Editor Camera
@@ -45,9 +53,6 @@ bool ModuleScene::Start()
 	game_cam->is_root = true;
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
-
-	//Octree
-	octree = new Octree();
 
 	//Initial Mesh
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
@@ -82,10 +87,27 @@ update_status ModuleScene::Update(float dt)
 	}
 
 
-	if (octree != nullptr)
+	if (octree->update_octree)
 	{
+		octree->min_point = float3::zero;
+		octree->max_point = float3::zero;
+
+		for (std::list<GameObject*>::iterator it = static_gameobjects.begin(); it != static_gameobjects.end(); it++)
+		{
+			ComponentMesh* mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+			if (mesh != nullptr && mesh->GetMesh() != nullptr)
+				octree->Recalculate(mesh->GetMesh()->bb.minPoint, mesh->GetMesh()->bb.maxPoint);
+		}
+
 		octree->Update();
-		octree->Draw();
+
+		for (std::list<GameObject*>::iterator it = static_gameobjects.begin(); it != static_gameobjects.end(); it++)
+		{
+			ComponentMesh* mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+			if (mesh != nullptr && mesh->GetMesh() != nullptr)
+				octree->Insert(*it);
+		}
+		octree->update_octree = false;
 	}
 		
 	return UPDATE_CONTINUE;
@@ -239,6 +261,17 @@ void ModuleScene::RemoveGoFromStaticList(GameObject * go)
 		{
 			static_gameobjects.erase(it);
 			return;
+		}
+	}
+}
+
+void ModuleScene::ShowOctreeConfig()
+{
+	if (ImGui::CollapsingHeader("Octree"))
+	{
+		if (ImGui::Checkbox("Draw Octree", &octree->draw_octree))
+		{
+
 		}
 	}
 }

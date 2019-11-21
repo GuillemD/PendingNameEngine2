@@ -11,22 +11,21 @@ class GameObject;
 class OctreeNode
 {
 public:
-	OctreeNode(AABB bb, OctreeNode* parent, bool is_root);
+	OctreeNode(AABB& bb);
 	~OctreeNode();
 
 	void DrawNode();
 	void CleanUpNode();
 	void SplitNode();
-	void InsertInNode(GameObject* insert_go, int& num_go);
+	void InsertInNode(GameObject* insert_go);
+	void EraseInNode(GameObject* erase_go);
 
 public:
-	AABB bb;
-	OctreeNode* parent;
+	AABB node_bb;
+
 	OctreeNode* childs[8];
 
-	bool is_root;
-	bool leaf;
-	int div_level;
+	int div_level = 0;
 
 	std::list<GameObject*> node_objects;
 };
@@ -36,23 +35,28 @@ public:
 	Octree();
 	~Octree();
 
-	void Create(AABB points, int max_go);
+	void Create(float3 min, float3 max);
 	void CleanUp();
 	void Update();
 	void Draw();
 
-	bool Insert(GameObject* insert_go);
+	void Insert(GameObject* insert_go);
+	void Erase(GameObject* erase_go);
+
+	void Recalculate(float3 min, float3 max);
 
 public:
 
-	bool draw_octree = true;
+	bool draw_octree;
+	bool update_octree;
+
+	float3 min_point;
+	float3 max_point;
 
 private:
 
-	OctreeNode* root_node;
-	int max_num_go;
-	int subdiv_limit;
-	int num_go;
+	OctreeNode* root_node = nullptr;
+
 
 };
 	

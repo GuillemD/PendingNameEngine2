@@ -153,7 +153,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	{
 		App->scene->DrawScene();
 	}
-	
+	if (App->scene->octree->draw_octree)
+	{
+		App->scene->octree->Draw();
+	}
 	App->gui->DrawGUI();
 	EnableLights();
 

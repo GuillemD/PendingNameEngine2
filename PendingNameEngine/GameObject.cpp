@@ -67,8 +67,6 @@ void GameObject::DeleteGameObject()
 			if ((*it)->IsStatic())
 			{
 				(*it)->SetStatic(false);
-
-				//recalculate octree
 			}
 
 			(*it)->DeleteGameObject();
@@ -233,12 +231,20 @@ void GameObject::SetStatic(bool st)
 	if (st)
 	{
 		if (!is_static)
+		{
 			App->scene->AddStaticGO(this);
+			App->scene->octree->Insert(this);
+		}
+			
 	}
 	else
 	{
 		if (is_static)
+		{
 			App->scene->RemoveGoFromStaticList(this);
+			App->scene->octree->Erase(this);
+		}
+			
 	}
 
 	is_static = st;
