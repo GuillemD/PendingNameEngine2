@@ -71,9 +71,9 @@ bool ModuleImporter::Import(string path)
 				if (texture_path != path)
 				{
 					if (TextureExistsInLibrary(path)) {
-						string libpath = GetLibraryTexturePath(path).c_str();
 						
-						texture_import->LoadTextureFromPath(libpath.c_str());
+						CONSOLELOG("Texture exists in library, loading it from there. ");
+						texture_import->LoadTextureFromPath(GetLibraryTexturePath(path).c_str());
 					}
 					else {
 						texture_import->LoadTextureFromPath(path.c_str());
