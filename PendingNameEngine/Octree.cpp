@@ -219,22 +219,26 @@ void OctreeNode::EraseInNode(GameObject * erase_go)
 	}
 }
 
-void OctreeNode::GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB box)
+void OctreeNode::GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB* box)
 {
-	if (node_bb.Intersects(box))
+	if (childs[0] != nullptr)
 	{
-		for (std::list<GameObject*>::const_iterator it = node_objects.begin(); it != node_objects.end(); ++it)
+		for (int i = 0; i < 8; i++)
 		{
-			ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-			if (aux_mesh->GetMesh()->bb.Intersects(box))
+			if (childs[i]->node_bb.Intersects(*box))
 			{
-				list.push_back(*it);
+				childs[i]->GetObjectIntersectionsInNode(list, box);
 			}
 		}
+	}
 
-		for (uint i = 0; i < 8; i++)
+	for (std::list<GameObject*>::iterator it = node_objects.begin(); it != node_objects.end(); it++)
+	{
+		ComponentMesh* mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+		if (mesh == nullptr || mesh->GetMesh() == nullptr)continue;
+		if (mesh->GetMesh()->bb.Intersects(*box))
 		{
-			childs[i]->GetObjectIntersectionsInNode(list, box);
+			list.push_back(*it);
 		}
 	}
 }
@@ -242,6 +246,7 @@ void OctreeNode::GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB 
 Octree::Octree()
 {
 	update_octree = false;
+	optimise = false;
 }
 
 Octree::~Octree()
@@ -355,10 +360,17 @@ void Octree::Erase(GameObject * erase_go)
 	}
 }
 
-void Octree::GetObjectIntersections(std::list<GameObject*> list, GameObject * go)
+void Octree::GetObjectIntersections(std::list<GameObject*> list, AABB* box)
 {
-	ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
-	root_node->GetObjectIntersectionsInNode(list, mesh->GetMesh()->bb);
+	
+	if (root_node != nullptr)
+	{
+		if(box->Intersects(root_node->node_bb))
+			root_node->GetObjectIntersectionsInNode(list, box);
+		
+	}
+	
+	
 }
 
 void Octree::Recalculate(float3 min, float3 max)
@@ -395,5 +407,10 @@ void Octree::Recalculate(float3 min, float3 max)
 			max_point.z = max.z;
 		}
 	}
+}
+
+OctreeNode * Octree::GetRoot() const
+{
+	return root_node;
 }
 

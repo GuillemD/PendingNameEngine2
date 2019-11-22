@@ -148,16 +148,54 @@ void ModuleScene::DrawScene()
 
 void ModuleScene::DrawGameObjects(ComponentCamera * cam_to_draw)
 {
-	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+
+	
+	if (cam_to_draw->frustum_cull)
 	{
-		ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-		if (cam_to_draw->GetOwner() && aux_mesh && cam_to_draw->frustum_cull)
+		std::list<GameObject*> intersections;
+
+		if (octree->GetRoot() != nullptr && octree->optimise)
 		{
-			if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
-				continue;
+			octree->GetObjectIntersections(intersections, &cam_to_draw->camera_frustum.MinimalEnclosingAABB());
+
+			intersections.sort();
+			intersections.unique();
+
+			for (auto it = intersections.begin(); it != intersections.end(); it++)
+			{
+				ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+
+				if (!aux_mesh || cam_to_draw->GetOwner() == nullptr)continue;
+				{
+					if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
+						continue;
+				}
+				(*it)->Draw();
+			}
 		}
-		(*it)->Draw();
+		else
+		{
+			for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+			{
+				ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+				if (cam_to_draw->GetOwner() && aux_mesh && cam_to_draw->frustum_cull)
+				{
+					if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
+						continue;
+				}
+				(*it)->Draw();
+			}
+		}
+		
 	}
+	else
+	{
+		for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+		{
+			(*it)->Draw();
+		}
+	}
+	
 }
 
 void ModuleScene::ClearScene()
@@ -273,7 +311,16 @@ void ModuleScene::ShowOctreeConfig()
 		{
 
 		}
+		ImGui::SameLine();
 
+		if (ImGui::Checkbox("Optimize", &octree->optimise))
+		{
+
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Check intersections with frustum to check if and object is drawn.");
+		}
 		ImGui::Separator();
 
 		ImGui::Text("Num. Static GameObjects: ");

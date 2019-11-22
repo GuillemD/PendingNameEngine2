@@ -20,8 +20,7 @@ public:
 	void InsertInNode(GameObject* insert_go);
 	void EraseInNode(GameObject* erase_go);
 
-	void GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB box);
-	void GetFrustumIntersectionsInNode();
+	void GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB* box);
 
 public:
 	AABB node_bb;
@@ -45,15 +44,17 @@ public:
 
 	void Insert(GameObject* insert_go);
 	void Erase(GameObject* erase_go);
-	void GetObjectIntersections(std::list<GameObject*> list, GameObject* go);
-	void GetFrustumIntersections();
+	void GetObjectIntersections(std::list<GameObject*> list, AABB* box);
 
 	void Recalculate(float3 min, float3 max);
+
+	OctreeNode* GetRoot() const;
 
 public:
 
 	bool draw_octree;
 	bool update_octree;
+	bool optimise;
 
 	float3 min_point;
 	float3 max_point;

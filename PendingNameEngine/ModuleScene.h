@@ -36,7 +36,7 @@ public:
 
 	void AddStaticGO(GameObject* go);
 	void RemoveGoFromStaticList(GameObject* go);
-
+	
 	void ShowOctreeConfig();
 
 public:
