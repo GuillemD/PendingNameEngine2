@@ -139,6 +139,14 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			if (App->fs->Exists(("Library/Meshes/" + child->go_name + ".caca").c_str())) {
 
 				mesh = LoadOwnFileFormat(("Library/Meshes/" + child->go_name + ".caca").c_str());
+
+				glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
+
+
 				int i = 0;
 			}
 
@@ -152,11 +160,9 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				mesh->vertices = new float3[mesh->num_vertices];
 				memcpy(mesh->vertices, imp_mesh->mVertices, sizeof(float3)*mesh->num_vertices);
 
-				glGenBuffers(1, (GLuint*)&mesh->vertices_id);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
+
+				
+				
 
 			}
 
@@ -295,7 +301,7 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 {
 	uint ranges[4] = { mesh->num_indices,mesh->num_normals,mesh->num_texcoords,mesh->num_vertices };
 
-	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices*3 + sizeof(float)*mesh->num_normals*3 + sizeof(float)*mesh->num_texcoords * 3; 
+	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices * 3 + sizeof(float)*mesh->num_normals * 3 + sizeof(float)*mesh->num_texcoords * 3;
 
 	char* data = new char[size];
 	char* cursor = data;
@@ -312,12 +318,14 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 	memcpy(cursor, mesh->vertices, bytes);
 
 	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_normals * 3;
 	memcpy(cursor, mesh->normals, bytes);
 
 	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_texcoords * 3;
 	memcpy(cursor, mesh->texcoords, bytes);
 
-	ofstream newfile((LIBRARY_MESH_FOLDER + name+".caca").c_str(), ofstream::binary);
+	ofstream newfile((LIBRARY_MESH_FOLDER + name + ".caca").c_str(), ofstream::binary);
 	newfile.write(data, size);
 	newfile.close();
 		
@@ -326,11 +334,11 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 
 Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 {
-	Mesh* ret= nullptr;
+	Mesh* ret = nullptr;
 
 	std::ifstream file(path, std::ifstream::binary);
 
-	if(file.is_open())
+	if (file.is_open())
 	{
 		file.seekg(0, file.end);
 		int filesize = file.tellg();
@@ -357,30 +365,29 @@ Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 			memcpy(ret->indices, cursor, bytes);
 
 			cursor += bytes;
-			bytes = sizeof(float)*ret->num_vertices*3;
-			ret->vertices = new float3[ret->num_vertices*3];
+			bytes = sizeof(float)*ret->num_vertices * 3;
+			ret->vertices = new float3[ret->num_vertices * 3];
 			memcpy(ret->vertices, cursor, bytes);
 
 			cursor += bytes;
+			bytes = sizeof(float)*ret->num_normals * 3;
 			ret->normals = new float3[ret->num_normals * 3];
 			memcpy(ret->normals, cursor, bytes);
 
 			cursor += bytes;
+			bytes = sizeof(float*)*ret->num_texcoords*3;
 			ret->texcoords = new float[ret->num_texcoords*3];
 			memcpy(ret->texcoords, cursor, bytes);
 
-			
+
 
 		}
-		
-	}
 
-	ret->LoadIndices();
+	}
 	ret->LoadVertices();
+	ret->LoadIndices();
 	ret->LoadNormals();
 	ret->LoadTexcoords();
-
-	
 	return ret;
 }
 
