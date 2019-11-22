@@ -273,5 +273,11 @@ void ModuleScene::ShowOctreeConfig()
 		{
 
 		}
+
+		ImGui::Separator();
+
+		ImGui::Text("Num. Static GameObjects: ");
+		ImGui::SameLine();
+		ImGui::TextColored(YELLOW, "%d", static_gameobjects.size());
 	}
 }

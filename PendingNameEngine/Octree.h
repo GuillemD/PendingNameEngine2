@@ -11,7 +11,7 @@ class GameObject;
 class OctreeNode
 {
 public:
-	OctreeNode(AABB& bb);
+	OctreeNode(AABB& bb, OctreeNode* p_node);
 	~OctreeNode();
 
 	void DrawNode();
@@ -20,11 +20,14 @@ public:
 	void InsertInNode(GameObject* insert_go);
 	void EraseInNode(GameObject* erase_go);
 
+	void GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB box);
+	void GetFrustumIntersectionsInNode();
+
 public:
 	AABB node_bb;
-
+	OctreeNode* parent;
 	OctreeNode* childs[8];
-
+	bool leaf;
 	int div_level = 0;
 
 	std::list<GameObject*> node_objects;
@@ -42,6 +45,8 @@ public:
 
 	void Insert(GameObject* insert_go);
 	void Erase(GameObject* erase_go);
+	void GetObjectIntersections(std::list<GameObject*> list, GameObject* go);
+	void GetFrustumIntersections();
 
 	void Recalculate(float3 min, float3 max);
 

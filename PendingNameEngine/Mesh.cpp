@@ -54,7 +54,7 @@ void Mesh::LoadTexcoords()
 	{
 		glGenBuffers(1, &texcoords_id);
 		glBindBuffer(GL_ARRAY_BUFFER, texcoords_id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*texcoords_id * 3, texcoords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_texcoords * 3, texcoords, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }

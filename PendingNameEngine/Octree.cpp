@@ -10,12 +10,19 @@
 
 #define DIV_LIMIT 4
 
-OctreeNode::OctreeNode(AABB& bb)
+OctreeNode::OctreeNode(AABB& bb, OctreeNode* p_node)
 {
 	node_bb = bb;
-	
+	leaf = true;
 	childs[0] = childs[1] = childs[2] = childs[3] = 
 	childs[4] = childs[5] = childs[6] = childs[7] = nullptr;
+
+	parent = p_node;
+
+	if (parent != nullptr)
+		div_level = parent->div_level + 1;
+	else
+		div_level = 0;
 }
 
 OctreeNode::~OctreeNode()
@@ -75,7 +82,7 @@ void OctreeNode::DrawNode()
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (childs[0] != nullptr)
+	if (!leaf)
 	{
 		for (int i = 0; i < 8; i++)
 			childs[i]->DrawNode();
@@ -84,16 +91,24 @@ void OctreeNode::DrawNode()
 
 void OctreeNode::CleanUpNode()
 {
-	
-	for (int i = 0; i < 8; i++)
+	if (!leaf)
 	{
-		RELEASE(childs[i]);
+		for (int i = 0; i < 8; i++)
+		{
+			childs[i]->CleanUpNode();
+			RELEASE(childs[i]);
+		}
 	}
 	
+	node_objects.clear();
 }
 
 void OctreeNode::SplitNode()
 {
+
+	if (div_level >= DIV_LIMIT)
+		return;
+
 	AABB child_bb;
 	float3 side_len = node_bb.Size() / 2;
 	float3 center = node_bb.CenterPoint();
@@ -118,8 +133,8 @@ void OctreeNode::SplitNode()
 
 				child_bb.minPoint = child_min;
 				child_bb.maxPoint = child_max;
-				childs[index] = new OctreeNode(child_bb);
-				index++;
+				childs[index++] = new OctreeNode(child_bb, this);
+				
 			}
 		}
 	}
@@ -143,6 +158,7 @@ void OctreeNode::SplitNode()
 			it++;
 		}
 	}
+	leaf = false;
 }
 
 void OctreeNode::InsertInNode(GameObject * insert_go)
@@ -153,7 +169,7 @@ void OctreeNode::InsertInNode(GameObject * insert_go)
 
 	if (childs[0] == nullptr)
 	{
-		if (node_objects.size() == DIV_LIMIT)
+		if (node_objects.size() > 1)
 		{
 			SplitNode();
 		}
@@ -203,6 +219,26 @@ void OctreeNode::EraseInNode(GameObject * erase_go)
 	}
 }
 
+void OctreeNode::GetObjectIntersectionsInNode(std::list<GameObject*> list, AABB box)
+{
+	if (node_bb.Intersects(box))
+	{
+		for (std::list<GameObject*>::const_iterator it = node_objects.begin(); it != node_objects.end(); ++it)
+		{
+			ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
+			if (aux_mesh->GetMesh()->bb.Intersects(box))
+			{
+				list.push_back(*it);
+			}
+		}
+
+		for (uint i = 0; i < 8; i++)
+		{
+			childs[i]->GetObjectIntersectionsInNode(list, box);
+		}
+	}
+}
+
 Octree::Octree()
 {
 	update_octree = false;
@@ -220,7 +256,7 @@ void Octree::Create(float3 min, float3 max)
 
 	AABB new_box(min, max);
 	
-	root_node = new OctreeNode(new_box);
+	root_node = new OctreeNode(new_box, nullptr);
 	CONSOLELOG("Octree Created");
 
 	min_point = min;
@@ -314,8 +350,15 @@ void Octree::Erase(GameObject * erase_go)
 		if (!update_octree)
 		{
 			root_node->EraseInNode(erase_go);
+			CONSOLELOG("GameObject %s erased from the octree.", erase_go->go_name.c_str());
 		}
 	}
+}
+
+void Octree::GetObjectIntersections(std::list<GameObject*> list, GameObject * go)
+{
+	ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
+	root_node->GetObjectIntersectionsInNode(list, mesh->GetMesh()->bb);
 }
 
 void Octree::Recalculate(float3 min, float3 max)
