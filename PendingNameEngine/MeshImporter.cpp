@@ -120,29 +120,29 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	}
 	else if (_node->mNumMeshes > 0)
 	{
-		string thename;
-		thename = _node->mName.C_Str();
-		string test1 = ("Library/Meshes/" + thename + ".caca").c_str();
 		
-		if (App->fs->Exists(test1.c_str())) {
-			CONSOLELOG(test1.c_str());
-			Mesh* mesh = nullptr;
-			mesh = LoadOwnFileFormat(test1.c_str());
-			
-		}
 
 
 
 
 		for (int i = 0; i < _node->mNumMeshes; i++)
 		{
-			
+
+
+
 			GameObject* child = new GameObject();
 			child->go_name = _node->mName.C_Str();
 
 			aiMesh* imp_mesh = _scene->mMeshes[_node->mMeshes[i]];
 			Mesh* mesh = nullptr;
 
+			if (App->fs->Exists(("Library/Meshes/" + child->go_name + ".caca").c_str())) {
+
+				mesh = LoadOwnFileFormat(("Library/Meshes/" + child->go_name + ".caca").c_str());
+				int i = 0;
+			}
+
+			else{
 			if (imp_mesh->HasPositions())
 			{
 				mesh = new Mesh();
@@ -224,7 +224,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
 			}
 
-			
+		}
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
 			m_cmp->CreateBB();
@@ -312,11 +312,9 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 	memcpy(cursor, mesh->vertices, bytes);
 
 	cursor += bytes;
-	bytes = sizeof(float)*mesh->num_normals * 3;
 	memcpy(cursor, mesh->normals, bytes);
 
 	cursor += bytes;
-	bytes = sizeof(float)*mesh->num_texcoords * 3;
 	memcpy(cursor, mesh->texcoords, bytes);
 
 	ofstream newfile((LIBRARY_MESH_FOLDER + name+".caca").c_str(), ofstream::binary);
@@ -364,13 +362,11 @@ Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 			memcpy(ret->vertices, cursor, bytes);
 
 			cursor += bytes;
-			bytes = sizeof(float)*ret->num_normals * 3;
 			ret->normals = new float3[ret->num_normals * 3];
 			memcpy(ret->normals, cursor, bytes);
 
 			cursor += bytes;
-			bytes = sizeof(float*)*ret->num_texcoords;
-			ret->texcoords = new float[ret->num_texcoords];
+			ret->texcoords = new float[ret->num_texcoords*3];
 			memcpy(ret->texcoords, cursor, bytes);
 
 			
@@ -380,9 +376,11 @@ Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 	}
 
 	ret->LoadIndices();
+	ret->LoadVertices();
 	ret->LoadNormals();
 	ret->LoadTexcoords();
-	ret->LoadVertices();
+
+	
 	return ret;
 }
 

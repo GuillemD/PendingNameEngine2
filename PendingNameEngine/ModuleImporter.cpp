@@ -84,6 +84,9 @@ bool ModuleImporter::Import(string path)
 				}
 
 			}
+			else {
+				texture_import->AddTextureToLibrary(path);
+			}
 		}
 		else
 		{
