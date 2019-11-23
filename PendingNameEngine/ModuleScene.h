@@ -7,6 +7,7 @@
 #include "GameObject.h"
 
 #include "Octree.h"
+#include "ImGui/ImGuizmo/ImGuizmo.h"
 
 class ComponentCamera;
 class ModuleScene :
@@ -39,6 +40,8 @@ public:
 	
 	void ShowOctreeConfig();
 
+	void DrawGizmo();
+
 public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
@@ -49,6 +52,9 @@ public:
 	Octree* octree;
 
 	Texture* checkers=nullptr;
+
+	ImGuizmo::OPERATION mCurrentGizmoOperation;
+	ImGuizmo::MODE mCurrentGizmoMode;
 	
 private:
 	std::vector<GameObject*> to_delete;

@@ -44,12 +44,15 @@ bool ModuleScene::Start()
 	App->camera->SetCamPos({0.0,10.f,5.f});
 	App->camera->LookAt({ 0,0,0 });
 
+	//Guizmo
+	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	mCurrentGizmoMode = ImGuizmo::LOCAL;
+
 	//Game Cam Test
 	GameObject* game_cam = new GameObject();
 	game_cam->go_name = "Main Camera";
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
-	game_cam->SetSelected(true);
 	game_cam->is_root = true;
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
@@ -329,6 +332,17 @@ void ModuleScene::ShowOctreeConfig()
 		ImGui::SameLine();
 		ImGui::TextColored(YELLOW, "%d", static_gameobjects.size());
 	}
+}
+
+void ModuleScene::DrawGizmo()
+{
+/*	if (selected_go)
+	{
+		ImVec2 window_pos = ImGui::GetWindowPos();
+		ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
+		ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+
+	}*/
 }
 
 

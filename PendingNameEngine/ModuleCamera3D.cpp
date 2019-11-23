@@ -167,7 +167,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		//MousePicking
 
-		if (App->input->GetMouseButton(0) == KEY_DOWN)
+		if (App->input->GetMouseButton(0) == KEY_DOWN && !ImGuizmo::IsOver())
 		{
 			int mouse_x = App->input->GetMouseX();
 			int mouse_y = App->input->GetMouseY();

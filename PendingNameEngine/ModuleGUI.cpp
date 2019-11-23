@@ -9,6 +9,7 @@
 #include "OpenGL.h"
 
 #include "ImGui/imgui_impl_opengl2.h"
+#include "ImGui/ImGuizmo/ImGuizmo.h"
 
 #include "Assimp/include/version.h"
 
@@ -69,6 +70,7 @@ update_status ModuleGUI::PreUpdate(float dt)
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	return UPDATE_CONTINUE;
 }
