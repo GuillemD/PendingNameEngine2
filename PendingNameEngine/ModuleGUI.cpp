@@ -324,7 +324,7 @@ void ModuleGUI::ShowAbout()
 		//SDL
 		SDL_version v_compiled;
 		SDL_VERSION(&v_compiled);
-		if (ImGui::Button("SDL", ImVec2(80, 15)))
+		if (ImGui::Button("SDL", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://www.libsdl.org/");
 		}
@@ -333,7 +333,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//OpenGL
-		if (ImGui::Button("OpenGL", ImVec2(80, 15)))
+		if (ImGui::Button("OpenGL", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://opengl.org/");
 		}
@@ -342,7 +342,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//GLEW
-		if (ImGui::Button("glew", ImVec2(80, 15)))
+		if (ImGui::Button("glew", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/nigels-com/glew");
 		}
@@ -351,7 +351,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//IMGUI
-		if (ImGui::Button("ImGui", ImVec2(80, 15)))
+		if (ImGui::Button("ImGui", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/ocornut/imgui");
 		}
@@ -360,7 +360,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//MATHGEOLIB
-		if (ImGui::Button("MathGeoLib", ImVec2(80, 15)))
+		if (ImGui::Button("MathGeoLib", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/juj/MathGeoLib");
 		}
@@ -369,7 +369,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//PCG
-		if (ImGui::Button("PCG RNG", ImVec2(80, 15)))
+		if (ImGui::Button("PCG RNG", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://www.pcg-random.org/");
 		}
@@ -378,7 +378,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//rapidjson (JSON parser)
-		if (ImGui::Button("rapidjson", ImVec2(80, 15)))
+		if (ImGui::Button("rapidjson", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://rapidjson.org/");
 		}
@@ -387,25 +387,25 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//gpudetect
-		if (ImGui::Button("gpudetect", ImVec2(80, 15)))
+		if (ImGui::Button("gpudetect", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/GameTechDev/gpudetect");
 		}
 
 		//mmgr
-		if (ImGui::Button("mmgr", ImVec2(80, 15)))
+		if (ImGui::Button("mmgr", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 		}
 
 		//PAR Shapes
-		if (ImGui::Button("Par", ImVec2(80, 15)))
+		if (ImGui::Button("Par", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/prideout/par");
 		}
 
 		//Assimp
-		if (ImGui::Button("Assimp", ImVec2(80, 15)))
+		if (ImGui::Button("Assimp", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://www.assimp.org/");
 		}
@@ -414,7 +414,7 @@ void ModuleGUI::ShowAbout()
 		ImGui::NextColumn();
 
 		//DevIL
-		if (ImGui::Button("DevIL", ImVec2(80, 15)))
+		if (ImGui::Button("DevIL", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://openil.sourceforge.net/");
 		}
@@ -422,6 +422,12 @@ void ModuleGUI::ShowAbout()
 		ImGui::Text("%d", App->importer->GetILVersion());
 		ImGui::NextColumn();
 
+		//ImGuizmo
+		if (ImGui::Button("ImGuizmo", ImVec2(80, 22)))
+		{
+			App->OpenBrowser("https://github.com/CedricGuillemet/ImGuizmo");
+		}
+		
 		ImGui::Columns(1);
 		ImGui::Separator();
 
