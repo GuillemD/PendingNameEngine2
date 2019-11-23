@@ -28,10 +28,14 @@ public:
 
 	ComponentCamera* GetEditorCam() const;
 	float* GetViewMat();
+
+	void CreateRay(int mouse_x, int mouse_y);
+	
 private:
 	
 	ComponentCamera* editor_cam;
 	bool isPlaying = false;
+
 public:
 
 	bool can_focus = false;	
