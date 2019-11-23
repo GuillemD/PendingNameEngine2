@@ -105,6 +105,16 @@ void PanelInspector::DrawComponentTransform(ComponentTransform * trans)
 			rotation = trans->GetLocalRotation();
 			scale = trans->GetLocalScale();
 		}
+
+		if (ImGui::RadioButton("Translate", App->scene->mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+			App->scene->mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Rotate", App->scene->mCurrentGizmoOperation == ImGuizmo::ROTATE))
+			App->scene->mCurrentGizmoOperation = ImGuizmo::ROTATE;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Scale", App->scene->mCurrentGizmoOperation == ImGuizmo::SCALE))
+			App->scene->mCurrentGizmoOperation = ImGuizmo::SCALE;
+
 		if (ImGui::DragFloat3("Position", (float*)&position, 0.25f) && trans->GetOwner()->IsStatic() == false)
 		{
 			trans->SetPosition(position);

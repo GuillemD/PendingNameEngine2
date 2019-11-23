@@ -5,6 +5,7 @@
 #include "OpenGL.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
+#include "ComponentTransform.h"
 
 #include "mmgr/mmgr.h"
 
@@ -112,6 +113,8 @@ update_status ModuleScene::Update(float dt)
 		}
 		octree->update_octree = false;
 	}
+
+	DrawGizmo();
 		
 	return UPDATE_CONTINUE;
 }
@@ -217,7 +220,7 @@ void ModuleScene::ClearScene()
 	}
 	App->importer->mesh_path = "";
 	App->importer->texture_path = "";
-	App->scene->selected_go = nullptr;
+	
 	
 }
 
@@ -287,7 +290,8 @@ void ModuleScene::AddGameObjectToDelete(GameObject * go_to_delete)
 void ModuleScene::SetSelectedGO(GameObject * go)
 {
 	selected_go->SetSelected(false);
-	go->SetSelected(true);
+	if(go != nullptr)
+		go->SetSelected(true);
 	selected_go = go;
 }
 
@@ -336,13 +340,73 @@ void ModuleScene::ShowOctreeConfig()
 
 void ModuleScene::DrawGizmo()
 {
-/*	if (selected_go)
+	if (selected_go)
 	{
+		ImGuizmo::Enable(true);
+		if (selected_go->IsStatic()) ImGuizmo::Enable(false);
+
 		ImVec2 window_pos = ImGui::GetWindowPos();
 		ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
-		ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+		//ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
 
-	}*/
+		float4x4 selected_view = selected_go->GetGlobalMatrix().Transposed();
+		float transformation[16]; //float4x4
+		//ImGuizmo::SetDrawlist();
+		ImGuizmo::Manipulate(App->camera->GetEditorCam()->GetViewMatrix(), App->camera->GetEditorCam()->GetProjectionMatrix(), mCurrentGizmoOperation, mCurrentGizmoMode, selected_view.ptr(), transformation);
+
+
+		if (ImGuizmo::IsOver() && ImGuizmo::IsUsing())
+		{
+			float position[3];
+			float rotation[3];
+			float scale[3];
+
+			ImGuizmo::DecomposeMatrixToComponents(transformation, position, rotation, scale);
+
+			ComponentTransform* trans = (ComponentTransform*)selected_go->GetComponent(CMP_TRANSFORM);
+
+			float3 pos;
+			float3 rot;
+			float3 sc;
+
+			if (trans->GetOwner()->IsRoot())
+			{
+				pos = trans->GetGlobalPosition();
+				rot = trans->GetGlobalRotation();
+				sc = trans->GetGlobalScale();
+			}
+			else
+			{
+				pos = trans->GetLocalPosition();
+				rot = trans->GetLocalRotation();
+				sc = trans->GetLocalScale();
+			}
+
+			float3 g_pos(position[0], position[1], position[2]);
+			float3 g_rot(rotation[0], rotation[1], rotation[2]);
+			float3 g_sc(scale[0], scale[1], scale[2]);
+
+			switch (mCurrentGizmoOperation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+				if (selected_go->GetParent() != nullptr)
+				{
+					g_pos = selected_go->GetParent()->GetGlobalMatrix().Inverted().TransformPos(g_pos);
+				}
+				trans->SetPosition(pos + g_pos);
+				break;
+			case ImGuizmo::OPERATION::ROTATE:
+				if (selected_go->GetParent() != nullptr)
+				{
+					g_rot = selected_go->GetParent()->GetGlobalMatrix().Inverted().TransformPos(g_rot);
+				}
+				trans->SetRotation(rot + g_rot);
+				break;
+			case ImGuizmo::OPERATION::SCALE:
+				break;
+			}
+		}
+	}
 }
 
 
