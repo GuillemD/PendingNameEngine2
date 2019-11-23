@@ -66,6 +66,7 @@ void  TextureImporter::AddTextureToLibrary(string name)
 	ILuint size;
 	ILubyte *data;
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+	iluFlipImage();
 	if (ilSave(IL_DDS, ( "Library/Textures/" + tmp + ".dds").c_str())) {
 		CONSOLELOG("Textured saved in library/textures");
 	}
