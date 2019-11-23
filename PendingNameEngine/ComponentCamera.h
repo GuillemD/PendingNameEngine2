@@ -9,7 +9,7 @@
 
 
 #define NEAR 0.25f
-#define FAR 300.0f
+#define FAR 10.0f
 
 class ComponentCamera :
 	public Component

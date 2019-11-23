@@ -55,13 +55,24 @@ bool ModuleScene::Start()
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
 	game_cam->is_root = true;
+	
 
 	ComponentCamera* cmp_cam = (ComponentCamera*)game_cam->AddComponent(CMP_CAMERA);
+	ComponentTransform* cmp_trans = (ComponentTransform*)game_cam->GetComponent(CMP_TRANSFORM);
 
+	cmp_trans->SetPosition({ 0.f,0.f,-15.f });
 	//Initial Mesh
 	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
 	App->importer->first_load = false;
 	ret = App->importer->Import(".//Assets//Baker_house.png");
+
+	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		ComponentTransform* aux = (ComponentTransform*)(*it)->GetComponent(CMP_TRANSFORM);
+
+		aux->SetRotation({ 0.f,0.f,0.f });
+		aux->SetScale({ 1.f,1.f,1.f });
+	}
 
 	return ret;
 }
@@ -114,7 +125,7 @@ update_status ModuleScene::Update(float dt)
 		octree->update_octree = false;
 	}
 
-	DrawGizmo();
+	
 		
 	return UPDATE_CONTINUE;
 }
@@ -142,6 +153,8 @@ void ModuleScene::DrawScene()
 	App->renderer3D->DebugRenderSettings();
 	grid.Render();
 	App->renderer3D->SetDefaultSettings();
+
+	DrawGizmo();
 
 	for (std::list<ComponentCamera*>::iterator it = App->renderer3D->rendering_cameras.begin(); it != App->renderer3D->rendering_cameras.end(); it++)
 	{
@@ -347,7 +360,7 @@ void ModuleScene::DrawGizmo()
 
 		ImVec2 window_pos = ImGui::GetWindowPos();
 		ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
-		//ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+		ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
 
 		float4x4 selected_view = selected_go->GetGlobalMatrix().Transposed();
 		float transformation[16]; //float4x4

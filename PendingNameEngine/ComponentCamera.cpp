@@ -14,7 +14,7 @@ ComponentCamera::ComponentCamera(GameObject* p)
 	active = true;
 	is_editor = false;
 	draw_frustum = true;
-	frustum_cull = true;
+	frustum_cull = false;
 	speed = 20.f;
 
 	(p) ? camera_frustum.pos = p->GetGlobalMatrix().TranslatePart() : camera_frustum.pos = float3::zero;
@@ -70,13 +70,18 @@ void ComponentCamera::Draw()
 
 float * ComponentCamera::GetViewMatrix()
 {
-	float4x4 m = camera_frustum.ViewMatrix();
-	return (float*)m.Transposed().v;
+	static float4x4 m;
+	m = camera_frustum.ViewMatrix();
+	m.Transpose();
+	return (float*)m.v;
 }
 
 float * ComponentCamera::GetProjectionMatrix() const
 {
-		return (float*)camera_frustum.ProjectionMatrix().Transposed().v;
+	static float4x4 m;
+	m = camera_frustum.ProjectionMatrix();
+	m.Transpose();
+	return (float*)m.v;
 }
 
 const float * ComponentCamera::GetGLViewMatrix()
