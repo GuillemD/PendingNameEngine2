@@ -58,7 +58,7 @@ public:
 	
 private:
 	std::vector<GameObject*> to_delete;
-
+	float3 last_gizmo_scale;
 	
 
 };

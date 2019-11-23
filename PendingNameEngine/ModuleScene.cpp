@@ -13,12 +13,14 @@
 ModuleScene::ModuleScene()
 {
 	name = "Scene";
+	last_gizmo_scale = { 1,1,1 };
 
 }
 
 ModuleScene::ModuleScene(bool start_enabled)
 {
 	name = "Scene";
+	last_gizmo_scale = { 1,1,1 };
 
 }
 
@@ -154,7 +156,7 @@ void ModuleScene::DrawScene()
 	grid.Render();
 	App->renderer3D->SetDefaultSettings();
 
-	DrawGizmo();
+	
 
 	for (std::list<ComponentCamera*>::iterator it = App->renderer3D->rendering_cameras.begin(); it != App->renderer3D->rendering_cameras.end(); it++)
 	{
@@ -162,6 +164,7 @@ void ModuleScene::DrawScene()
 	}
 	//DrawGameObjects(App->renderer3D->active_cam);
 	App->renderer3D->rendering_cameras.clear();
+	DrawGizmo();
 
 }
 
@@ -365,7 +368,7 @@ void ModuleScene::DrawGizmo()
 		float4x4 selected_view = selected_go->GetGlobalMatrix().Transposed();
 		float transformation[16]; //float4x4
 		//ImGuizmo::SetDrawlist();
-		ImGuizmo::Manipulate(App->camera->GetEditorCam()->GetViewMatrix(), App->camera->GetEditorCam()->GetProjectionMatrix(), mCurrentGizmoOperation, mCurrentGizmoMode, selected_view.ptr(), transformation);
+		ImGuizmo::Manipulate(App->camera->GetEditorCam()->GetViewMatrix(), App->camera->GetEditorCam()->GetProjectionMatrix(), mCurrentGizmoOperation, mCurrentGizmoMode, (float*)&selected_view, transformation);
 
 
 		if (ImGuizmo::IsOver() && ImGuizmo::IsUsing())
@@ -416,8 +419,19 @@ void ModuleScene::DrawGizmo()
 				trans->SetRotation(rot + g_rot);
 				break;
 			case ImGuizmo::OPERATION::SCALE:
+				if (last_gizmo_scale.x != g_sc.x || last_gizmo_scale.y != g_sc.y || last_gizmo_scale.z != g_sc.z)
+				{
+					float3 aux = g_sc;
+					g_sc -= last_gizmo_scale;
+					last_gizmo_scale = aux;
+					trans->SetScale(sc + g_sc);
+				}
 				break;
 			}
+		}
+		else
+		{
+			last_gizmo_scale = { 1,1,1 };
 		}
 	}
 }
