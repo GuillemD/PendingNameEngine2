@@ -299,7 +299,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 {
-	uint ranges[4] = { mesh->num_indices,mesh->num_normals,mesh->num_texcoords,mesh->num_vertices };
+	uint ranges[4] = { mesh->num_indices,mesh->num_vertices,mesh->num_normals,mesh->num_texcoords };
 
 	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices * 3 + sizeof(float)*mesh->num_normals * 3 + sizeof(float)*mesh->num_texcoords * 3;
 
