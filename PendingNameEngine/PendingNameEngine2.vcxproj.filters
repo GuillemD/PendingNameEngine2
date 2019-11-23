@@ -224,6 +224,9 @@
     <ClCompile Include="Octree.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\ImGuizmo\ImGuizmo.cpp">
+      <Filter>External Libraries\ImGui\ImGuizmo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -1001,6 +1004,9 @@
     <ClInclude Include="Octree.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\ImGuizmo\ImGuizmo.h">
+      <Filter>External Libraries\ImGui\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -1092,6 +1098,9 @@
     </Filter>
     <Filter Include="GameObjects\Components">
       <UniqueIdentifier>{c545aa51-d39c-42e9-8ae7-1b542a43cea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\ImGui\ImGuizmo">
+      <UniqueIdentifier>{8a28a66c-f9c3-45d4-9610-f64ddd6ae2bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
