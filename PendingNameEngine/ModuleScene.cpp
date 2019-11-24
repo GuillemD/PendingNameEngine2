@@ -152,68 +152,49 @@ void ModuleScene::DrawScene()
 	grid.Render();
 	App->renderer3D->SetDefaultSettings();
 
-	
+	//editor
+	if(App->renderer3D->rendering_cameras.empty())
+		DrawGameObjects(App->camera->GetEditorCam(),true);
 
 	for (std::list<ComponentCamera*>::iterator it = App->renderer3D->rendering_cameras.begin(); it != App->renderer3D->rendering_cameras.end(); it++)
 	{
-		DrawGameObjects(*it);
+		DrawGameObjects(*it,false);
 	}
-	DrawGameObjects(App->renderer3D->active_cam);
+	
 	App->renderer3D->rendering_cameras.clear();
 	DrawGizmo();
 
 }
 
-void ModuleScene::DrawGameObjects(ComponentCamera * cam_to_draw)
+void ModuleScene::DrawGameObjects(ComponentCamera * cam_to_draw, bool is_editor)
 {
+	std::list<GameObject*> intersections;
+	octree->GetObjectIntersections(intersections, &cam_to_draw->camera_frustum.MinimalEnclosingAABB());
 
-	
-	if (cam_to_draw->frustum_cull)
+	intersections.sort();
+	intersections.unique();
+	for (auto it = intersections.begin(); it != intersections.end(); it++)
 	{
-		std::list<GameObject*> intersections;
+		(*it)->Draw();
+	}
+	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
 
-		if (octree->GetRoot() != nullptr && octree->optimise)
+		if (!is_editor)
 		{
-			octree->GetObjectIntersections(intersections, &cam_to_draw->camera_frustum.MinimalEnclosingAABB());
-
-			intersections.sort();
-			intersections.unique();
-
-			for (auto it = intersections.begin(); it != intersections.end(); it++)
+			if (cam_to_draw->GetOwner() && aux_mesh && cam_to_draw->frustum_cull)
 			{
-				ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-
-				if (!aux_mesh || cam_to_draw->GetOwner() == nullptr)continue;
-				{
-					if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
-						continue;
-				}
-				(*it)->Draw();
+				if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
+					continue;
 			}
+			(*it)->Draw();
 		}
 		else
 		{
-			for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
-			{
-				ComponentMesh* aux_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-				if (cam_to_draw->GetOwner() && aux_mesh && cam_to_draw->frustum_cull)
-				{
-					if (!cam_to_draw->ContainsAABB(aux_mesh->GetMesh()->bb))
-						continue;
-				}
-				(*it)->Draw();
-			}
-		}
-		
-	}
-	else
-	{
-		for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
-		{
 			(*it)->Draw();
 		}
-	}
-	
+	}	
 }
 
 void ModuleScene::ClearScene()

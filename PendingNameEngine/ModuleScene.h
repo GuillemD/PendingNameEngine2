@@ -25,7 +25,7 @@ public:
 	bool CleanUp();
 
 	void DrawScene();
-	void DrawGameObjects(ComponentCamera* cam_to_draw);
+	void DrawGameObjects(ComponentCamera* cam_to_draw, bool is_editor);
 	void ClearScene();
 	void DeleteGameObjects();
 	void DeleteGameObject(GameObject* go_to_delete);
