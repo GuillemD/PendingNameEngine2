@@ -37,11 +37,10 @@ void PanelInspector::Draw()
 			ImGui::SameLine();
 
 			ImGui::TextColored(YELLOW, "%s", selected->go_name.c_str());
-			bool is_go_active = selected->IsActive();
-
-			ImGui::TextColored(YELLOW, "%s", App->scene->selected_go->go_name.c_str());
+			
 			ImGui::Text("Unique id: %llu", App->scene->selected_go->UniqueId);
 
+			bool is_go_active = selected->IsActive();
 			if (ImGui::Checkbox("Active", &is_go_active))
 			{
 				selected->SetActive(is_go_active);
