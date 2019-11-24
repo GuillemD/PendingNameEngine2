@@ -154,7 +154,13 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 
 				
-				
+
+				glGenBuffers(1, (GLuint*)&mesh->vertices_id);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
+
 
 			}
 
