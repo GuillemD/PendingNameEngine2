@@ -158,7 +158,7 @@ void ModuleScene::DrawScene()
 	{
 		DrawGameObjects(*it);
 	}
-	//DrawGameObjects(App->renderer3D->active_cam);
+	DrawGameObjects(App->renderer3D->active_cam);
 	App->renderer3D->rendering_cameras.clear();
 	DrawGizmo();
 
@@ -232,8 +232,7 @@ void ModuleScene::ClearScene()
 	}
 	App->importer->mesh_path = "";
 	App->importer->texture_path = "";
-	
-	
+
 }
 
 void ModuleScene::DeleteGameObjects()
