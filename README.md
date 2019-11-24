@@ -25,6 +25,8 @@ In the Main menu, you have several features:
 - Create primitives using par_shapes
 - Random number generator
 
+INNOVATION: Octree
+
 
 In this version we are using SDL/OpenGL and several external libraries:
 
