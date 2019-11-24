@@ -432,6 +432,10 @@ void ModuleGUI::ShowAbout()
 		{
 			App->OpenBrowser("https://github.com/CedricGuillemet/ImGuizmo");
 		}
+
+		if (ImGui::Button("PhysFS", ImVec2(80, 22))) {
+			App->OpenBrowser("https://icculus.org/physfs/");
+		}
 		
 		ImGui::Columns(1);
 		ImGui::Separator();

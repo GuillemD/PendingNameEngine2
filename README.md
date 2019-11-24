@@ -1,11 +1,15 @@
-# PendingNameEngine2
+﻿# PendingNameEngine2
 
 This 3D Engine is created by two students from Barcelona for the subject of 3D Engines. 
 The github repository page is: https://github.com/GuillemD/PendingNameEngine2
 
-Version 1.0 allows the user to drag and drop FBX files to load geometry and also drop textures (.png,.dds) to use on those models.
+Version 2.0 allows the user to drag and drop FBX files to load geometry and also drop textures (.png,.dds) to use on those models. Everyone of those 
+will be saved in our own file format ".caca" if  they are meshes or ".dds" if they are textures and then they will load from there which will be faster.
+And talk about faster, Octree enables our mousepicking to be faster so select GameObjects clicking in the screen without lag. Same goes for frustum culling
+it enables the scene to run more smoothly even with street.fbx loaded. You can use the gizmo to move GameObjects around the scene.
 
-It has Unity-like camera controls:
+
+Camera has Unity-like camera controls:
 - RMB + 'WASD' to move around the space
 - Mouse wheel to Zoom IN/OUT
 - ALT + LMB to orbit an object
@@ -14,8 +18,8 @@ It has Unity-like camera controls:
 
 In the Main menu, you have several features:
 - Saving configuration
-- Show/Hide configuration panel -> ( information about performance, debug functionalities)
-- Inspector panel to show geometry properties of a selected game object
+- Show/Hide configuration panel  ( information about performance, debug functionalities)
+- Inspector panel to show geometry properties of a selected game object. You can edit properties such as escale position and rotation from there.
 - Hierarchy Panel displaying all the game objects in a tree (also able to delete all scene game objects)
 - Show/hide console
 - Create primitives using par_shapes
@@ -34,6 +38,8 @@ In this version we are using SDL/OpenGL and several external libraries:
 - RapidJson: https://rapidjson.org/
 - gpudetect: https://github.com/GameTechDev/gpudetect
 - mmgr: http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml
+- PhysFS: https://icculus.org/physfs/
+- ImGuizmo: https://github.com/CedricGuillemet/ImGuizmo
 
 ### MIT LICENSE
 
