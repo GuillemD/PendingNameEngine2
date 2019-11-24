@@ -29,6 +29,7 @@ public:
 	uint width;
 	uint height;
 	string tex_name = "";
+	string tex_path = "";
 };
 
 #endif // !_TEXTURE_H_

@@ -13,6 +13,8 @@
 #pragma comment( lib, "DevIL/libx86/ILU.lib" )
 #pragma comment( lib, "DevIL/libx86/ILUT.lib" )
 
+#include <fstream>
+
 
 TextureImporter::TextureImporter()
 {
@@ -48,28 +50,61 @@ bool TextureImporter::CleanUp()
 }
 
 
-void  TextureImporter::AddTextureToLibrary(string name)
+bool  TextureImporter::AddTextureToLibrary(const char* path, std::string& output, std::string& tex_name)
 {
 	//Chop the extension and the path from the actual name
-	string thename;
-	string tmp;
-	
-	thename = name;
+	std::string name = path;
+	std::replace(name.begin(), name.end(), '\\', '/');
+	uint lastSlash = name.find_last_of('/');
+	uint dot = name.find_last_of('.');
+	name = name.substr(lastSlash + 1, dot - lastSlash - 1);
+	std::string libPath;
+	libPath = "Library/Textures/" + name + ".dds";
 
-	uint last_bar = (thename.find("\\Assets\\") != std::string::npos) ? thename.find_last_of('\\') : thename.find_last_of('\\');
-	uint ext_point = thename.find_last_of('.');
+	ILuint imageID;
+	ILboolean success;
 
-	for (int i = last_bar + 1; i < ext_point; i++) {
-		tmp.push_back(thename[i]);
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage(libPath.c_str());
+
+	if (success)
+	{
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
+
+		if (ilGetError() == IL_NO_ERROR)
+		{
+			ILuint size;
+			ILubyte *data;
+			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+			size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
+			if (size > 0) {
+				data = new ILubyte[size]; // allocate data buffer
+				if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+				{
+					std::ofstream dataFile(libPath, std::fstream::out | std::fstream::binary);
+					dataFile.write((const char*)data, size);
+					dataFile.close();
+				}
+				RELEASE_ARRAY(data);
+			}
+		}
+	}
+	else
+	{
+		ILenum error = ilGetError();
+		LOG("Image load failed - IL reports error: %s", iluErrorString(error));
+		return false;
 	}
 
-	ILuint size;
-	ILubyte *data;
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-	iluFlipImage();
-	if (ilSave(IL_DDS, ( "Library/Textures/" + tmp + ".dds").c_str())) {
-		CONSOLELOG("Textured saved in library/textures");
-	}
+	ilDeleteImages(1, &imageID);
+
+	tex_name = name;
+	output = libPath;
+
+	return true;
 
 }
 
@@ -80,7 +115,7 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 	if (App->scene->scene_gameobjects.empty())
 		return nullptr;
 
-	Texture* t = nullptr;
+	Texture* t = new Texture();
 
 	ILuint image_id;
 	GLuint tex_id;
@@ -89,7 +124,6 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 
 	ilGenImages(1, &image_id);
 	ilBindImage(image_id);
-	
 
 	imageloaded = ilLoadImage(path);
 
@@ -107,13 +141,12 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 		{
 			error = ilGetError();
 			CONSOLELOG("DevIL failed to convert image %s. Error: %s . :(", path, iluErrorString(error));
-			exit(-1);
+			return nullptr;
 		}
 
-		t = new Texture();
 		t->SetWidth(ilGetInteger(IL_IMAGE_WIDTH));
 		t->SetHeight(ilGetInteger(IL_IMAGE_HEIGHT));
-		t->SetName(path); //temporary
+		t->tex_path = path;
 			
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glGenTextures(1, &tex_id);
@@ -150,36 +183,9 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 	{
 		error = ilGetError();
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
-		
+		return nullptr;
 	}
-	string textname = t->GetName();
-	AddTextureToLibrary(textname);
 
-	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
-	{
-		if (*it != nullptr)
-		{
-			if ((*it)->IsActive())
-			{
-				ComponentMesh* c_mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-				if (c_mesh != nullptr)
-				{
-					ComponentMaterial* c_mat = (ComponentMaterial*)(*it)->GetComponent(CMP_MATERIAL);
-					if (c_mat != nullptr)
-					{
-						c_mat->GetMaterial()->SetDiffuse(t);
-					}
-					else
-					{
-						(*it)->AddComponent(CMP_MATERIAL);
-						c_mat = (ComponentMaterial*)(*it)->GetComponent(CMP_MATERIAL);
-						c_mat->GetMaterial()->SetDiffuse(t);
-					}
-				}
-				
-			}
-		}
-	}
 	
 	return t;
 }

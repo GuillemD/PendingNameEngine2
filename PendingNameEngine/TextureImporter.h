@@ -16,7 +16,7 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	void AddTextureToLibrary(string name);
+	bool AddTextureToLibrary(const char* path, std::string& output, std::string& tex_name);
 	Texture* LoadTextureFromPath(const char* path);
 	int GetVersion() const;
 

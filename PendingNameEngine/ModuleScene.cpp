@@ -47,7 +47,7 @@ bool ModuleScene::Start()
 	selected_go = new GameObject();
 
 	//Editor Camera
-	App->camera->SetCamPos({0.0,10.f,5.f});
+	App->camera->SetCamPos({0.0,50.f,50.f});
 	App->camera->LookAt({ 0,0,0 });
 
 	//Guizmo
@@ -67,17 +67,9 @@ bool ModuleScene::Start()
 
 	cmp_trans->SetPosition({ 0.f,0.f,-15.f });
 	//Initial Mesh
-	ret = App->importer->Import(".//Assets//BakerHouse.fbx");
+	ret = App->importer->Import(".//Assets//Street environment_V01.fbx");
 	App->importer->first_load = false;
-	ret = App->importer->Import(".//Assets//Baker_house.png");
-
-	for (std::vector<GameObject*>::iterator it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
-	{
-		ComponentTransform* aux = (ComponentTransform*)(*it)->GetComponent(CMP_TRANSFORM);
-
-		aux->SetRotation({ 0.f,0.f,0.f });
-		aux->SetScale({ 1.f,1.f,1.f });
-	}
+	
 
 	return ret;
 }

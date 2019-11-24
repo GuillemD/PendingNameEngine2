@@ -78,14 +78,8 @@ bool ModuleImporter::Import(string path)
 					else {
 						texture_import->LoadTextureFromPath(path.c_str());
 					}
-					
-					
 					texture_path = path;
 				}
-
-			}
-			else {
-				texture_import->AddTextureToLibrary(path);
 			}
 		}
 		else

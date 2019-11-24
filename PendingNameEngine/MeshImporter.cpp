@@ -110,26 +110,16 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 			App->scene->AddGameObject(go);
 			CONSOLELOG("Root GO created");
-
 		}
 		else
 		{
 			go = parent;
 		}
-		
 	}
 	else if (_node->mNumMeshes > 0)
 	{
-		
-
-
-
-
 		for (int i = 0; i < _node->mNumMeshes; i++)
 		{
-
-
-
 			GameObject* child = new GameObject();
 			child->go_name = _node->mName.C_Str();
 
@@ -139,101 +129,153 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			if (App->fs->Exists(("Library/Meshes/" + child->go_name + ".caca").c_str())) {
 
 				mesh = LoadOwnFileFormat(("Library/Meshes/" + child->go_name + ".caca").c_str());
-
 			}
-
-			else{
-			if (imp_mesh->HasPositions())
+			else
 			{
-				mesh = new Mesh();
-
-				//vertices
-				mesh->num_vertices = imp_mesh->mNumVertices;
-				mesh->vertices = new float3[mesh->num_vertices];
-				memcpy(mesh->vertices, imp_mesh->mVertices, sizeof(float3)*mesh->num_vertices);
-
-
-				
-
-				glGenBuffers(1, (GLuint*)&mesh->vertices_id);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
-
-
-			}
-
-			if (imp_mesh->HasFaces())
-			{
-				//indices
-				mesh->num_indices = imp_mesh->mNumFaces * 3; //num triangles * 3
-				mesh->indices = new int[mesh->num_indices];
-
-				for (int j = 0; j < imp_mesh->mNumFaces; j++)
+				if (imp_mesh->HasPositions())
 				{
-					aiFace triangle = imp_mesh->mFaces[j];
-					if (triangle.mNumIndices != 3)
-					{
-						CONSOLELOG("WARNING, geometry face %d with != 3 indices!", j);
-						correct_num_faces = false;
-					}
-					else
-					{
-						memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
-					}
-				}
-				for (int i = 0; i < imp_mesh->mNumVertices; i++) {
-					int u = i + 1;
-					int v = i + 2;
-					LineSegment face_normal = GetTriNormal(mesh->vertices[i], mesh->vertices[u], mesh->vertices[v]);
-					if (face_normal.a.y < 0) {
-						face_normal.a.y = face_normal.a.y * -1;
-					}
-					mesh->facesnormals.push_back(face_normal);
+					mesh = new Mesh();
+
+					//vertices
+					mesh->num_vertices = imp_mesh->mNumVertices;
+					mesh->vertices = new float3[mesh->num_vertices];
+					memcpy(mesh->vertices, imp_mesh->mVertices, sizeof(float3)*mesh->num_vertices);
+
+					glGenBuffers(1, (GLuint*)&mesh->vertices_id);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
 				}
 
-				glGenBuffers(1, (GLuint*)&mesh->indices_id);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d indices loaded", child->go_name.c_str(), mesh->num_indices);
+				if (imp_mesh->HasFaces())
+				{
+					//indices
+					mesh->num_indices = imp_mesh->mNumFaces * 3; //num triangles * 3
+					mesh->indices = new int[mesh->num_indices];
+
+					for (int j = 0; j < imp_mesh->mNumFaces; j++)
+					{
+						aiFace triangle = imp_mesh->mFaces[j];
+						if (triangle.mNumIndices != 3)
+						{
+							CONSOLELOG("WARNING, geometry face %d with != 3 indices!", j);
+							correct_num_faces = false;
+						}
+						else
+						{
+							memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
+						}
+					}
+					for (int i = 0; i < imp_mesh->mNumVertices; i++) {
+						int u = i + 1;
+						int v = i + 2;
+						LineSegment face_normal = GetTriNormal(mesh->vertices[i], mesh->vertices[u], mesh->vertices[v]);
+						if (face_normal.a.y < 0) {
+							face_normal.a.y = face_normal.a.y * -1;
+						}
+						mesh->facesnormals.push_back(face_normal);
+					}
+
+					glGenBuffers(1, (GLuint*)&mesh->indices_id);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+					CONSOLELOG("Mesh %s with %d indices loaded", child->go_name.c_str(), mesh->num_indices);
+
+				}
+
+				if (imp_mesh->HasNormals())
+				{
+					mesh->num_normals = mesh->num_vertices;
+					mesh->normals = new float3[mesh->num_normals];
+					memcpy(mesh->normals, &imp_mesh->mNormals[0], sizeof(float3)*mesh->num_normals);
+
+					glGenBuffers(1, (GLuint*)&mesh->normals_id);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->normals_id);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					CONSOLELOG("Mesh %s with %d normals loaded", child->go_name.c_str(), mesh->num_normals);
+				}
+
+				if (imp_mesh->HasTextureCoords(0))
+				{
+					mesh->num_texcoords = imp_mesh->mNumVertices;
+					mesh->texcoords = new float[mesh->num_texcoords * 3];
+
+					memcpy(mesh->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*mesh->num_texcoords * 3);
+
+					glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
+				}
 
 			}
-
-			if (imp_mesh->HasNormals())
-			{
-				mesh->num_normals = mesh->num_vertices;
-				mesh->normals = new float3[mesh->num_normals];
-				memcpy(mesh->normals, &imp_mesh->mNormals[0], sizeof(float3)*mesh->num_normals);
-
-				glGenBuffers(1, (GLuint*)&mesh->normals_id);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->normals_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d normals loaded", child->go_name.c_str(), mesh->num_normals);
-			}
-
-			if (imp_mesh->HasTextureCoords(0))
-			{
-				mesh->num_texcoords = imp_mesh->mNumVertices;
-				mesh->texcoords = new float[mesh->num_texcoords * 3];
-
-				memcpy(mesh->texcoords, imp_mesh->mTextureCoords[0], sizeof(float)*mesh->num_texcoords * 3);
-
-				glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
-			}
-
-		}
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
 			m_cmp->CreateBB();
 			m_cmp->draw_bb = false;
 
+			if (_scene->HasMaterials())
+			{
+				aiMaterial* mat = _scene->mMaterials[imp_mesh->mMaterialIndex];
+				aiColor3D col(0.0f, 0.0f, 0.0f);
+				mat->Get(AI_MATKEY_COLOR_DIFFUSE, col);
+
+				aiString tex_path;
+				aiReturn load = mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
+				Material* material = nullptr;
+				Texture* tex = nullptr;
+
+				if (load == aiReturn::aiReturn_SUCCESS)
+				{
+					string new_path = _full_path;
+					
+					if (App->importer->first_load == true)
+					{
+						for (int i = new_path.size() - 1; i >= 0; i--)
+						{
+							if (new_path[i] == '/')
+								break;
+							else
+								new_path.pop_back();
+						}
+					}
+					else
+					{
+						for (int i = new_path.size() - 1; i >= 0; i--)
+						{
+							if (new_path[i] == '\\')
+								break;
+							else
+								new_path.pop_back();
+						}
+					}
+					new_path += tex_path.C_Str();
+					std::string new_name = "";
+					if (App->importer->texture_import->AddTextureToLibrary(new_path.c_str(), new_path, new_name))
+					{
+						ComponentMaterial* mat_cmp = (ComponentMaterial*)child->AddComponent(CMP_MATERIAL);
+						material = new Material();
+						tex = App->importer->texture_import->LoadTextureFromPath(new_path.c_str());
+						tex->tex_name = new_name;
+						material->SetDiffuse(tex);
+						mat_cmp->SetMaterial(material);
+					}
+
+				}
+				else
+				{
+					CONSOLELOG("Importer not able to load texture from .fbx");
+				}
+
+				if (material != nullptr)
+				{
+					material->color.Set(col.r, col.g, col.b);
+				}
+			}
 			parent->AddChild(child);
 
 			if (_node->mTransformation[0] != nullptr)
@@ -274,14 +316,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 			SaveInOwnFileFormat(mesh, test);
 			
-		}
-
-		
-		
-
-	
-
-		
+		}	
 	}
 
 	if (_node->mNumChildren > 0)
@@ -292,8 +327,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		}
 	}
 
-
-	
 }
 
 void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
@@ -326,8 +359,7 @@ void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
 
 	ofstream newfile((LIBRARY_MESH_FOLDER + name + ".caca").c_str(), ofstream::binary);
 	newfile.write(data, size);
-	newfile.close();
-		
+	newfile.close();	
 
 }
 
