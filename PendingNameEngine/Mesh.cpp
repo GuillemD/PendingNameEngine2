@@ -69,7 +69,7 @@ void Mesh::Reset()
 	texcoords = nullptr;
 }
 
-void Mesh::DrawFacesNormals()
+/*void Mesh::DrawFacesNormals()
 {
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
@@ -81,4 +81,4 @@ void Mesh::DrawFacesNormals()
 		glVertex3fv((GLfloat*)&float3(facesnormals[i].a.x, facesnormals[i].a.y, facesnormals[i].a.z));
 	}
 	glEnd();
-}
+}*/

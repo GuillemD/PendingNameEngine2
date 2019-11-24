@@ -28,7 +28,7 @@ public:
 
 	void Reset();
 
-	void DrawFacesNormals();
+	//void DrawFacesNormals();
 
 public:
 
@@ -51,9 +51,9 @@ public:
 	uint num_normals = 0;
 	uint normals_id = 0;
 
-	bool drawnormals = false;
+	//bool drawnormals = false;
 
-	std::vector<LineSegment> facesnormals;
+	//std::vector<LineSegment> facesnormals;
 
 };
 #endif // !_MESH_H_

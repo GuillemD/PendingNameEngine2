@@ -165,13 +165,13 @@ void PanelInspector::DrawComponentMesh(ComponentMesh * mesh)
 			ImGui::Columns(1);
 		}
 		ImGui::Separator();
-		if (mesh->GetMesh()->num_normals > 0)
+		/*if (mesh->GetMesh()->num_normals > 0)
 		{
 			if (ImGui::Checkbox("Draw Faces Normals", &mesh->GetMesh()->drawnormals)) {
 
 			}
 		}
-		ImGui::Separator();
+		ImGui::Separator();*/
 	}
 }
 
@@ -180,8 +180,9 @@ void PanelInspector::DrawComponentMaterial(ComponentMaterial * mat)
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
-		if (mat->GetMaterial() != nullptr)
+		if (mat->GetMaterial()->GetDiffuse() != nullptr)
 		{
+
 			ImGui::Text("Texture Id: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%d", mat->GetMaterial()->GetDiffuse()->GetTextureId());
 			ImGui::Text("Texture Path: "); ImGui::SameLine(); ImGui::TextColored(YELLOW, "%s", mat->GetMaterial()->GetDiffuse()->GetName());
 
@@ -195,18 +196,20 @@ void PanelInspector::DrawComponentMaterial(ComponentMaterial * mat)
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			size.y = size.x;
 			ImGui::Image(tex, size);
+
+			if (ImGui::Checkbox("Enable checkers texture", &usecheckers)) {
+				if (usecheckers) {
+					prevtex = mat->GetMaterial()->GetDiffuse();
+					mat->GetMaterial()->SetDiffuse(App->scene->checkers);
+				}
+				else {
+					mat->GetMaterial()->SetDiffuse(prevtex);
+
+				}
+			}
 		}
 
-		if (ImGui::Checkbox("Enable checkers texture", &usecheckers)) {
-			if (usecheckers) {
-				prevtex = mat->GetMaterial()->GetDiffuse();
-				mat->GetMaterial()->SetDiffuse(App->scene->checkers);
-			}
-			else {
-				mat->GetMaterial()->SetDiffuse(prevtex);
-
-			}
-		}
+		
 	}
 }
 

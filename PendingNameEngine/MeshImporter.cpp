@@ -167,7 +167,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 							memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
 						}
 					}
-					for (int i = 0; i < imp_mesh->mNumVertices; i++) {
+					/*for (int i = 0; i < imp_mesh->mNumVertices; i++) {
 						int u = i + 1;
 						int v = i + 2;
 						LineSegment face_normal = GetTriNormal(mesh->vertices[i], mesh->vertices[u], mesh->vertices[v]);
@@ -175,7 +175,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 							face_normal.a.y = face_normal.a.y * -1;
 						}
 						mesh->facesnormals.push_back(face_normal);
-					}
+					}*/
 
 					glGenBuffers(1, (GLuint*)&mesh->indices_id);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
@@ -226,7 +226,8 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 				aiString tex_path;
 				aiReturn load = mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
-				Material* material = nullptr;
+				ComponentMaterial* mat_cmp = (ComponentMaterial*)child->AddComponent(CMP_MATERIAL);
+				Material* material = new Material();
 				Texture* tex = nullptr;
 
 				if (load == aiReturn::aiReturn_SUCCESS)
@@ -257,12 +258,11 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 					std::string new_name = "";
 					if (App->importer->texture_import->AddTextureToLibrary(new_path.c_str(), new_path, new_name))
 					{
-						ComponentMaterial* mat_cmp = (ComponentMaterial*)child->AddComponent(CMP_MATERIAL);
-						material = new Material();
+						
 						tex = App->importer->texture_import->LoadTextureFromPath(new_path.c_str());
 						tex->tex_name = new_name;
 						material->SetDiffuse(tex);
-						mat_cmp->SetMaterial(material);
+						
 					}
 
 				}
@@ -270,7 +270,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				{
 					CONSOLELOG("Importer not able to load texture from .fbx");
 				}
-
+				mat_cmp->SetMaterial(material);
 				if (material != nullptr)
 				{
 					material->color.Set(col.r, col.g, col.b);

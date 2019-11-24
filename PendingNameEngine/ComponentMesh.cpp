@@ -76,7 +76,6 @@ void ComponentMesh::Draw()
 		}
 		else
 		{
-			App->renderer3D->SetTexture2d(false);
 			Color col = mat->GetColor();
 			glColor3f(col.r, col.g, col.b);
 		}
@@ -102,8 +101,8 @@ void ComponentMesh::Draw()
 	if (draw_bb)
 		DrawBB();
 
-	if (GetMesh()->drawnormals)
-		GetMesh()->DrawFacesNormals();
+	//if (GetMesh()->drawnormals)
+		//GetMesh()->DrawFacesNormals();
 }
 
 Mesh * ComponentMesh::GetMesh() const
