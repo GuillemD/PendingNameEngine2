@@ -140,14 +140,6 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 
 				mesh = LoadOwnFileFormat(("Library/Meshes/" + child->go_name + ".caca").c_str());
 
-				glGenBuffers(1, (GLuint*)&mesh->texcoords_id);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->texcoords_id);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(uint)*mesh->num_texcoords * 3, mesh->texcoords, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
-
-
-				int i = 0;
 			}
 
 			else{
@@ -375,7 +367,7 @@ Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
 			memcpy(ret->normals, cursor, bytes);
 
 			cursor += bytes;
-			bytes = sizeof(float*)*ret->num_texcoords*3;
+			bytes = sizeof(float)*ret->num_texcoords*3;
 			ret->texcoords = new float[ret->num_texcoords*3];
 			memcpy(ret->texcoords, cursor, bytes);
 
