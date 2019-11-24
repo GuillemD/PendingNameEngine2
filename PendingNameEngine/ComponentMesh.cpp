@@ -86,7 +86,11 @@ void ComponentMesh::Draw()
 
 	if (mat && mat->GetMaterial())
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		if (mat->GetMaterial()->GetDiffuse() != nullptr)
+			glBindTexture(GL_TEXTURE_2D, 0);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
+		
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -96,6 +100,7 @@ void ComponentMesh::Draw()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glPopMatrix();
 
+	
 	owner->trans->CalculateGlobalMatrix();
 
 	if (draw_bb)
