@@ -5,6 +5,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
+
 #include "ComponentCamera.h"
 
 #include "OpenGL.h"
@@ -18,6 +19,7 @@ GameObject::GameObject()
 	is_root = false;
 	is_active = true;
 	is_static = false;
+	UniqueId = (long long)pcg32_random_r(&App->gui->seed);
 
 	//create component transform
 	Component* cmp = new ComponentTransform(this);

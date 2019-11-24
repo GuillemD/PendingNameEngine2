@@ -48,6 +48,31 @@ bool TextureImporter::CleanUp()
 }
 
 
+void  TextureImporter::AddTextureToLibrary(string name)
+{
+	//Chop the extension and the path from the actual name
+	string thename;
+	string tmp;
+	
+	thename = name;
+
+	uint last_bar = (thename.find("\\Assets\\") != std::string::npos) ? thename.find_last_of('\\') : thename.find_last_of('\\');
+	uint ext_point = thename.find_last_of('.');
+
+	for (int i = last_bar + 1; i < ext_point; i++) {
+		tmp.push_back(thename[i]);
+	}
+
+	ILuint size;
+	ILubyte *data;
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+	iluFlipImage();
+	if (ilSave(IL_DDS, ( "Library/Textures/" + tmp + ".dds").c_str())) {
+		CONSOLELOG("Textured saved in library/textures");
+	}
+
+}
+
 Texture* TextureImporter::LoadTextureFromPath(const char * path)
 {
 	CONSOLELOG("Importing texture %s ...", path);
@@ -127,6 +152,8 @@ Texture* TextureImporter::LoadTextureFromPath(const char * path)
 		CONSOLELOG("DevIL: Unable to load image correctly. Error: %s. :( Texture_id set to %d", iluErrorString(error), tex_id);
 		
 	}
+	string textname = t->GetName();
+	AddTextureToLibrary(textname);
 
 	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
 	{

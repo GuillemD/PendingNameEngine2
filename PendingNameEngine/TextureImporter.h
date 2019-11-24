@@ -16,6 +16,7 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	void AddTextureToLibrary(string name);
 	Texture* LoadTextureFromPath(const char* path);
 	int GetVersion() const;
 

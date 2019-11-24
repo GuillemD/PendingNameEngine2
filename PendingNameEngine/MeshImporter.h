@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "Mesh.h"
+#include <string>
 
 class GameObject;
 class aiScene;
@@ -22,6 +23,8 @@ public:
 	bool ImportMesh(const char* full_path);
 	void LoadMesh(const aiScene* _scene, const aiNode* _node, GameObject* parent, const char* _full_path);
 
+	void SaveInOwnFileFormat(Mesh* mesh, std::string name);
+	Mesh* LoadOwnFileFormat(const char* path);
 	LineSegment GetTriNormal(float3 p1, float3 p2, float3 p3);
 
 

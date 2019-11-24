@@ -226,6 +226,8 @@
     </ClCompile>
     <ClCompile Include="ImGui\ImGuizmo\ImGuizmo.cpp">
       <Filter>External Libraries\ImGui\ImGuizmo</Filter>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1006,6 +1008,11 @@
     </ClInclude>
     <ClInclude Include="ImGui\ImGuizmo\ImGuizmo.h">
       <Filter>External Libraries\ImGui\ImGuizmo</Filter>
+    <ClInclude Include="PhysFS\include\physfs.h">
+      <Filter>External Libraries\PhysFS</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1101,6 +1108,8 @@
     </Filter>
     <Filter Include="External Libraries\ImGui\ImGuizmo">
       <UniqueIdentifier>{8a28a66c-f9c3-45d4-9610-f64ddd6ae2bc}</UniqueIdentifier>
+    <Filter Include="External Libraries\PhysFS">
+      <UniqueIdentifier>{ba49a8cc-354c-4ec5-a2a5-c58ed4cc81bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

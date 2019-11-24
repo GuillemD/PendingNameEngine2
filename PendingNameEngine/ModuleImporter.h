@@ -20,6 +20,8 @@ public:
 
 	 bool Import(string path);
 
+	 bool TextureExistsInLibrary(string path);
+	 string GetLibraryTexturePath(string path);
 
 	 int GetILVersion() const;
 public:

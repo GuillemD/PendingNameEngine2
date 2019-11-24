@@ -13,7 +13,7 @@ Application::Application()
 	gui = new ModuleGUI(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-
+	fs = new ModuleFileSystem(ASSETS_FOLDER);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -23,7 +23,10 @@ Application::Application()
 	AddModule(window);
 	AddModule(input);
 	AddModule(importer);
+
 	AddModule(camera);
+
+	AddModule(fs);
 
 	AddModule(scene);
 

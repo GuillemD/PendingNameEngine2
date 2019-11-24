@@ -149,6 +149,7 @@
     <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
+    <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="Octree.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="PAR\par_streamlines.h" />
     <ClInclude Include="PCG_c_basic\pcg_basic.h" />
     <ClInclude Include="PCG_c_basic\pcg_variants.h" />
+    <ClInclude Include="PhysFS\include\physfs.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="rapidjson\allocators.h" />
     <ClInclude Include="rapidjson\cursorstreamwrapper.h" />
@@ -358,6 +360,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshImporter.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
+    <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
     <ClCompile Include="Octree.cpp" />

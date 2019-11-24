@@ -9,6 +9,9 @@
 
 #include "mmgr/mmgr.h"
 
+#include "ModuleImporter.h"
+#include "MeshImporter.h"
+#include "ModuleInput.h"
 
 ModuleScene::ModuleScene()
 {

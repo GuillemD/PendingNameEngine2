@@ -11,7 +11,7 @@
 #include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-
+#include "ModuleFileSystem.h"
 
 #define FPSBUFFER_SIZE 100
 #define MSBUFFER_SIZE 100
@@ -26,6 +26,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleScene* scene;
 	ModuleImporter* importer;
+	ModuleFileSystem* fs;
 
 private:
 

@@ -9,7 +9,11 @@
 #include "TextureImporter.h"
 
 #include "OpenGL.h"
+
 #include <string>
+#include <iostream>
+#include <fstream> 
+#include "Globals.h"
 #include "Assimp.h"
 
 void AssimpToConsoleLog(const char* str, char* userData);
@@ -71,6 +75,8 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	GameObject* go = nullptr;
 	bool correct_num_faces = true;
 
+
+	int i = 1;
 	if (_node->mNumMeshes < 1)
 	{
 		go = new GameObject();
@@ -114,14 +120,29 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 	}
 	else if (_node->mNumMeshes > 0)
 	{
+		
+
+
+
+
 		for (int i = 0; i < _node->mNumMeshes; i++)
 		{
+
+
+
 			GameObject* child = new GameObject();
 			child->go_name = _node->mName.C_Str();
 
 			aiMesh* imp_mesh = _scene->mMeshes[_node->mMeshes[i]];
 			Mesh* mesh = nullptr;
 
+			if (App->fs->Exists(("Library/Meshes/" + child->go_name + ".caca").c_str())) {
+
+				mesh = LoadOwnFileFormat(("Library/Meshes/" + child->go_name + ".caca").c_str());
+
+			}
+
+			else{
 			if (imp_mesh->HasPositions())
 			{
 				mesh = new Mesh();
@@ -131,11 +152,15 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				mesh->vertices = new float3[mesh->num_vertices];
 				memcpy(mesh->vertices, imp_mesh->mVertices, sizeof(float3)*mesh->num_vertices);
 
+
+				
+
 				glGenBuffers(1, (GLuint*)&mesh->vertices_id);
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertices_id);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				CONSOLELOG("Mesh %s with %d vertex loaded", child->go_name.c_str(), mesh->num_vertices);
+
 
 			}
 
@@ -203,7 +228,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				CONSOLELOG("Mesh %s with %d texcoords loaded", child->go_name.c_str(), mesh->num_texcoords);
 			}
 
-			
+		}
 			ComponentMesh* m_cmp = (ComponentMesh*)child->AddComponent(CMP_MESH);
 			m_cmp->SetMesh(mesh);
 			m_cmp->CreateBB();
@@ -243,8 +268,20 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			App->camera->Focus(m_cmp->GetMesh()->bb);
 			App->camera->can_focus = false;
 
+			const char* tmp = _node->mName.C_Str();
+
+			string test = _node->mName.C_Str();
+
+			SaveInOwnFileFormat(mesh, test);
+			
 		}
-		go = parent;
+
+		
+		
+
+	
+
+		
 	}
 
 	if (_node->mNumChildren > 0)
@@ -255,6 +292,102 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 		}
 	}
 
+
+	
+}
+
+void MeshImporter::SaveInOwnFileFormat(Mesh * mesh, string name)
+{
+	uint ranges[4] = { mesh->num_indices,mesh->num_vertices,mesh->num_normals,mesh->num_texcoords };
+
+	uint size = sizeof(ranges) + sizeof(uint)*mesh->num_indices + sizeof(float) * mesh->num_vertices * 3 + sizeof(float)*mesh->num_normals * 3 + sizeof(float)*mesh->num_texcoords * 3;
+
+	char* data = new char[size];
+	char* cursor = data;
+
+	uint bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(uint)* mesh->num_indices;
+	memcpy(cursor, mesh->indices, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_vertices * 3;
+	memcpy(cursor, mesh->vertices, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_normals * 3;
+	memcpy(cursor, mesh->normals, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(float)*mesh->num_texcoords * 3;
+	memcpy(cursor, mesh->texcoords, bytes);
+
+	ofstream newfile((LIBRARY_MESH_FOLDER + name + ".caca").c_str(), ofstream::binary);
+	newfile.write(data, size);
+	newfile.close();
+		
+
+}
+
+Mesh* MeshImporter::LoadOwnFileFormat(const char * path)
+{
+	Mesh* ret = nullptr;
+
+	std::ifstream file(path, std::ifstream::binary);
+
+	if (file.is_open())
+	{
+		file.seekg(0, file.end);
+		int filesize = file.tellg();
+		file.seekg(0, file.beg);
+
+		char* buffer = new char[filesize];
+		file.read(buffer, filesize);
+		if (file) {
+			char* cursor = buffer;
+			ret = new Mesh();
+			uint ranges[4];
+			uint bytes = sizeof(ranges);
+			memcpy(ranges, cursor, bytes);
+
+			ret->num_indices = ranges[0];
+			ret->num_vertices = ranges[1];
+			ret->num_normals = ranges[2];
+			ret->num_texcoords = ranges[3];
+
+
+			cursor += bytes;
+			bytes = sizeof(uint) * ret->num_indices;
+			ret->indices = new int[ret->num_indices];
+			memcpy(ret->indices, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float)*ret->num_vertices * 3;
+			ret->vertices = new float3[ret->num_vertices * 3];
+			memcpy(ret->vertices, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float)*ret->num_normals * 3;
+			ret->normals = new float3[ret->num_normals * 3];
+			memcpy(ret->normals, cursor, bytes);
+
+			cursor += bytes;
+			bytes = sizeof(float)*ret->num_texcoords*3;
+			ret->texcoords = new float[ret->num_texcoords*3];
+			memcpy(ret->texcoords, cursor, bytes);
+
+
+
+		}
+
+	}
+	ret->LoadVertices();
+	ret->LoadIndices();
+	ret->LoadNormals();
+	ret->LoadTexcoords();
+	return ret;
 }
 
 LineSegment MeshImporter::GetTriNormal(float3 p1, float3 p2, float3 p3)
