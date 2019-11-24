@@ -301,7 +301,8 @@ void ModuleScene::AddGameObjectToDelete(GameObject * go_to_delete)
 
 void ModuleScene::SetSelectedGO(GameObject * go)
 {
-	selected_go->SetSelected(false);
+	if(selected_go != nullptr)
+		selected_go->SetSelected(false);
 	if(go != nullptr)
 		go->SetSelected(true);
 	selected_go = go;
