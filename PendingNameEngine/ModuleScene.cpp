@@ -55,7 +55,7 @@ bool ModuleScene::Start()
 	mCurrentGizmoMode = ImGuizmo::LOCAL;
 
 	//Game Cam Test
-	GameObject* game_cam = new GameObject();
+	/*GameObject* game_cam = new GameObject();
 	game_cam->go_name = "Main Camera";
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
@@ -66,10 +66,7 @@ bool ModuleScene::Start()
 	ComponentTransform* cmp_trans = (ComponentTransform*)game_cam->GetComponent(CMP_TRANSFORM);
 
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
-	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
-	//Initial Mesh
-	ret = App->importer->Import(".//Assets//Street environment_V01.fbx");
-	App->importer->first_load = false;
+	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });*/
 	
 
 	return ret;
