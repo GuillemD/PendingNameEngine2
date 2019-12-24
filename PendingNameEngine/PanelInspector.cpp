@@ -25,7 +25,7 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::Draw()
 {
-	ImGui::SetNextWindowSize(ImVec2(290, 600));
+	ImGui::SetNextWindowSize(ImVec2(290, 600), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Inspector", &active);
 	GameObject* selected = nullptr;
 	if (App->scene->selected_go != nullptr)

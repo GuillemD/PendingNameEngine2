@@ -52,7 +52,7 @@ bool ModuleScene::Start()
 
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-	mCurrentGizmoMode = ImGuizmo::WORLD;
+	mCurrentGizmoMode = ImGuizmo::LOCAL;
 
 	//Game Cam Test
 	GameObject* game_cam = new GameObject();

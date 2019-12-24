@@ -21,7 +21,7 @@ PanelHierarchy::~PanelHierarchy()
 
 void PanelHierarchy::Draw()
 {
-	ImGui::SetNextWindowSize(ImVec2(190, 600));
+	ImGui::SetNextWindowSize(ImVec2(190, 600), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Hierarchy", &active);
 
 	if (ImGui::Button("Clear Scene"))
