@@ -28,13 +28,13 @@ public:
 
 	ComponentCamera* GetEditorCam() const;
 	float* GetViewMat();
-
-	void CreateRay(int mouse_x, int mouse_y);
 	
 private:
 	
 	ComponentCamera* editor_cam;
 	bool isPlaying = false;
+
+	LineSegment mouse_ray;
 
 public:
 

@@ -41,6 +41,8 @@ public:
 	void ShowOctreeConfig();
 
 	void DrawGizmo();
+	void TestMouseRayHit(LineSegment ray);
+	GameObject* GetClosestGO(LineSegment ray, list<GameObject*> list);
 
 public:
 	GameObject* selected_go = nullptr;

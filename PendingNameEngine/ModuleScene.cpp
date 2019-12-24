@@ -68,6 +68,9 @@ bool ModuleScene::Start()
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
 	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
 	
+	//Initial scene
+
+	App->importer->Import(".//Assets//BakerHouse.fbx");
 
 	return ret;
 }
@@ -95,7 +98,6 @@ update_status ModuleScene::Update(float dt)
 			}
 		}
 	}
-
 
 	if (octree->update_octree)
 	{
@@ -409,6 +411,70 @@ void ModuleScene::DrawGizmo()
 			last_gizmo_scale = { 1,1,1 };
 		}
 	}
+}
+
+void ModuleScene::TestMouseRayHit(LineSegment ray)
+{
+	list<GameObject*> intersections;
+
+	auto it = scene_gameobjects.begin();
+	while (it != scene_gameobjects.end())
+	{
+		GameObject* go = (*it);
+
+		ComponentMesh* c_mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
+		if (c_mesh == nullptr || c_mesh->GetMesh() == nullptr)
+		{
+			it++;
+			continue;
+		}
+
+		bool hit = ray.Intersects(c_mesh->GetMesh()->bb);
+		if (hit)
+		{
+			intersections.push_back(go);
+		}
+		it++;
+	}
+
+	GameObject* closest = GetClosestGO(ray, intersections);
+
+	SetSelectedGO(closest);
+}
+
+GameObject * ModuleScene::GetClosestGO(LineSegment ray, list<GameObject*> list)
+{
+	float3 nearest_point;
+
+	float near_dist = 100000;
+	float dist;
+
+	GameObject* ret = nullptr;
+
+	auto it = list.begin();
+	while (it != list.end())
+	{
+		GameObject* go = (*it);
+
+		ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
+		if (mesh)
+		{
+			float3 point = { 0,0,0 };
+			if (mesh->GetClosestPoint(ray, point, dist))
+			{
+				if (dist < near_dist)
+				{
+					near_dist = dist;
+					nearest_point = point;
+					ret = go;
+				}
+			}
+		}
+
+		it++;
+	}
+
+	return ret;
 }
 
 
