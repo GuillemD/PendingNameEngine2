@@ -52,10 +52,10 @@ bool ModuleScene::Start()
 
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-	mCurrentGizmoMode = ImGuizmo::LOCAL;
+	mCurrentGizmoMode = ImGuizmo::WORLD;
 
 	//Game Cam Test
-	/*GameObject* game_cam = new GameObject();
+	GameObject* game_cam = new GameObject();
 	game_cam->go_name = "Main Camera";
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
@@ -66,7 +66,7 @@ bool ModuleScene::Start()
 	ComponentTransform* cmp_trans = (ComponentTransform*)game_cam->GetComponent(CMP_TRANSFORM);
 
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
-	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });*/
+	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
 	
 
 	return ret;
@@ -332,18 +332,19 @@ void ModuleScene::DrawGizmo()
 {
 	if (selected_go)
 	{
+		ImGuizmo::BeginFrame();
+
 		ImGuizmo::Enable(true);
 		if (selected_go->IsStatic()) ImGuizmo::Enable(false);
 
-		ImVec2 window_pos = ImGui::GetWindowPos();
-		ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
-		ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 
+		
 		float4x4 selected_view = selected_go->GetGlobalMatrix().Transposed();
 		float transformation[16]; //float4x4
-		//ImGuizmo::SetDrawlist();
+		
 		ImGuizmo::Manipulate(App->camera->GetEditorCam()->GetViewMatrix(), App->camera->GetEditorCam()->GetProjectionMatrix(), mCurrentGizmoOperation, mCurrentGizmoMode, (float*)&selected_view, transformation);
-
 
 		if (ImGuizmo::IsOver() && ImGuizmo::IsUsing())
 		{

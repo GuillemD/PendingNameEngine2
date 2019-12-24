@@ -24,9 +24,11 @@ public:
 	void Draw();
 
 
-	float* GetViewMatrix();
+	float* GetViewMatrix()const ;
+	float4x4 GetViewMatrix4x4() const;
 	float* GetProjectionMatrix() const;
-	const float* GetGLViewMatrix();
+	float4x4 GetProjectionMatrix4x4() const;
+	const float* GetGLViewMatrix() const;
 	void UpdateProjectionMatrix();
 
 

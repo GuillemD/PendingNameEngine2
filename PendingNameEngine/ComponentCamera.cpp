@@ -68,12 +68,21 @@ void ComponentCamera::Draw()
 }
 
 
-float * ComponentCamera::GetViewMatrix()
+float * ComponentCamera::GetViewMatrix() const
 {
 	static float4x4 m;
 	m = camera_frustum.ViewMatrix();
 	m.Transpose();
 	return (float*)m.v;
+}
+
+float4x4 ComponentCamera::GetViewMatrix4x4() const
+{
+	static float4x4 m;
+	m = camera_frustum.ViewMatrix();
+	m.Transpose();
+
+	return m;
 }
 
 float * ComponentCamera::GetProjectionMatrix() const
@@ -84,7 +93,12 @@ float * ComponentCamera::GetProjectionMatrix() const
 	return (float*)m.v;
 }
 
-const float * ComponentCamera::GetGLViewMatrix()
+float4x4 ComponentCamera::GetProjectionMatrix4x4() const
+{
+	return camera_frustum.ProjectionMatrix();
+}
+
+const float * ComponentCamera::GetGLViewMatrix() const
 {
 	float4x4 m;
 
