@@ -43,6 +43,7 @@ bool Wwise::Init()
 	AkPlatformInitSettings platformInitSettings;
 	AK::SoundEngine::GetDefaultInitSettings(initSettings);
 	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
+	platformInitSettings.hWnd = GetActiveWindow();
 	if (AK::SoundEngine::Init(&initSettings, &platformInitSettings) != AK_Success)
 	{
 		assert(!"Could not initialize the Sound Engine.");
