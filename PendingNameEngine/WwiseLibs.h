@@ -30,4 +30,16 @@
 #pragma comment( lib, "Wwise/dsound.lib")
 #pragma comment( lib, "Wwise/dxguid.lib")
 
+// Custom alloc/free functions. These are declared as "extern" in AkMemoryMgr.h
+// and MUST be defined by the game developer.
+namespace AK
+{
+#ifdef WIN32
+	void * AllocHook(size_t in_size);
+	void FreeHook(void * in_ptr);
+	void * VirtualAllocHook(void * in_pMemAddress, size_t in_size, DWORD in_dwAllocationType, DWORD in_dwProtect);
+	void VirtualFreeHook(void * in_pMemAddress, size_t in_size, DWORD in_dwFreeType);
+#endif
+}
+
 #endif // ! _WWISELIBS_
