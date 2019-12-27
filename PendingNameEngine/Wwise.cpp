@@ -75,3 +75,8 @@ bool Wwise::Init()
 #endif // AK_OPTIMIZED
 	return true;
 }
+
+void Wwise::ProcessAudio()
+{
+	AK::SoundEngine::RenderAudio();
+}
