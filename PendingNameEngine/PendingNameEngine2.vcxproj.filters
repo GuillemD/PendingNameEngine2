@@ -230,7 +230,6 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="WwiseEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -1020,7 +1019,6 @@
     <ClInclude Include="WwiseLibs.h">
       <Filter>Utility\Includes</Filter>
     </ClInclude>
-    <ClInclude Include="WwiseEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

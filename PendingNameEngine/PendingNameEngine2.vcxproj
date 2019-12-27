@@ -341,7 +341,6 @@
     <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="WwiseEngine.h" />
     <ClInclude Include="WwiseLibs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -422,7 +421,6 @@
     <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="WwiseEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\config.json" />
