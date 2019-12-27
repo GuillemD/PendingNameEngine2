@@ -1,6 +1,5 @@
 #include "WwiseLibs.h"
 #include "mmgr/mmgr.h"
-
 namespace AK
 {
 	void * AllocHook(size_t in_size)

@@ -2,6 +2,14 @@
 #define _WWISELIBS_
 
 
+#include <AK/SoundEngine/Common/AkMemoryMgr.h>
+#include <AK/SoundEngine/Common/AkModule.h>
+#include <AK/SoundEngine/Common/IAkStreamMgr.h>
+#include <AK/Tools/Common/AkPlatformFuncs.h>
+#include "WWISE/IO/Win32/AkFilePackageLowLevelIOBlocking.h"
+#include <AK/SoundEngine/Common/AkSoundEngine.h> 
+#include <AK/MusicEngine/Common/AkMusicEngine.h>
+
 #ifdef _DEBUG
 #pragma comment( lib, "Wwise/Debug(StaticCRT)/lib/CommunicationCentral.lib")
 #pragma comment( lib, "Wwise/ws2_32.lib")

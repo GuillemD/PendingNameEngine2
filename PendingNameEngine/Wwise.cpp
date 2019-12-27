@@ -2,13 +2,7 @@
 #include <assert.h>
 #include "Globals.h"
 
-#include <AK/SoundEngine/Common/AkMemoryMgr.h>
-#include <AK/SoundEngine/Common/AkModule.h>
-#include <AK/SoundEngine/Common/IAkStreamMgr.h>
-#include <AK/Tools/Common/AkPlatformFuncs.h>
-#include "WWISE/IO/Win32/AkFilePackageLowLevelIOBlocking.h"
-#include <AK/SoundEngine/Common/AkSoundEngine.h> 
-#include <AK/MusicEngine/Common/AkMusicEngine.h> 
+ 
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 bool Wwise::Init()
@@ -130,4 +124,26 @@ AkBankID Wwise::LoadBank(const char * path)
 	}
 	
 	return ret;
+}
+
+Wwise::WwiseGO::WwiseGO(unsigned long _ID, const char * _name)
+{
+	ID = _ID;
+	name = _name;
+	AKRESULT eResult = AK::SoundEngine::RegisterGameObj(ID, name);
+	if (eResult != AK_Success)
+	{
+		LOG("Failed to register GameObject to Wwise!");
+	}
+
+
+}
+
+Wwise::WwiseGO::~WwiseGO()
+{
+	AKRESULT eResult = AK::SoundEngine::UnregisterGameObj(ID);
+	if (eResult != AK_Success)
+	{
+		LOG("Failed to unregister GameObject from Wwise!");
+	}
 }

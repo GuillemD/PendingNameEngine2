@@ -4,9 +4,17 @@
 
 namespace Wwise
 {
-	/*class Wwise
+	class WwiseGO
 	{		
-	};*/
+	public:
+		WwiseGO(unsigned long _ID, const char* _name);
+		~WwiseGO();
+
+
+	private:
+		AkGameObjectID ID;
+		const char* name;
+	};
 
 	bool Init();
 	void ProcessAudio();
