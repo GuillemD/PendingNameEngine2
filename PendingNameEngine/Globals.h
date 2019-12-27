@@ -37,6 +37,12 @@ void consolelog(const char file[], int line, const char* format, ...);
 #define LIBRARY_STATE_MACHINE_FOLDER "Library/StateMachines/"
 
 
+#ifndef _DEBUG
+#define AK_OPTIMIZED
+#endif
+
+
+
 
 typedef unsigned int uint;
 typedef long long UID;
