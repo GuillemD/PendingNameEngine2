@@ -11,6 +11,7 @@ namespace Wwise
 	bool Init();
 	void ProcessAudio();
 	void TermSoundEngine();
+	AkBankID LoadBank(const char* path);
 }
 
 #endif // !__WISE__

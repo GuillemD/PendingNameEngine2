@@ -1,7 +1,7 @@
 #include "ModuleAudio.h"
 #include "Application.h"
 
-//#include "Wwise.h"
+#include "Wwise.h"
 
 #include "mmgr/mmgr.h"
 
@@ -18,7 +18,8 @@ bool ModuleAudio::Init()
 {
 	LOG("Initializing Audio");
 	bool ret = true;
-	// ret = Wwise::Init();
+	ret = Wwise::Init();
+
 
 	return ret;
 }
@@ -30,7 +31,7 @@ update_status ModuleAudio::PreUpdate(float dt)
 
 update_status ModuleAudio::PostUpdate(float dt)
 {
-	//Wwise::ProcessAudio();
+	Wwise::ProcessAudio();
 
 	return UPDATE_CONTINUE;
 }
@@ -39,7 +40,7 @@ bool ModuleAudio::CleanUp()
 {
 	LOG("Clean Up audio");
 
-	//Wwise::TermSoundEngine();
+	Wwise::TermSoundEngine();
 
 	return true;
 }

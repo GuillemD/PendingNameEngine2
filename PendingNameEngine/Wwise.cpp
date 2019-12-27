@@ -74,6 +74,9 @@ bool Wwise::Init()
 	}
 
 #endif // AK_OPTIMIZED
+
+	LoadBank("Library/Audio/SoundBanks/Init.bnk");
+
 	return true;
 }
 
@@ -110,4 +113,21 @@ void Wwise::TermSoundEngine()
 
 	//Terminate the Memory Manager
 	AK::MemoryMgr::Term();
+}
+
+AkBankID Wwise::LoadBank(const char * path)
+{
+	
+	AkBankID ret;
+	AKRESULT eResult = AK::SoundEngine::LoadBank(path, AK_DEFAULT_POOL_ID, ret);
+	if (eResult == AK_WrongBankVersion) {
+		assert(!"Wrongbankversion");
+		return false;
+	}
+	else if (eResult != AK_Success) {
+		assert(!"Could not load sound bank :(");
+		return false;
+	}
+	
+	return ret;
 }
