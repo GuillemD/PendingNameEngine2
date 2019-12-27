@@ -6,6 +6,8 @@
 #include <AK/SoundEngine/Common/IAkStreamMgr.h>
 #include <AK/Tools/Common/AkPlatformFuncs.h>
 #include "WWISE/IO/Win32/AkFilePackageLowLevelIOBlocking.h"
+#include <AK/SoundEngine/Common/AkSoundEngine.h> 
+#include <AK/MusicEngine/Common/AkMusicEngine.h> 
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 bool Wwise::Init()
@@ -17,5 +19,59 @@ bool Wwise::Init()
 		return false;
 	}
 
+	////
+
+	AkStreamMgrSettings stmSettings;
+	AK::StreamMgr::GetDefaultSettings(stmSettings);
+
+	if (!AK::StreamMgr::Create(stmSettings)) {
+		assert(!"Could not create the Streaming Manager");
+		return false;
+	}
+
+	AkDeviceSettings deviceSettings;
+	AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
+
+	if (g_lowLevelIO.Init(deviceSettings) != AK_Success) {
+		assert(!"Could not create the streaming device and Low-Level I/O system");
+		return false;
+	}
+
+	////
+
+	AkInitSettings initSettings;
+	AkPlatformInitSettings platformInitSettings;
+	AK::SoundEngine::GetDefaultInitSettings(initSettings);
+	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
+	if (AK::SoundEngine::Init(&initSettings, &platformInitSettings) != AK_Success)
+	{
+		assert(!"Could not initialize the Sound Engine.");
+		return false;
+
+	}
+
+	////
+
+	AkMusicSettings musicInit;
+	AK::MusicEngine::GetDefaultInitSettings(musicInit);
+	if (AK::MusicEngine::Init(&musicInit) != AK_Success)
+	{
+		assert(!"Could not initialize the Music Engine.");
+		return false;
+	}
+
+	////
+
+#ifndef AK_OPTIMIZED
+
+	AkCommSettings commSettings;
+	AK::Comm::GetDefaultInitSettings(commSettings);
+	if (AK::Comm::Init(commSettings) != AK_Success)
+	{
+		assert(!"Could not initialize communication.");
+		return false;
+	}
+
+#endif // AK_OPTIMIZED
 	return true;
 }
