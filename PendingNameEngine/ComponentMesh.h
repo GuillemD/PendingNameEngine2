@@ -21,6 +21,8 @@ public:
 	void DrawBB();
 	void UpdateBB();
 
+	bool GetClosestPoint(LineSegment ray, float3 &point, float &dist);
+
 public:
 	bool draw_bb = false;
 private:

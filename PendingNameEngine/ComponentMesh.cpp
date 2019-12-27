@@ -160,3 +160,52 @@ void ComponentMesh::UpdateBB()
 		mesh->bb = obb.MinimalEnclosingAABB();
 	}
 }
+
+bool ComponentMesh::GetClosestPoint(LineSegment ray, float3 & point, float & dist)
+{
+	Triangle tri;
+	float3 hit_point;
+
+	float near_distance = 100000;
+	float distance;
+
+	bool ret = false;
+
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
+
+	if (!mesh)
+		return false;
+	if (!mesh->vertices)
+		return false;
+
+	float4x4 mat = trans->GetGlobalMatrix();
+
+	ray.Transform(mat.Inverted());
+
+	for (int i = 0; i < mesh->num_indices; i += 3)
+	{
+		float3 vert_a = mesh->vertices[mesh->indices[i]];
+		float3 vert_b = mesh->vertices[mesh->indices[i + 1]];
+		float3 vert_c = mesh->vertices[mesh->indices[i + 2]];
+
+		tri.a = vert_a;
+		tri.b = vert_b;
+		tri.c = vert_c;
+
+		bool hit = ray.Intersects(tri, &distance, &hit_point);
+		if (hit)
+		{
+			if (distance < near_distance)
+			{
+				point = hit_point;
+				near_distance = distance;
+				ret = true;
+			}
+		}
+	}
+
+	point += mat.TranslatePart();
+	dist = near_distance;
+
+	return ret;
+}

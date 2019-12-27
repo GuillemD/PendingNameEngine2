@@ -278,6 +278,7 @@ void Octree::CleanUp()
 void Octree::Update()
 {
 	Create(min_point, max_point);
+	CONSOLELOG("Octree @Update");
 }
 
 void Octree::Draw()

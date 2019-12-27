@@ -67,10 +67,10 @@ bool ModuleScene::Start()
 
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
 	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
-	//Initial Mesh
-	ret = App->importer->Import(".//Assets//Street environment_V01.fbx");
-	App->importer->first_load = false;
 	
+	//Initial scene
+
+	App->importer->Import(".//Assets//BakerHouse.fbx");
 
 	return ret;
 }
@@ -98,7 +98,6 @@ update_status ModuleScene::Update(float dt)
 			}
 		}
 	}
-
 
 	if (octree->update_octree)
 	{
@@ -335,18 +334,19 @@ void ModuleScene::DrawGizmo()
 {
 	if (selected_go)
 	{
+		ImGuizmo::BeginFrame();
+
 		ImGuizmo::Enable(true);
 		if (selected_go->IsStatic()) ImGuizmo::Enable(false);
 
-		ImVec2 window_pos = ImGui::GetWindowPos();
-		ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
-		ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 
+		
 		float4x4 selected_view = selected_go->GetGlobalMatrix().Transposed();
 		float transformation[16]; //float4x4
-		//ImGuizmo::SetDrawlist();
+		
 		ImGuizmo::Manipulate(App->camera->GetEditorCam()->GetViewMatrix(), App->camera->GetEditorCam()->GetProjectionMatrix(), mCurrentGizmoOperation, mCurrentGizmoMode, (float*)&selected_view, transformation);
-
 
 		if (ImGuizmo::IsOver() && ImGuizmo::IsUsing())
 		{
@@ -411,6 +411,70 @@ void ModuleScene::DrawGizmo()
 			last_gizmo_scale = { 1,1,1 };
 		}
 	}
+}
+
+void ModuleScene::TestMouseRayHit(LineSegment ray)
+{
+	list<GameObject*> intersections;
+
+	auto it = scene_gameobjects.begin();
+	while (it != scene_gameobjects.end())
+	{
+		GameObject* go = (*it);
+
+		ComponentMesh* c_mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
+		if (c_mesh == nullptr || c_mesh->GetMesh() == nullptr)
+		{
+			it++;
+			continue;
+		}
+
+		bool hit = ray.Intersects(c_mesh->GetMesh()->bb);
+		if (hit)
+		{
+			intersections.push_back(go);
+		}
+		it++;
+	}
+
+	GameObject* closest = GetClosestGO(ray, intersections);
+
+	SetSelectedGO(closest);
+}
+
+GameObject * ModuleScene::GetClosestGO(LineSegment ray, list<GameObject*> list)
+{
+	float3 nearest_point;
+
+	float near_dist = 100000;
+	float dist;
+
+	GameObject* ret = nullptr;
+
+	auto it = list.begin();
+	while (it != list.end())
+	{
+		GameObject* go = (*it);
+
+		ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(CMP_MESH);
+		if (mesh)
+		{
+			float3 point = { 0,0,0 };
+			if (mesh->GetClosestPoint(ray, point, dist))
+			{
+				if (dist < near_dist)
+				{
+					near_dist = dist;
+					nearest_point = point;
+					ret = go;
+				}
+			}
+		}
+
+		it++;
+	}
+
+	return ret;
 }
 
 

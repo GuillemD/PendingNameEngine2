@@ -26,6 +26,9 @@ bool ModuleCamera3D::Start()
 	editor_cam->SetEditor(true);
 	App->renderer3D->active_cam = editor_cam;
 
+	mouse_ray.a = { 0,0,0 };
+	mouse_ray.b = { 0,0,0 };
+
 	return ret;
 }
 
@@ -168,9 +171,22 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetMouseButton(0) == KEY_DOWN && !ImGuizmo::IsOver())
 		{
-			int mouse_x = App->input->GetMouseX();
+			/*int mouse_x = App->input->GetMouseX();
 			int mouse_y = App->input->GetMouseY();
-			CreateRay(mouse_x, mouse_y);
+			CreateRay(mouse_x, mouse_y);*/
+
+			double normalizedX = -1.0 + 2.0 * (double)App->input->GetMouseX() / App->window->GetWidth();
+			double normalizedY = 1.0 - 2.0 * (double)App->input->GetMouseY() / App->window->GetHeight();
+
+			ImVec2 mouse_pos_normalized = ImVec2(normalizedX, normalizedY);
+
+			if (mouse_pos_normalized.x > -1 && mouse_pos_normalized.x < 1)
+				if (mouse_pos_normalized.y > -1 && mouse_pos_normalized.y < 1)
+					mouse_ray = tmp_frustum->UnProjectLineSegment(mouse_pos_normalized.x, mouse_pos_normalized.y);
+
+			if (mouse_ray.Length() != 0)
+				App->scene->TestMouseRayHit(mouse_ray);
+
 		}
 	}
 
@@ -225,75 +241,4 @@ ComponentCamera * ModuleCamera3D::GetEditorCam() const
 float * ModuleCamera3D::GetViewMat()
 {
 	return editor_cam->GetViewMatrix();
-}
-
-void ModuleCamera3D::CreateRay(int mouse_x, int mouse_y)
-{
-	ImVec2 window_pos = ImGui::GetWindowPos();
-	ImVec2 window_size = ImVec2(App->window->GetWidth(), App->window->GetHeight());
-
-	float mouse_x_norm = (((mouse_x - window_pos.x) / window_size.x) * 2) - 1;
-	float mouse_y_norm = 1 - ((mouse_y - window_pos.y) / window_size.y) * 2;
-
-	Ray mouse_ray = this->GetEditorCam()->camera_frustum.UnProject(mouse_x_norm, mouse_y_norm);
-
-	float min_dist = NULL;
-	GameObject* closest_go = nullptr;
-
-	for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
-	{
-		Ray inv_ray = mouse_ray.GetInverted((*it)->GetGlobalMatrix().Inverted());
-
-		ComponentMesh* mesh = (ComponentMesh*)(*it)->GetComponent(CMP_MESH);
-		if (mesh != nullptr && mesh->GetMesh() != nullptr)
-		{
-			float nearest;
-			float far_dist;
-			if (mouse_ray.Intersects(mesh->GetMesh()->bb, nearest, far_dist))
-			{
-
-				for (int i = 0; i < mesh->GetMesh()->num_indices; i += 3)
-				{
-					Triangle temp;
-					float3 vert_a = mesh->GetMesh()->vertices[mesh->GetMesh()->indices[i]];
-					float3 vert_b = mesh->GetMesh()->vertices[mesh->GetMesh()->indices[i + 1]];
-					float3 vert_c = mesh->GetMesh()->vertices[mesh->GetMesh()->indices[i + 2]];
-
-					temp.a = vert_a;
-					temp.b = vert_b;
-					temp.c = vert_c;
-					
-
-					if (inv_ray.Intersects(temp))
-					{
-						if (min_dist == NULL || nearest < min_dist)
-						{
-							min_dist = nearest;
-							if (closest_go != nullptr)
-							{
-								closest_go->SetSelected(false);
-							}
-							closest_go = *it;
-						}
-					}
-				}
-			}
-		}
-	}
-	if (closest_go != nullptr)
-	{
-		for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
-		{
-			(*it)->SetSelected(false);
-		}
-		App->scene->SetSelectedGO(closest_go);
-	}
-	else
-	{
-		for (std::vector<GameObject*>::iterator it = App->scene->scene_gameobjects.begin(); it != App->scene->scene_gameobjects.end(); it++)
-		{
-			(*it)->SetSelected(false);
-		}
-	}
-
 }

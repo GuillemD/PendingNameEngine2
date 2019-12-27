@@ -17,7 +17,7 @@ PanelConsole::PanelConsole(const char * _name)
 
 void PanelConsole::Draw()
 {
-		ImGui::SetNextWindowSize(ImVec2(800, 300));
+		ImGui::SetNextWindowSize(ImVec2(800, 300), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Console", &active);
 		if (ImGui::Button("Clear Console")) {
 			EmptyConsole();
