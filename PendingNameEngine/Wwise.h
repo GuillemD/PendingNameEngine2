@@ -9,8 +9,8 @@ namespace Wwise
 	};*/
 
 	bool Init();
-
 	void ProcessAudio();
+	void TermSoundEngine();
 }
 
 #endif // !__WISE__
