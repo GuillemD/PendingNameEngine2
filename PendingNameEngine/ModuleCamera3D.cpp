@@ -6,7 +6,6 @@
 #include "ComponentTransform.h"
 
 
-
 ModuleCamera3D::ModuleCamera3D(bool start_enabled)
 {
 	name = "Camera3D";

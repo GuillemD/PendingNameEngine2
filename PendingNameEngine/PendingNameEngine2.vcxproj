@@ -344,6 +344,7 @@
     <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Wwise.h" />
     <ClInclude Include="WwiseLibs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -424,7 +425,16 @@
     <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Wwise.cpp" />
     <ClCompile Include="WwiseLibs.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkDefaultLowLevelIODispatcher.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFileLocationBase.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFilePackage.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFilePackageLUT.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkMultipleFileLocation.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookBlocking.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookDeferred.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\config.json" />

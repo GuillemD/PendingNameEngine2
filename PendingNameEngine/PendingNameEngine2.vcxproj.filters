@@ -233,6 +233,31 @@
     <ClCompile Include="WwiseLibs.cpp">
       <Filter>Utility\Includes</Filter>
     </ClCompile>
+    <ClCompile Include="Wwise.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookBlocking.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookDeferred.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Win32\stdafx.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkDefaultLowLevelIODispatcher.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFileLocationBase.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFilePackage.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFilePackageLUT.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkMultipleFileLocation.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -1022,6 +1047,7 @@
     <ClInclude Include="WwiseLibs.h">
       <Filter>Utility\Includes</Filter>
     </ClInclude>
+    <ClInclude Include="Wwise.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -1119,6 +1145,9 @@
     </Filter>
     <Filter Include="External Libraries\PhysFS">
       <UniqueIdentifier>{ba49a8cc-354c-4ec5-a2a5-c58ed4cc81bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\Wwise">
+      <UniqueIdentifier>{40362f10-64c5-4ca1-a64c-0ef398a22639}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

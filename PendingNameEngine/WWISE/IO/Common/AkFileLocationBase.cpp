@@ -24,7 +24,7 @@ written agreement between you and Audiokinetic Inc.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
+#include "../Win32/stdafx.h"
 #include "AkFileLocationBase.h"
 
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
@@ -34,8 +34,7 @@ written agreement between you and Audiokinetic Inc.
 #endif //AK_SUPPORT_WCHAR
 #include <stdio.h>
 #include <AK/Tools/Common/AkAssert.h>
-
-#include "AkFileHelpers.h"
+#include "../Win32/akfilehelpers.h"
 
 
 #define MAX_NUMBER_STRING_SIZE      (10)    // 4G
