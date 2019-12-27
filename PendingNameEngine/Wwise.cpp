@@ -1,5 +1,6 @@
 #include "Wwise.h"
 #include <assert.h>
+#include "Globals.h"
 
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
@@ -48,7 +49,6 @@ bool Wwise::Init()
 	{
 		assert(!"Could not initialize the Sound Engine.");
 		return false;
-
 	}
 
 	////

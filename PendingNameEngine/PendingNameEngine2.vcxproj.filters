@@ -258,6 +258,9 @@
     <ClCompile Include="WWISE\IO\Common\AkMultipleFileLocation.cpp">
       <Filter>External Libraries\Wwise</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleAudio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -1048,6 +1051,9 @@
       <Filter>Utility\Includes</Filter>
     </ClInclude>
     <ClInclude Include="Wwise.h" />
+    <ClInclude Include="ModuleAudio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
