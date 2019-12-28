@@ -96,8 +96,26 @@ bool ModuleScene::Start()
 		{
 			moose = (*it);
 		}
+		else if ((*it)->go_name == "Sci_fi_Train")
+		{
+			train = (*it);
+		}
 	}
+	ComponentTransform* moose_trans = (ComponentTransform*)moose->GetComponent(CMP_TRANSFORM);
+	moose_trans->SetPosition({ 0,0,10 });
+	moose_trans->SetRotation({ -90,0,0 });
+	moose_trans->SetScale({ 4,4,4 });
+	ComponentAudioSource* audio_source_moose = (ComponentAudioSource*)moose->AddComponent(CMP_A_SOURCE);
+	audio_source_moose->SetSoundId(AK::EVENTS::GOOSE);
 
+	ComponentTransform* train_trans = (ComponentTransform*)train->GetComponent(CMP_TRANSFORM);
+	train_trans->SetPosition({ 30,0,-20 });
+	train_trans->SetRotation({ 0,90,0 });
+	train_trans->SetScale({ 0.015f,0.015f,0.015f });
+	ComponentAudioSource* audio_source_train = (ComponentAudioSource*)train->AddComponent(CMP_A_SOURCE);
+	audio_source_train->SetSoundId(AK::EVENTS::STEAM_TRAIN);
+	//audio_source_train->GetSoundObject()->ev_Play(AK::EVENTS::STEAM_TRAIN);
+	//audio_source_train->GetSoundObject()->playing = true;
 	return ret;
 }
 
