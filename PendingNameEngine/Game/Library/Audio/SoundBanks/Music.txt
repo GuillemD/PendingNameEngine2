@@ -3,6 +3,9 @@ Event	ID	Name			Wwise Object Path	Notes
 	3926051762	goose			\Default Work Unit\goose\goose	
 	3991942870	Music			\Default Work Unit\BGMusic\Music	
 
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	2415836739	Volume			\Default Work Unit\Volume	
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	49951808	Onyx_Astral	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\Onyx_Astral_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\SequenceContainer\Onyx_Astral		5803624
 	204566498	JATFBS	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\JATFBS_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\SequenceContainer\JATFBS		6509224
