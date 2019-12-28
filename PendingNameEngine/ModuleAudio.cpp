@@ -5,6 +5,8 @@
 
 #include "mmgr/mmgr.h"
 
+#define DEFAULT_VOLUME 50.0f
+
 ModuleAudio::ModuleAudio(bool start_enabled)
 {
 	name = "Audio";
@@ -18,6 +20,9 @@ bool ModuleAudio::Init()
 {
 	LOG("Initializing Audio");
 	bool ret = true;
+
+	volume = DEFAULT_VOLUME;
+
 	ret = Wwise::Init();
 
 
@@ -43,4 +48,14 @@ bool ModuleAudio::CleanUp()
 	Wwise::TermSoundEngine();
 
 	return true;
+}
+
+void ModuleAudio::SetVolume(const char * rtpc, float volume)
+{
+	
+}
+
+float ModuleAudio::GetVolume() const
+{
+	return volume;
 }

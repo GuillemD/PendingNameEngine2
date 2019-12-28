@@ -18,6 +18,13 @@ public:
 	update_status PostUpdate(float dt);
 
 	bool CleanUp();
+
+	void SetVolume(const char* rtpc, float volume);
+	float GetVolume() const;
+
+private:
+
+	float volume = .0f;
 };
 
 

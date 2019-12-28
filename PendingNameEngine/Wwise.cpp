@@ -2,9 +2,9 @@
 #include <assert.h>
 #include "Globals.h"
 
- 
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
+
 bool Wwise::Init()
 {
 	AkMemSettings memSettings;
@@ -126,7 +126,21 @@ AkBankID Wwise::LoadBank(const char * path)
 	return ret;
 }
 
-Wwise::WwiseGO::WwiseGO(unsigned long _ID, const char * _name)
+Wwise::WwiseGO * Wwise::CreateObject(ulong _id, const char * _name, float3 _pos, bool listener)
+{
+	WwiseGO* object = new WwiseGO(_id, _name);
+
+	if (listener)
+	{
+		AkGameObjectID listener_id = object->getID();
+		AK::SoundEngine::SetDefaultListeners(&listener_id, 1);
+	}
+
+	object->SetPos(_pos, { 1,0,0 }, { 0,1,0 });
+	return object;
+}
+
+Wwise::WwiseGO::WwiseGO(ulong _ID, const char * _name)
 {
 	ID = _ID;
 	name = _name;
@@ -146,4 +160,51 @@ Wwise::WwiseGO::~WwiseGO()
 	{
 		LOG("Failed to unregister GameObject from Wwise!");
 	}
+}
+
+ulong Wwise::WwiseGO::getID() const
+{
+	return ID;
+}
+
+const char * Wwise::WwiseGO::getName() const
+{
+	return name;
+}
+
+void Wwise::WwiseGO::SetPos(float3 _pos, float3 _front, float3 _top)
+{
+	position.X = -_pos.x; position.Y = _pos.y; position.Z = -_pos.z;
+
+	front.X = _front.x; front.Y = _front.y; front.Z = _front.z;
+
+	top.X = _top.x; top.Y = _top.y; top.Z = _top.z;
+
+	float length_f = sqrt(pow(front.X, 2) + pow(front.Y, 2) + pow(front.Z, 2));
+	float length_t = sqrt(pow(top.X, 2) + pow(top.Y, 2) + pow(top.Z, 2));
+
+	front.X = front.X / length_f;
+	front.Y = front.Y / length_f;
+	front.Z = front.Z / length_f;
+
+	top.X = top.X / length_t;
+	top.Y = top.Y / length_t;
+	top.Z = top.Z / length_t;
+
+	float dot = top.X*front.X + top.Y*front.Y + top.Z*front.Z;
+	if (dot >= 0.0001)
+		LOG("Warning -- Vectors are not orthogonal.");
+
+	AkSoundPosition sound_pos;
+	sound_pos.Set(position, front, top);
+	AKRESULT result = AK::SoundEngine::SetPosition((AkGameObjectID)ID, sound_pos);
+	if (result != AK_Success)
+		LOG("ERROR -- Could not update position.");
+}
+
+float3 Wwise::WwiseGO::GetPos() const
+{
+
+	float3 ret = { position.X,position.Y, position.Z };
+	return ret;
 }
