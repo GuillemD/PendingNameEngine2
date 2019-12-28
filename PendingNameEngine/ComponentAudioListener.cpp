@@ -15,7 +15,7 @@ ComponentAudioListener::ComponentAudioListener(GameObject * p)
 	SetOwner(p);
 	type = CMP_A_LISTENER;
 	
-	ComponentTransform* trans = (ComponentTransform*)p->GetComponent(CMP_TRANSFORM);
+	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
 	float3 pos = trans->GetLocalPosition();
 	sound_object = Wwise::CreateObject(owner->UniqueId, owner->go_name.c_str(), pos, true);
 }
