@@ -58,9 +58,10 @@ bool ModuleScene::Start()
 
 	//BG Music Source
 	bg_music = new GameObject();
-	bg_music->go_name = "BackgroundMusic";
+	bg_music->go_name = "BackgroundMusicSource";
 	ComponentAudioSource* music_source = (ComponentAudioSource*)bg_music->AddComponent(CMP_A_SOURCE);
-	
+	music_source->SetSoundId(AK::EVENTS::MUSIC);
+	music_source->GetSoundObject()->ev_Play(AK::EVENTS::MUSIC);
 
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -80,6 +81,21 @@ bool ModuleScene::Start()
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
 	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
 
+
+	//SCENE
+	App->importer->Import("Assets/Meshes_Textures/Moose_type_01.FBX");
+	App->importer->Import("Assets/Meshes_Textures/Sci_fi_Train.fbx");
+	App->importer->first_load = false;
+
+	GameObject* moose = nullptr;
+	GameObject* train = nullptr;
+	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
+	{
+		if ((*it)->go_name == "Moose_type_01")
+		{
+			moose = (*it);
+		}
+	}
 
 	return ret;
 }

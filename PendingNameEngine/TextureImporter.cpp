@@ -58,6 +58,8 @@ bool  TextureImporter::AddTextureToLibrary(const char* path, std::string& output
 	uint lastSlash = name.find_last_of('/');
 	uint dot = name.find_last_of('.');
 	name = name.substr(lastSlash + 1, dot - lastSlash - 1);
+	std::string assetsPath;
+	assetsPath = "Assets/Meshes_Textures/" + name + ".png";
 	std::string libPath;
 	libPath = "Library/Textures/" + name + ".dds";
 
@@ -67,7 +69,7 @@ bool  TextureImporter::AddTextureToLibrary(const char* path, std::string& output
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage(libPath.c_str());
+	success = ilLoadImage(assetsPath.c_str());
 
 	if (success)
 	{

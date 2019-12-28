@@ -104,9 +104,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 				aux_name = aux_name.substr(0, pos2);
 				go->go_name = aux_name;
 			}
-			//go->is_root = true;
-			//App->scene->SetSelectedGO(go);
-			//go->SetSelected(true);
+			
 
 			App->scene->AddGameObject(go);
 			CONSOLELOG("Root GO created");
@@ -167,15 +165,7 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 							memcpy(&mesh->indices[j * 3], triangle.mIndices, sizeof(uint) * 3);
 						}
 					}
-					/*for (int i = 0; i < imp_mesh->mNumVertices; i++) {
-						int u = i + 1;
-						int v = i + 2;
-						LineSegment face_normal = GetTriNormal(mesh->vertices[i], mesh->vertices[u], mesh->vertices[v]);
-						if (face_normal.a.y < 0) {
-							face_normal.a.y = face_normal.a.y * -1;
-						}
-						mesh->facesnormals.push_back(face_normal);
-					}*/
+			
 
 					glGenBuffers(1, (GLuint*)&mesh->indices_id);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_id);
@@ -218,12 +208,13 @@ void MeshImporter::LoadMesh(const aiScene * _scene, const aiNode * _node, GameOb
 			m_cmp->CreateBB();
 			m_cmp->draw_bb = false;
 
-			if (_scene->HasMaterials())
-			{
-				aiMaterial* mat = _scene->mMaterials[imp_mesh->mMaterialIndex];
-				aiColor3D col(0.0f, 0.0f, 0.0f);
-				mat->Get(AI_MATKEY_COLOR_DIFFUSE, col);
+			
+			aiMaterial* mat = _scene->mMaterials[imp_mesh->mMaterialIndex];
+			aiColor3D col(0.0f, 0.0f, 0.0f);
+			mat->Get(AI_MATKEY_COLOR_DIFFUSE, col);
 
+			if (imp_mesh->HasFaces())
+			{
 				aiString tex_path;
 				aiReturn load = mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_path);
 				ComponentMaterial* mat_cmp = (ComponentMaterial*)child->AddComponent(CMP_MATERIAL);

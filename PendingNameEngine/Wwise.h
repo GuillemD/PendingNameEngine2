@@ -17,6 +17,10 @@ namespace Wwise
 		void SetPos(float3 _pos, float3 _front, float3 _top);
 		float3 GetPos() const;
 
+		void ev_Play(ulong id);
+		void ev_Pause(ulong id);
+		void ev_Resume(ulong id);
+
 	private:
 		AkGameObjectID ID;
 		const char* name;

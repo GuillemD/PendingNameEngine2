@@ -4,6 +4,8 @@
 #include "Component.h"
 #include "Wwise.h"
 
+#include "WWISE/AK/Wwise_IDs.h"
+
 class WwiseGO;
 class ComponentAudioSource :
 	public Component

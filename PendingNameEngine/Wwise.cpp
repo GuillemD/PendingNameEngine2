@@ -2,7 +2,7 @@
 #include <assert.h>
 #include "Globals.h"
 
-#include "Game/Library/Audio/SoundBanks/Wwise_IDs.h"
+#include "WWISE/AK/Wwise_IDs.h"
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
@@ -208,4 +208,28 @@ float3 Wwise::WwiseGO::GetPos() const
 
 	float3 ret = { position.X,position.Y, position.Z };
 	return ret;
+}
+
+void Wwise::WwiseGO::ev_Play(ulong id)
+{
+	if (AK::SoundEngine::PostEvent(id, ID) == AK_INVALID_PLAYING_ID)
+	{
+		assert(!"ERROR with event: Play");
+	}
+}
+
+void Wwise::WwiseGO::ev_Pause(ulong id)
+{
+	if (AK::SoundEngine::ExecuteActionOnEvent(id, AK::SoundEngine::AkActionOnEventType::AkActionOnEventType_Pause, ID) == AK_INVALID_PLAYING_ID)
+	{
+		assert(!"ERROR with event: Pause");
+	}
+}
+
+void Wwise::WwiseGO::ev_Resume(ulong id)
+{
+	if (AK::SoundEngine::ExecuteActionOnEvent(id, AK::SoundEngine::AkActionOnEventType::AkActionOnEventType_Resume, ID) == AK_INVALID_PLAYING_ID)
+	{
+		assert(!"ERROR with event: Resume");
+	}
 }
