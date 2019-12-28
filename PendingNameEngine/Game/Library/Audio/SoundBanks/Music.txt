@@ -1,0 +1,11 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1507811132	steam_train			\Default Work Unit\Train\steam_train	
+	3926051762	goose			\Default Work Unit\goose\goose	
+	3991942870	Music			\Default Work Unit\BGMusic\Music	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	49951808	Onyx_Astral	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\Onyx_Astral_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\SequenceContainer\Onyx_Astral		5803624
+	204566498	JATFBS	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\JATFBS_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\SequenceContainer\JATFBS		6509224
+	542437482	goose	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\goose_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Static\goose		106304
+	715413399	steam_train	C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\SFX\steam_train_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Dynamic\TrainSequence\steam_train		8436876
+
