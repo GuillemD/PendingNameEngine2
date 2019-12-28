@@ -6,6 +6,7 @@
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
+#include "ComponentAudioSource.h"
 
 #include "mmgr/mmgr.h"
 
@@ -55,6 +56,12 @@ bool ModuleScene::Start()
 	default_listener->go_name = "Audio Listener";
 	default_listener->AddComponent(CMP_A_LISTENER);
 
+	//BG Music Source
+	bg_music = new GameObject();
+	bg_music->go_name = "BackgroundMusic";
+	ComponentAudioSource* music_source = (ComponentAudioSource*)bg_music->AddComponent(CMP_A_SOURCE);
+	
+
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 	mCurrentGizmoMode = ImGuizmo::LOCAL;
@@ -72,10 +79,7 @@ bool ModuleScene::Start()
 
 	cmp_trans->SetPosition({ 0.f,0.f,29.f });
 	cmp_trans->SetRotation({ 0.0f,180.f,0.0f });
-	
-	//Initial scene
 
-	App->importer->Import(".//Assets//BakerHouse.fbx");
 
 	return ret;
 }

@@ -60,6 +60,7 @@ public:
 
 	//AUDIO
 	GameObject* default_listener = nullptr;
+	GameObject* bg_music = nullptr;
 	
 private:
 	std::vector<GameObject*> to_delete;

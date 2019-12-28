@@ -1,6 +1,8 @@
 #include "ModuleAudio.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "ComponentAudioListener.h"
+#include "ComponentCamera.h"
 #include "Wwise.h"
 
 #include "mmgr/mmgr.h"
