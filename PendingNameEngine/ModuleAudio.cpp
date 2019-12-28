@@ -1,6 +1,6 @@
 #include "ModuleAudio.h"
 #include "Application.h"
-
+#include "ComponentAudioListener.h"
 #include "Wwise.h"
 
 #include "mmgr/mmgr.h"
@@ -52,7 +52,13 @@ bool ModuleAudio::CleanUp()
 
 void ModuleAudio::SetVolume(const char * rtpc, float volume)
 {
+	ComponentAudioListener* listener = (ComponentAudioListener*)App->scene->default_listener->GetComponent(CMP_A_LISTENER);
 	
+	AKRESULT eResult = AK::SoundEngine::SetRTPCValue(rtpc, volume, listener->GetSoundObject()->getID());
+	if (eResult != AK_Success)
+	{
+		assert(!"Error changing audio volume!");
+	}
 }
 
 float ModuleAudio::GetVolume() const

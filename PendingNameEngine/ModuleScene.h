@@ -57,6 +57,9 @@ public:
 
 	ImGuizmo::OPERATION mCurrentGizmoOperation;
 	ImGuizmo::MODE mCurrentGizmoMode;
+
+	//AUDIO
+	GameObject* default_listener = nullptr;
 	
 private:
 	std::vector<GameObject*> to_delete;

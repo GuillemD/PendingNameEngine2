@@ -50,6 +50,11 @@ bool ModuleScene::Start()
 	App->camera->SetCamPos({0.0,50.f,50.f});
 	App->camera->LookAt({ 0,0,0 });
 
+	//Audio Listener
+	default_listener = new GameObject();
+	default_listener->go_name = "Audio Listener";
+	default_listener->AddComponent(CMP_A_LISTENER);
+
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 	mCurrentGizmoMode = ImGuizmo::LOCAL;

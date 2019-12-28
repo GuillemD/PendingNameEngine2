@@ -7,6 +7,8 @@
 #include "ComponentMaterial.h"
 
 #include "ComponentCamera.h"
+#include "ComponentAudioListener.h"
+#include "ComponentAudioSource.h"
 
 #include "OpenGL.h"
 
@@ -177,6 +179,12 @@ Component * GameObject::AddComponent(ComponentTYPE _type)
 				break;
 			case CMP_CAMERA:
 				aux = new ComponentCamera(this);
+				break;
+			case CMP_A_LISTENER:
+				aux = new ComponentAudioListener(this);
+				break;
+			case CMP_A_SOURCE:
+				aux = new ComponentAudioSource(this);
 				break;
 		}
 
