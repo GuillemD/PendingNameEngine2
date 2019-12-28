@@ -42,7 +42,7 @@ In this version we are using SDL/OpenGL and several external libraries:
 - mmgr: http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml
 - PhysFS: https://icculus.org/physfs/
 - ImGuizmo: https://github.com/CedricGuillemet/ImGuizmo
-
+- WWISE: https://www.audiokinetic.com/products/wwise/
 ### MIT LICENSE
 
 Copyright (c) 2019 Asier Arellano Moreno and Guillem Dominguez Ruiz de Villa
