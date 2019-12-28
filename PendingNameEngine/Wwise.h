@@ -28,6 +28,9 @@ namespace Wwise
 		AkVector position = { 0,0,0 };
 		AkVector front = { 1,0,0 };
 		AkVector top = { 0,1,0 };
+	public:
+		bool playing = false;
+		bool paused = false;
 	};
 
 	bool Init();

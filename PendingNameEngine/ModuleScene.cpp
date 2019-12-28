@@ -62,6 +62,7 @@ bool ModuleScene::Start()
 	ComponentAudioSource* music_source = (ComponentAudioSource*)bg_music->AddComponent(CMP_A_SOURCE);
 	music_source->SetSoundId(AK::EVENTS::MUSIC);
 	music_source->GetSoundObject()->ev_Play(AK::EVENTS::MUSIC);
+	music_source->GetSoundObject()->playing = true;
 
 	//Guizmo
 	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;

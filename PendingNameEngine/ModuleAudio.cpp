@@ -1,7 +1,6 @@
 #include "ModuleAudio.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "ComponentAudioListener.h"
 #include "ComponentAudioSource.h"
 #include "ComponentCamera.h"
 #include "Wwise.h"
@@ -56,9 +55,9 @@ bool ModuleAudio::CleanUp()
 
 void ModuleAudio::SetVolume(const char * rtpc, float volume)
 {
-	ComponentAudioListener* listener = (ComponentAudioListener*)App->scene->default_listener->GetComponent(CMP_A_LISTENER);
+	ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
 	
-	AKRESULT eResult = AK::SoundEngine::SetRTPCValue(rtpc, volume, listener->GetSoundObject()->getID());
+	AKRESULT eResult = AK::SoundEngine::SetRTPCValue(rtpc, volume, source->GetSoundObject()->getID());
 	if (eResult != AK_Success)
 	{
 		assert(!"Error changing audio volume!");
@@ -74,13 +73,11 @@ void ModuleAudio::Mute(bool is_muted)
 {
 	if (is_muted)
 	{
-		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
-		source->GetSoundObject()->ev_Pause(AK::EVENTS::MUSIC);
+		SetVolume("VOLUME", 0);
 	}
 	else
 	{
-		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
-		source->GetSoundObject()->ev_Resume(AK::EVENTS::MUSIC);
+		SetVolume("VOLUME", volume);
 	}
 }
 
@@ -88,10 +85,38 @@ void ModuleAudio::ShowAudioConfig()
 {
 	if (ImGui::CollapsingHeader("Audio"))
 	{
-		ImGui::Text("Background Music:");
+		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
+
+		ImGui::TextColored(YELLOW,"Background Music:");
 		if (ImGui::Checkbox("Mute", &muted))
 		{
 			Mute(muted);
+		}
+		ImGui::SameLine();
+		if (source->GetSoundObject()->playing)
+		{
+			if (ImGui::Button("Pause", ImVec2(50, 20)))
+			{
+				source->GetSoundObject()->ev_Pause(AK::EVENTS::MUSIC);
+				source->GetSoundObject()->playing = false;
+				source->GetSoundObject()->paused = true;
+			}
+		}
+		ImGui::SameLine();
+		if (source->GetSoundObject()->paused)
+		{
+			if (ImGui::Button("Resume", ImVec2(50, 20)))
+			{
+				source->GetSoundObject()->ev_Resume(AK::EVENTS::MUSIC);
+				source->GetSoundObject()->paused = false;
+				source->GetSoundObject()->playing = true;
+			}
+		}
+		
+		ImGui::Separator();
+		if (ImGui::DragFloat("Volume", &volume, 1.0f,0,100))
+		{
+			SetVolume("VOLUME", volume);
 		}
 	}
 }
