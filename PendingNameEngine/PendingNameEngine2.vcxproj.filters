@@ -1066,6 +1066,9 @@
     <ClInclude Include="ComponentAudioSource.h">
       <Filter>GameObjects\Components</Filter>
     </ClInclude>
+    <ClInclude Include="WWISE\AK\Wwise_IDs.h">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

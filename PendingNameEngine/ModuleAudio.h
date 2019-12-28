@@ -22,9 +22,14 @@ public:
 	void SetVolume(const char* rtpc, float volume);
 	float GetVolume() const;
 
+	void Mute(bool is_muted);
+
+	void ShowAudioConfig();
+
 private:
 
 	float volume = .0f;
+	bool muted = false;
 };
 
 

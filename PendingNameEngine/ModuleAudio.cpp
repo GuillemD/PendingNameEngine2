@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentAudioListener.h"
+#include "ComponentAudioSource.h"
 #include "ComponentCamera.h"
 #include "Wwise.h"
 
@@ -67,4 +68,30 @@ void ModuleAudio::SetVolume(const char * rtpc, float volume)
 float ModuleAudio::GetVolume() const
 {
 	return volume;
+}
+
+void ModuleAudio::Mute(bool is_muted)
+{
+	if (is_muted)
+	{
+		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
+		source->GetSoundObject()->ev_Pause(AK::EVENTS::MUSIC);
+	}
+	else
+	{
+		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
+		source->GetSoundObject()->ev_Resume(AK::EVENTS::MUSIC);
+	}
+}
+
+void ModuleAudio::ShowAudioConfig()
+{
+	if (ImGui::CollapsingHeader("Audio"))
+	{
+		ImGui::Text("Background Music:");
+		if (ImGui::Checkbox("Mute", &muted))
+		{
+			Mute(muted);
+		}
+	}
 }

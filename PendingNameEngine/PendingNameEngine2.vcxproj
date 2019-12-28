@@ -349,6 +349,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Wwise.h" />
     <ClInclude Include="WwiseLibs.h" />
+    <ClInclude Include="WWISE\AK\Wwise_IDs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
