@@ -264,7 +264,9 @@
     <ClCompile Include="ComponentAudioListener.cpp">
       <Filter>GameObjects\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentAudioSource.cpp" />
+    <ClCompile Include="ComponentAudioSource.cpp">
+      <Filter>GameObjects\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h" />
@@ -1061,7 +1063,9 @@
     <ClInclude Include="ComponentAudioListener.h">
       <Filter>GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentAudioSource.h" />
+    <ClInclude Include="ComponentAudioSource.h">
+      <Filter>GameObjects\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

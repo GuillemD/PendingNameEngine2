@@ -1,8 +1,7 @@
 #include "ComponentAudioSource.h"
-
-
 #include "ComponentTransform.h"
 
+#include "Game/Library/Audio/SoundBanks/Wwise_IDs.h"
 
 ComponentAudioSource::ComponentAudioSource(GameObject* p)
 {

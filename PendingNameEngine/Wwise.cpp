@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Globals.h"
 
+#include "Game/Library/Audio/SoundBanks/Wwise_IDs.h"
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
