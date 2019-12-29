@@ -233,3 +233,11 @@ void Wwise::WwiseGO::ev_Resume(ulong id)
 		assert(!"ERROR with event: Resume");
 	}
 }
+
+void Wwise::WwiseGO::ev_Stop(ulong id)
+{
+	if (AK::SoundEngine::ExecuteActionOnEvent(id, AK::SoundEngine::AkActionOnEventType::AkActionOnEventType_Stop, ID) == AK_INVALID_PLAYING_ID)
+	{
+		assert(!"ERROR with event: Stop");
+	}
+}

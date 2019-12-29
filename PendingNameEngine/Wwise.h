@@ -20,6 +20,7 @@ namespace Wwise
 		void ev_Play(ulong id);
 		void ev_Pause(ulong id);
 		void ev_Resume(ulong id);
+		void ev_Stop(ulong id);
 
 	private:
 		AkGameObjectID ID;

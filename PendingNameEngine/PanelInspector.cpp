@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
+#include "ComponentAudioSource.h"
 #include "Transform.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -82,6 +83,9 @@ void PanelInspector::DrawComponent(Component * cmp)
 		break;
 	case CMP_CAMERA:
 		DrawComponentCamera((ComponentCamera*)cmp);
+		break;
+	case CMP_A_SOURCE:
+		DrawComponentASource((ComponentAudioSource*)cmp);
 		break;
 	default:
 		break;
@@ -164,13 +168,7 @@ void PanelInspector::DrawComponentMesh(ComponentMesh * mesh)
 			ImGui::Columns(1);
 		}
 		ImGui::Separator();
-		/*if (mesh->GetMesh()->num_normals > 0)
-		{
-			if (ImGui::Checkbox("Draw Faces Normals", &mesh->GetMesh()->drawnormals)) {
-
-			}
-		}
-		ImGui::Separator();*/
+		
 	}
 }
 
@@ -243,5 +241,28 @@ void PanelInspector::DrawComponentCamera(ComponentCamera * cam)
 		ImGui::Checkbox("Frustum Cull", &cam->frustum_cull);
 
 		cam->Update();
+	}
+}
+
+void PanelInspector::DrawComponentASource(ComponentAudioSource * source)
+{
+	if (ImGui::CollapsingHeader("Audio Source", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (source->GetSoundId() != 0)
+		{
+			if (ImGui::Button("Play"))
+			{
+				source->GetSoundObject()->ev_Play(source->GetSoundId());
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Stop"))
+			{
+				source->GetSoundObject()->ev_Stop(source->GetSoundId());
+			}
+		}
+		else
+		{
+			ImGui::TextColored(YELLOW, "There's no Audio Event!");
+		}
 	}
 }
