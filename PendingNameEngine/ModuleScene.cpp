@@ -102,7 +102,7 @@ bool ModuleScene::Start()
 	}
 	ComponentTransform* moose_trans = (ComponentTransform*)moose->GetComponent(CMP_TRANSFORM);
 	moose_trans->SetPosition({ 0,0,10 });
-	moose_trans->SetRotation({ -90,0,0 });
+	moose_trans->SetRotation({ -90,0,-30 });
 	moose_trans->SetScale({ 4,4,4 });
 	ComponentAudioSource* audio_source_moose = (ComponentAudioSource*)moose->AddComponent(CMP_A_SOURCE);
 	audio_source_moose->SetSoundId(AK::EVENTS::GOOSE);
