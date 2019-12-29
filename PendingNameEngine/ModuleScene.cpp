@@ -485,6 +485,7 @@ void ModuleScene::TestMouseRayHit(LineSegment ray)
 			it++;
 			continue;
 		}
+		
 
 		bool hit = ray.Intersects(c_mesh->GetMesh()->bb);
 		if (hit)

@@ -692,41 +692,41 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 {
 	assume(rayDir.IsNormalized4());
 	assume(tNear <= tFar && "AABB::IntersectLineAABB: User gave a degenerate line as input for the intersection test!");
-	/* For reference, this is the C++ form of the vectorized SSE code below.
+	// For reference, this is the C++ form of the vectorized SSE code below.
 
-	float4 recipDir = rayDir.RecipFast4();
-	float4 t1 = (aabbMinPoint - rayPos).Mul(recipDir);
-	float4 t2 = (aabbMaxPoint - rayPos).Mul(recipDir);
-	float4 near = t1.Min(t2);
-	float4 far = t1.Max(t2);
-	float4 rayDirAbs = rayDir.Abs();
+	//float4 recipDir = rayDir.RecipFast4();
+	//float4 t1 = (aabbMinPoint - rayPos).Mul(recipDir);
+	//float4 t2 = (aabbMaxPoint - rayPos).Mul(recipDir);
+	//float4 near = t1.Min(t2);
+	//float4 far = t1.Max(t2);
+	//float4 rayDirAbs = rayDir.Abs();
 
-	if (rayDirAbs.x > 1e-4f) // ray is parallel to plane in question
-	{
-		tNear = Max(near.x, tNear); // tNear tracks distance to intersect (enter) the AABB.
-		tFar = Min(far.x, tFar); // tFar tracks the distance to exit the AABB.
-	}
-	else if (rayPos.x < aabbMinPoint.x || rayPos.x > aabbMaxPoint.x) // early-out if the ray can't possibly enter the box.
-		return false;
+	//if (rayDirAbs.x > 1e-4f) // ray is parallel to plane in question
+	//{
+	//	tNear = Max(near.x, tNear); // tNear tracks distance to intersect (enter) the AABB.
+	//	tFar = Min(far.x, tFar); // tFar tracks the distance to exit the AABB.
+	//}
+	//else if (rayPos.x < aabbMinPoint.x || rayPos.x > aabbMaxPoint.x) // early-out if the ray can't possibly enter the box.
+	//	return false;
 
-	if (rayDirAbs.y > 1e-4f) // ray is parallel to plane in question
-	{
-		tNear = Max(near.y, tNear); // tNear tracks distance to intersect (enter) the AABB.
-		tFar = Min(far.y, tFar); // tFar tracks the distance to exit the AABB.
-	}
-	else if (rayPos.y < aabbMinPoint.y || rayPos.y > aabbMaxPoint.y) // early-out if the ray can't possibly enter the box.
-		return false;
+	//if (rayDirAbs.y > 1e-4f) // ray is parallel to plane in question
+	//{
+	//	tNear = Max(near.y, tNear); // tNear tracks distance to intersect (enter) the AABB.
+	//	tFar = Min(far.y, tFar); // tFar tracks the distance to exit the AABB.
+	//}
+	//else if (rayPos.y < aabbMinPoint.y || rayPos.y > aabbMaxPoint.y) // early-out if the ray can't possibly enter the box.
+	//	return false;
 
-	if (rayDirAbs.z > 1e-4f) // ray is parallel to plane in question
-	{
-		tNear = Max(near.z, tNear); // tNear tracks distance to intersect (enter) the AABB.
-		tFar = Min(far.z, tFar); // tFar tracks the distance to exit the AABB.
-	}
-	else if (rayPos.z < aabbMinPoint.z || rayPos.z > aabbMaxPoint.z) // early-out if the ray can't possibly enter the box.
-		return false;
+	//if (rayDirAbs.z > 1e-4f) // ray is parallel to plane in question
+	//{
+	//	tNear = Max(near.z, tNear); // tNear tracks distance to intersect (enter) the AABB.
+	//	tFar = Min(far.z, tFar); // tFar tracks the distance to exit the AABB.
+	//}
+	//else if (rayPos.z < aabbMinPoint.z || rayPos.z > aabbMaxPoint.z) // early-out if the ray can't possibly enter the box.
+	//	return false;
 
-	return tNear < tFar;
-	*/
+	//return tNear < tFar;
+	
 
 	__m128 recipDir = _mm_rcp_ps(rayDir.v);
 	// Note: The above performs an approximate reciprocal (11 bits of precision).
