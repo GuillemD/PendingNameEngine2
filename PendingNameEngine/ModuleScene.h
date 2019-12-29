@@ -44,6 +44,8 @@ public:
 	void TestMouseRayHit(LineSegment ray);
 	GameObject* GetClosestGO(LineSegment ray, list<GameObject*> list);
 
+	bool IsTrainInsideReverbBox();
+
 public:
 	GameObject* selected_go = nullptr;
 	std::vector<GameObject*> scene_gameobjects;
@@ -57,10 +59,18 @@ public:
 
 	ImGuizmo::OPERATION mCurrentGizmoOperation;
 	ImGuizmo::MODE mCurrentGizmoMode;
+
+	//AUDIO
+	GameObject* default_listener = nullptr;
+	GameObject* bg_music = nullptr;
+	GameObject* moose = nullptr;
+	GameObject* train = nullptr;
+	GameObject* reverb_zone = nullptr;
 	
 private:
 	std::vector<GameObject*> to_delete;
 	float3 last_gizmo_scale;
+	bool train_left = true;
 	
 
 };

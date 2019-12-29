@@ -42,7 +42,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(WWISESDK)\include</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(WWISESDK)\include</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -50,6 +55,7 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,6 +119,8 @@
     <ClInclude Include="Assimp\include\version.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentAudioListener.h" />
+    <ClInclude Include="ComponentAudioSource.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
@@ -149,6 +157,7 @@
     <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
+    <ClInclude Include="ModuleAudio.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleScene.h" />
@@ -338,11 +347,16 @@
     <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Wwise.h" />
+    <ClInclude Include="WwiseLibs.h" />
+    <ClInclude Include="WWISE\AK\Wwise_IDs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentAudioListener.cpp" />
+    <ClCompile Include="ComponentAudioSource.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
@@ -360,6 +374,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshImporter.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
+    <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
@@ -417,6 +432,16 @@
     <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Wwise.cpp" />
+    <ClCompile Include="WwiseLibs.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkDefaultLowLevelIODispatcher.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFileLocationBase.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFilePackage.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkFilePackageLUT.cpp" />
+    <ClCompile Include="WWISE\IO\Common\AkMultipleFileLocation.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookBlocking.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookDeferred.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\config.json" />

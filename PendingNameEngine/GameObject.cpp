@@ -7,6 +7,8 @@
 #include "ComponentMaterial.h"
 
 #include "ComponentCamera.h"
+#include "ComponentAudioListener.h"
+#include "ComponentAudioSource.h"
 
 #include "OpenGL.h"
 
@@ -36,6 +38,11 @@ void GameObject::Update()
 	if (!is_active)
 		return;
 
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Update();
+	}
+
 }
 
 void GameObject::Draw()
@@ -47,6 +54,7 @@ void GameObject::Draw()
 	{
 		(*it)->Draw();
 	}
+	this->Update();
 
 }
 
@@ -177,6 +185,12 @@ Component * GameObject::AddComponent(ComponentTYPE _type)
 				break;
 			case CMP_CAMERA:
 				aux = new ComponentCamera(this);
+				break;
+			case CMP_A_LISTENER:
+				aux = new ComponentAudioListener(this);
+				break;
+			case CMP_A_SOURCE:
+				aux = new ComponentAudioSource(this);
 				break;
 		}
 
@@ -330,7 +344,7 @@ void GameObject::PrintMyHierarchy()
 				if (ImGui::MenuItem("Delete"))
 				{
 					App->scene->selected_go->DeleteGameObject();
-					//App->scene->octree->Update();
+					App->scene->octree->Update();
 				}
 			}
 			ImGui::EndPopup();

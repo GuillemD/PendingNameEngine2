@@ -8,6 +8,8 @@ class ComponentTransform;
 class ComponentMesh;
 class ComponentMaterial;
 class ComponentCamera;
+class ComponentAudioSource;
+class ComponentAudioListener;
 
 class PanelInspector :
 	public Panel
@@ -29,6 +31,8 @@ private:
 	void DrawComponentMesh(ComponentMesh* mesh);
 	void DrawComponentMaterial(ComponentMaterial* mat);
 	void DrawComponentCamera(ComponentCamera* cam);
+	void DrawComponentASource(ComponentAudioSource* source);
+	void DrawComponentAListener(ComponentAudioListener* listener);
 
 };
 #endif // !_PANEL_INSPECTOR_H_

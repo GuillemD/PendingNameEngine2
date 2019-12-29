@@ -7,6 +7,7 @@
 Application::Application()
 {
 	window = new ModuleWindow(this);
+	audio = new ModuleAudio(this);
 	input = new ModuleInput(this);
 	importer = new ModuleImporter(this);
 	scene = new ModuleScene(this);
@@ -22,6 +23,7 @@ Application::Application()
 	// Main Modules
 	AddModule(window);
 	AddModule(input);
+	AddModule(audio);
 	AddModule(importer);
 
 	AddModule(camera);

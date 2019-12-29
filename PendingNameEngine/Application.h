@@ -5,6 +5,7 @@
 #include "Timer.h"
 #include "Module.h"
 #include "ModuleWindow.h"
+#include "ModuleAudio.h"
 #include "ModuleInput.h"
 #include "ModuleImporter.h"
 #include "ModuleScene.h"
@@ -27,6 +28,7 @@ public:
 	ModuleScene* scene;
 	ModuleImporter* importer;
 	ModuleFileSystem* fs;
+	ModuleAudio* audio;
 
 private:
 
@@ -40,7 +42,6 @@ private:
 
 	std::vector<float>	fps_buffer;
 	std::vector<float>	ms_buffer;
-
 
 	uint total_frame_count = 0;
 	uint this_sec_frame_count = 0;

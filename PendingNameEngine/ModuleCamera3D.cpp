@@ -6,7 +6,6 @@
 #include "ComponentTransform.h"
 
 
-
 ModuleCamera3D::ModuleCamera3D(bool start_enabled)
 {
 	name = "Camera3D";
@@ -172,9 +171,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetMouseButton(0) == KEY_DOWN && !ImGuizmo::IsOver())
 		{
-			/*int mouse_x = App->input->GetMouseX();
-			int mouse_y = App->input->GetMouseY();
-			CreateRay(mouse_x, mouse_y);*/
 
 			double normalizedX = -1.0 + 2.0 * (double)App->input->GetMouseX() / App->window->GetWidth();
 			double normalizedY = 1.0 - 2.0 * (double)App->input->GetMouseY() / App->window->GetHeight();

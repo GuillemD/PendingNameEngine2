@@ -74,7 +74,6 @@ public:
 	std::string go_name;
 	std::list<Component*> components;
 	ComponentTransform* trans;
-
 	UID UniqueId=0;
 
 private:

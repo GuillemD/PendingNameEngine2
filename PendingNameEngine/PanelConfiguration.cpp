@@ -25,6 +25,7 @@ void PanelConfig::Draw()
 		App->window->ShowWindowConfig();
 		App->renderer3D->ShowRendererConfig();
 		App->scene->ShowOctreeConfig();
+		App->audio->ShowAudioConfig();
 	}
 	ImGui::End();
 }

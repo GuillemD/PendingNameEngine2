@@ -396,18 +396,26 @@ void ModuleGUI::ShowAbout()
 		{
 			App->OpenBrowser("https://github.com/GameTechDev/gpudetect");
 		}
-
+		ImGui::NextColumn();
+		ImGui::Text("-");
+		ImGui::NextColumn();
 		//mmgr
 		if (ImGui::Button("mmgr", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml");
 		}
+		ImGui::NextColumn();
+		ImGui::Text("-");
+		ImGui::NextColumn();
 
 		//PAR Shapes
 		if (ImGui::Button("Par", ImVec2(80, 22)))
 		{
 			App->OpenBrowser("https://github.com/prideout/par");
 		}
+		ImGui::NextColumn();
+		ImGui::Text("-");
+		ImGui::NextColumn();
 
 		//Assimp
 		if (ImGui::Button("Assimp", ImVec2(80, 22)))
@@ -432,10 +440,24 @@ void ModuleGUI::ShowAbout()
 		{
 			App->OpenBrowser("https://github.com/CedricGuillemet/ImGuizmo");
 		}
+		ImGui::NextColumn();
+		ImGui::Text("-");
+		ImGui::NextColumn();
 
+		//PhysFS
 		if (ImGui::Button("PhysFS", ImVec2(80, 22))) {
 			App->OpenBrowser("https://icculus.org/physfs/");
 		}
+		ImGui::NextColumn();
+		ImGui::Text("-");
+		ImGui::NextColumn();
+		//Wwise
+		if (ImGui::Button("Wwise", ImVec2(80, 22))) {
+			App->OpenBrowser("https://www.audiokinetic.com/products/wwise/");
+		}
+		ImGui::NextColumn();
+		ImGui::Text("2019.1.6.7110");
+		ImGui::NextColumn();
 		
 		ImGui::Columns(1);
 		ImGui::Separator();

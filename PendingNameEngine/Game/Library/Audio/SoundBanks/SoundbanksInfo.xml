@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="11" SoundbankVersion="134">
+	<RootPaths>
+		<ProjectRoot>C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\</ProjectRoot>
+		<SourceFilesRoot>C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>C:\Users\Guillem\Documents\WwiseProjects\AudioEngineIntegration\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Language="SFX">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3991942870" Language="SFX">
+			<ObjectPath>\SoundBanks\Default Work Unit\Music</ObjectPath>
+			<ShortName>Music</ShortName>
+			<Path>Music.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3926051762" Name="goose" ObjectPath="\Events\Default Work Unit\goose\goose"/>
+				<Event Id="3991942870" Name="Music" ObjectPath="\Events\Default Work Unit\BGMusic\Music"/>
+				<Event Id="1507811132" Name="steam_train" ObjectPath="\Events\Default Work Unit\Train\steam_train"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="49951808" Language="SFX">
+					<ShortName>Onyx_Astral.wav</ShortName>
+					<Path>SFX\Onyx_Astral_10C4C929.wem</Path>
+				</File>
+				<File Id="204566498" Language="SFX">
+					<ShortName>JATFBS.wav</ShortName>
+					<Path>SFX\JATFBS_10C4C929.wem</Path>
+				</File>
+				<File Id="542437482" Language="SFX">
+					<ShortName>goose.wav</ShortName>
+					<Path>SFX\goose_10C4C929.wem</Path>
+				</File>
+				<File Id="715413399" Language="SFX">
+					<ShortName>steam_train.wav</ShortName>
+					<Path>SFX\steam_train_10C4C929.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>

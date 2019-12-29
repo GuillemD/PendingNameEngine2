@@ -226,9 +226,46 @@
     </ClCompile>
     <ClCompile Include="ImGui\ImGuizmo\ImGuizmo.cpp">
       <Filter>External Libraries\ImGui\ImGuizmo</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="WwiseLibs.cpp">
+      <Filter>Utility\Includes</Filter>
+    </ClCompile>
+    <ClCompile Include="Wwise.cpp" />
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookBlocking.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Win32\AkDefaultIOHookDeferred.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Win32\stdafx.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkDefaultLowLevelIODispatcher.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFileLocationBase.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFilePackage.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkFilePackageLUT.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="WWISE\IO\Common\AkMultipleFileLocation.cpp">
+      <Filter>External Libraries\Wwise</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleAudio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentAudioListener.cpp">
+      <Filter>GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentAudioSource.cpp">
+      <Filter>GameObjects\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1009,12 +1046,28 @@
     </ClInclude>
     <ClInclude Include="ImGui\ImGuizmo\ImGuizmo.h">
       <Filter>External Libraries\ImGui\ImGuizmo</Filter>
-	  </ClInclude>
+    </ClInclude>
     <ClInclude Include="PhysFS\include\physfs.h">
       <Filter>External Libraries\PhysFS</Filter>
     </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="WwiseLibs.h">
+      <Filter>Utility\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Wwise.h" />
+    <ClInclude Include="ModuleAudio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAudioListener.h">
+      <Filter>GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAudioSource.h">
+      <Filter>GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="WWISE\AK\Wwise_IDs.h">
+      <Filter>External Libraries\Wwise</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1110,9 +1163,12 @@
     </Filter>
     <Filter Include="External Libraries\ImGui\ImGuizmo">
       <UniqueIdentifier>{8a28a66c-f9c3-45d4-9610-f64ddd6ae2bc}</UniqueIdentifier>
-	  </Filter>
+    </Filter>
     <Filter Include="External Libraries\PhysFS">
       <UniqueIdentifier>{ba49a8cc-354c-4ec5-a2a5-c58ed4cc81bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\Wwise">
+      <UniqueIdentifier>{40362f10-64c5-4ca1-a64c-0ef398a22639}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
