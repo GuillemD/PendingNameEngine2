@@ -87,6 +87,7 @@ bool ModuleScene::Start()
 	//SCENE
 	App->importer->Import("Assets/Meshes_Textures/Moose.FBX");
 	App->importer->Import("Assets/Meshes_Textures/Sci_fi_Train.fbx");
+
 	App->importer->first_load = false;
 
 	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)

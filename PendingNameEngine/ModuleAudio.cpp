@@ -83,7 +83,7 @@ void ModuleAudio::Mute(bool is_muted)
 
 void ModuleAudio::ShowAudioConfig()
 {
-	if (ImGui::CollapsingHeader("Audio"))
+	if (ImGui::CollapsingHeader("Audio", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ComponentAudioSource* source = (ComponentAudioSource*)App->scene->bg_music->GetComponent(CMP_A_SOURCE);
 
