@@ -71,7 +71,7 @@ bool Wwise::Init()
 
 #endif // AK_OPTIMIZED
 
-	LoadBank("Library/Audio/SoundBanks/Init.bnk");
+	LoadBank("SoundBanks/Init.bnk");
 
 	return true;
 }

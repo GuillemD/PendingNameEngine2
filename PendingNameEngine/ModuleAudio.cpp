@@ -27,7 +27,7 @@ bool ModuleAudio::Init()
 
 	ret = Wwise::Init();
 
-	ret = Wwise::LoadBank("Library/Audio/SoundBanks/Music.bnk");
+	ret = Wwise::LoadBank("SoundBanks/Music.bnk");
 
 	return ret;
 }
