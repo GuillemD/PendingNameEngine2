@@ -129,13 +129,13 @@ update_status ModuleScene::PreUpdate(float dt)
 	if (train_left)
 	{
 		t_trans->SetPosition({ t_trans->GetGlobalPosition().x - 40 * dt, 0, -20 });
-		if (t_trans->transform.pos.x <= -100)
+		if (t_trans->transform.pos.x <= -180)
 			train_left = false;
 	}
 	else
 	{
 		t_trans->SetPosition({ t_trans->GetGlobalPosition().x + 40 * dt, 0, -20 });
-		if (t_trans->transform.pos.x >= 100)
+		if (t_trans->transform.pos.x >= 180)
 			train_left = true;
 	}
 	return UPDATE_CONTINUE;

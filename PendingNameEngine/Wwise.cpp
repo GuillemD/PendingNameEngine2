@@ -175,7 +175,7 @@ const char * Wwise::WwiseGO::getName() const
 
 void Wwise::WwiseGO::SetPos(float x , float y, float z, float frontx, float fronty, float frontz, float topx , float topy, float topz)
 {
-	position.X = x; position.Y = y; position.Z = z;
+	position.X = -x; position.Y = y; position.Z = -z;
 
 	front.X = frontx; front.Y = fronty; front.Z = frontz;
 

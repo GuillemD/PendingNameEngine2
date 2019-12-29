@@ -260,8 +260,6 @@ void PanelInspector::DrawComponentASource(ComponentAudioSource * source)
 			{
 				source->GetSoundObject()->ev_Stop(source->GetSoundId());
 			}
-
-			ImGui::Text("%f,%f,%f", source->GetSoundObject()->GetPos().x, source->GetSoundObject()->GetPos().y, source->GetSoundObject()->GetPos().z);
 		}
 		else
 		{
