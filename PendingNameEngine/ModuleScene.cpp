@@ -109,13 +109,13 @@ bool ModuleScene::Start()
 	audio_source_moose->SetSoundId(AK::EVENTS::GOOSE);
 
 	ComponentTransform* train_trans = (ComponentTransform*)train->GetComponent(CMP_TRANSFORM);
-	train_trans->SetPosition({ 30,0,-20 });
+	train_trans->SetPosition({ 30,0,-40 });
 	train_trans->SetRotation({ 0,90,0 });
 	train_trans->SetScale({ 0.015f,0.015f,0.015f });
 	ComponentAudioSource* audio_source_train = (ComponentAudioSource*)train->AddComponent(CMP_A_SOURCE);
 	audio_source_train->SetSoundId(AK::EVENTS::STEAM_TRAIN);
-	//audio_source_train->GetSoundObject()->ev_Play(AK::EVENTS::STEAM_TRAIN);
-	//audio_source_train->GetSoundObject()->playing = true;
+	audio_source_train->GetSoundObject()->ev_Play(AK::EVENTS::STEAM_TRAIN);
+	audio_source_train->GetSoundObject()->playing = true;
 	return ret;
 }
 

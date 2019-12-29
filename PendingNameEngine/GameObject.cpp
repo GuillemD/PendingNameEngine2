@@ -38,6 +38,11 @@ void GameObject::Update()
 	if (!is_active)
 		return;
 
+	for (auto it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Update();
+	}
+
 }
 
 void GameObject::Draw()
@@ -49,6 +54,7 @@ void GameObject::Draw()
 	{
 		(*it)->Draw();
 	}
+	this->Update();
 
 }
 

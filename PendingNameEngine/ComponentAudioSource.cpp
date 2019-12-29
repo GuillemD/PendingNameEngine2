@@ -20,7 +20,7 @@ ComponentAudioSource::~ComponentAudioSource()
 bool ComponentAudioSource::Update()
 {
 	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
-	float3 pos = trans->GetLocalPosition();
+	float3 pos = trans->GetGlobalPosition();
 	sound_object->SetPos(pos, { 1,0,0 }, { 0,1,0 });
 	return true;
 }
