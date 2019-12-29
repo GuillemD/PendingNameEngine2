@@ -9,7 +9,7 @@ ComponentAudioSource::ComponentAudioSource(GameObject* p)
 
 	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
 	float3 pos = trans->GetLocalPosition();
-	sound_object = Wwise::CreateObject(owner->UniqueId, owner->go_name.c_str(), pos, false);
+	sound_object = Wwise::CreateObject(owner->UniqueId, owner->go_name.c_str(), pos.x, pos.y, pos.z, false);
 }
 
 
@@ -20,8 +20,8 @@ ComponentAudioSource::~ComponentAudioSource()
 bool ComponentAudioSource::Update()
 {
 	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
-	float3 pos = trans->GetGlobalPosition();
-	sound_object->SetPos(pos, { 1,0,0 }, { 0,1,0 });
+	float3 pos = trans->GetLocalPosition();
+	sound_object->SetPos(pos.x,pos.y,pos.z);
 	return true;
 }
 

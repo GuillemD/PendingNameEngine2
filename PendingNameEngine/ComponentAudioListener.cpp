@@ -17,7 +17,7 @@ ComponentAudioListener::ComponentAudioListener(GameObject * p)
 	
 	ComponentTransform* trans = (ComponentTransform*)owner->GetComponent(CMP_TRANSFORM);
 	float3 pos = trans->GetLocalPosition();
-	sound_object = Wwise::CreateObject(owner->UniqueId, owner->go_name.c_str(), pos, true);
+	sound_object = Wwise::CreateObject(owner->UniqueId, owner->go_name.c_str(), pos.x, pos.y,pos.z, true);
 }
 
 
@@ -31,7 +31,7 @@ bool ComponentAudioListener::Update()
 	float3 front = App->renderer3D->active_cam->GetFrustum().front;
 	float3 top = App->renderer3D->active_cam->GetFrustum().up;
 
-	sound_object->SetPos(pos, front, top);
+	sound_object->SetPos(pos.x, pos.y, pos.z, front.x, front.y, front.z, top.x, top.y, top.z);
 	return true;
 }
 

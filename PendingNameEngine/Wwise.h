@@ -14,7 +14,7 @@ namespace Wwise
 		ulong getID() const;
 		const char* getName() const;
 
-		void SetPos(float3 _pos, float3 _front, float3 _top);
+		void SetPos(float x = 0, float y = 0, float z = 0, float frontx = 1, float fronty = 0, float frontz = 0, float topx = 0, float topy = 1, float topz = 0);
 		float3 GetPos() const;
 
 		void ev_Play(ulong id);
@@ -27,8 +27,8 @@ namespace Wwise
 		const char* name;
 
 		AkVector position = { 0,0,0 };
-		AkVector front = { 1,0,0 };
-		AkVector top = { 0,1,0 };
+		AkVector front = { 0,0,0 };
+		AkVector top = { 0,0,0 };
 	public:
 		bool playing = false;
 		bool paused = false;
@@ -39,7 +39,7 @@ namespace Wwise
 	void TermSoundEngine();
 
 	AkBankID LoadBank(const char* path);
-	WwiseGO* CreateObject(ulong _id, const char* _name, float3 _pos, bool listener);
+	WwiseGO* CreateObject(ulong _id, const char* _name, float x, float y, float z, bool listener);
 }
 
 #endif // !__WISE__

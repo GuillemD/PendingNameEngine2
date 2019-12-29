@@ -61,10 +61,13 @@ public:
 	//AUDIO
 	GameObject* default_listener = nullptr;
 	GameObject* bg_music = nullptr;
+	GameObject* moose = nullptr;
+	GameObject* train = nullptr;
 	
 private:
 	std::vector<GameObject*> to_delete;
 	float3 last_gizmo_scale;
+	bool train_left = true;
 	
 
 };

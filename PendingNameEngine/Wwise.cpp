@@ -127,7 +127,7 @@ AkBankID Wwise::LoadBank(const char * path)
 	return ret;
 }
 
-Wwise::WwiseGO * Wwise::CreateObject(ulong _id, const char * _name, float3 _pos, bool listener)
+Wwise::WwiseGO * Wwise::CreateObject(ulong _id, const char * _name, float x, float y, float z, bool listener)
 {
 	WwiseGO* object = new WwiseGO(_id, _name);
 
@@ -137,7 +137,7 @@ Wwise::WwiseGO * Wwise::CreateObject(ulong _id, const char * _name, float3 _pos,
 		AK::SoundEngine::SetDefaultListeners(&listener_id, 1);
 	}
 
-	object->SetPos(_pos, { 1,0,0 }, { 0,1,0 });
+	object->SetPos(x, y, z);
 	return object;
 }
 
@@ -173,13 +173,13 @@ const char * Wwise::WwiseGO::getName() const
 	return name;
 }
 
-void Wwise::WwiseGO::SetPos(float3 _pos, float3 _front, float3 _top)
+void Wwise::WwiseGO::SetPos(float x , float y, float z, float frontx, float fronty, float frontz, float topx , float topy, float topz)
 {
-	position.X = -_pos.x; position.Y = _pos.y; position.Z = -_pos.z;
+	position.X = x; position.Y = y; position.Z = z;
 
-	front.X = _front.x; front.Y = _front.y; front.Z = _front.z;
+	front.X = frontx; front.Y = fronty; front.Z = frontz;
 
-	top.X = _top.x; top.Y = _top.y; top.Z = _top.z;
+	top.X = topx; top.Y = topy; top.Z = topz;
 
 	float length_f = sqrt(pow(front.X, 2) + pow(front.Y, 2) + pow(front.Z, 2));
 	float length_t = sqrt(pow(top.X, 2) + pow(top.Y, 2) + pow(top.Z, 2));

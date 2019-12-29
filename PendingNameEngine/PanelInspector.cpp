@@ -87,6 +87,9 @@ void PanelInspector::DrawComponent(Component * cmp)
 	case CMP_A_SOURCE:
 		DrawComponentASource((ComponentAudioSource*)cmp);
 		break;
+	case CMP_A_LISTENER:
+		DrawComponentAListener((ComponentAudioListener*)cmp);
+		break;
 	default:
 		break;
 	}
@@ -140,7 +143,7 @@ void PanelInspector::DrawComponentTransform(ComponentTransform * trans)
 
 void PanelInspector::DrawComponentMesh(ComponentMesh * mesh)
 {
-	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Mesh"))
 	{
 		
 		if (mesh->GetMesh() != nullptr)
@@ -174,7 +177,7 @@ void PanelInspector::DrawComponentMesh(ComponentMesh * mesh)
 
 void PanelInspector::DrawComponentMaterial(ComponentMaterial * mat)
 {
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Material"))
 	{
 
 		if (mat->GetMaterial()->GetDiffuse() != nullptr)
@@ -205,14 +208,12 @@ void PanelInspector::DrawComponentMaterial(ComponentMaterial * mat)
 				}
 			}
 		}
-
-		
 	}
 }
 
 void PanelInspector::DrawComponentCamera(ComponentCamera * cam)
 {
-	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+	if (ImGui::CollapsingHeader("Camera"))
 	{
 		Color bg = cam->bg_color;
 		if (ImGui::ColorEdit4("Background Color", &bg.r))
@@ -259,10 +260,24 @@ void PanelInspector::DrawComponentASource(ComponentAudioSource * source)
 			{
 				source->GetSoundObject()->ev_Stop(source->GetSoundId());
 			}
+
+			ImGui::Text("%f,%f,%f", source->GetSoundObject()->GetPos().x, source->GetSoundObject()->GetPos().y, source->GetSoundObject()->GetPos().z);
 		}
 		else
 		{
 			ImGui::TextColored(YELLOW, "There's no Audio Event!");
 		}
+	}
+}
+
+void PanelInspector::DrawComponentAListener(ComponentAudioListener * listener)
+{
+	if (ImGui::CollapsingHeader("Audio Listener", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::TextColored(YELLOW,"Visual representation of Listener ");
+		ImGui::TextColored(YELLOW, "Position. Audio Listener Wwise GO  ");
+		ImGui::TextColored(YELLOW, "is tied to editor camera position.");
+		ImGui::TextColored(YELLOW, "Use Module Audio in the Configuration");
+		ImGui::TextColored(YELLOW, "Window to control listener properties.");
 	}
 }

@@ -55,6 +55,7 @@ bool ModuleScene::Start()
 	default_listener = new GameObject();
 	default_listener->go_name = "Audio Listener";
 	default_listener->AddComponent(CMP_A_LISTENER);
+	AddGameObject(default_listener);
 
 	//BG Music Source
 	bg_music = new GameObject();
@@ -70,7 +71,7 @@ bool ModuleScene::Start()
 
 	//Game Cam Test
 	GameObject* game_cam = new GameObject();
-	game_cam->go_name = "Main Camera";
+	game_cam->go_name = "Game Camera";
 	AddGameObject(game_cam);
 	SetSelectedGO(game_cam);
 	game_cam->is_root = true;
@@ -88,8 +89,6 @@ bool ModuleScene::Start()
 	App->importer->Import("Assets/Meshes_Textures/Sci_fi_Train.fbx");
 	App->importer->first_load = false;
 
-	GameObject* moose = nullptr;
-	GameObject* train = nullptr;
 	for (auto it = scene_gameobjects.begin(); it != scene_gameobjects.end(); it++)
 	{
 		if ((*it)->go_name == "Moose")
@@ -109,7 +108,7 @@ bool ModuleScene::Start()
 	audio_source_moose->SetSoundId(AK::EVENTS::GOOSE);
 
 	ComponentTransform* train_trans = (ComponentTransform*)train->GetComponent(CMP_TRANSFORM);
-	train_trans->SetPosition({ 30,0,-40 });
+	train_trans->SetPosition({ 50,0,-20 });
 	train_trans->SetRotation({ 0,90,0 });
 	train_trans->SetScale({ 0.015f,0.015f,0.015f });
 	ComponentAudioSource* audio_source_train = (ComponentAudioSource*)train->AddComponent(CMP_A_SOURCE);
@@ -125,6 +124,20 @@ update_status ModuleScene::PreUpdate(float dt)
 	if (!to_delete.empty())
 		DeleteGameObjects();
 
+	ComponentTransform* t_trans = (ComponentTransform*)train->GetComponent(CMP_TRANSFORM);
+
+	if (train_left)
+	{
+		t_trans->SetPosition({ t_trans->GetGlobalPosition().x - 40 * dt, 0, -20 });
+		if (t_trans->transform.pos.x <= -100)
+			train_left = false;
+	}
+	else
+	{
+		t_trans->SetPosition({ t_trans->GetGlobalPosition().x + 40 * dt, 0, -20 });
+		if (t_trans->transform.pos.x >= 100)
+			train_left = true;
+	}
 	return UPDATE_CONTINUE;
 }
 
