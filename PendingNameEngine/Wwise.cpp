@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #include "WWISE/AK/Wwise_IDs.h"
+#include <AK/Plugin/AkRoomVerbFXFactory.h>
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
@@ -240,4 +241,24 @@ void Wwise::WwiseGO::ev_Stop(ulong id)
 	{
 		assert(!"ERROR with event: Stop");
 	}
+}
+
+void Wwise::WwiseGO::ReverbAuxSend(AkReal32 value, AkGameObjectID target)
+{
+	AkAuxSendValue reverb_zone[1];
+
+	reverb_zone[0].listenerID = AK_INVALID_GAME_OBJECT;
+	reverb_zone[0].auxBusID = AK::AUX_BUSSES::REVERB;
+	reverb_zone[0].fControlValue = value;
+
+	AKRESULT res = AK::SoundEngine::SetGameObjectAuxSendValues(target, reverb_zone, 1);
+	if (res != AK_Success)
+		LOG("ERROR with auxiliary sends.");
+}
+
+void Wwise::WwiseGO::NullAuxSend(AkGameObjectID target)
+{	
+	AKRESULT res = AK::SoundEngine::SetGameObjectAuxSendValues(target, NULL, 0);
+	if (res != AK_Success)
+		LOG("ERROR with auxiliary sends.");
 }

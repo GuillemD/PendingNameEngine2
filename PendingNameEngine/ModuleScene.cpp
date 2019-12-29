@@ -87,6 +87,7 @@ bool ModuleScene::Start()
 	//SCENE
 	App->importer->Import("Assets/Meshes_Textures/Moose.FBX");
 	App->importer->Import("Assets/Meshes_Textures/Sci_fi_Train.fbx");
+	App->importer->Import("Assets/Meshes_Textures/ReverbBox.FBX");
 
 	App->importer->first_load = false;
 
@@ -99,6 +100,10 @@ bool ModuleScene::Start()
 		else if ((*it)->go_name == "Sci_fi_Train")
 		{
 			train = (*it);
+		}
+		else if ((*it)->go_name == "ReverbBox")
+		{
+			reverb_zone = (*it);
 		}
 	}
 	ComponentTransform* moose_trans = (ComponentTransform*)moose->GetComponent(CMP_TRANSFORM);
@@ -116,6 +121,13 @@ bool ModuleScene::Start()
 	audio_source_train->SetSoundId(AK::EVENTS::STEAM_TRAIN);
 	audio_source_train->GetSoundObject()->ev_Play(AK::EVENTS::STEAM_TRAIN);
 	audio_source_train->GetSoundObject()->playing = true;
+	//Set Reverb Zone
+	
+	ComponentTransform* rev_trans = (ComponentTransform*)reverb_zone->GetComponent(CMP_TRANSFORM);
+	rev_trans->SetPosition({ 0,3.5f,-25 });
+	rev_trans->SetRotation({ 0,0,90 });
+	rev_trans->SetScale({ 0.7f,1.f,0.5f });
+
 	return ret;
 }
 
@@ -126,19 +138,28 @@ update_status ModuleScene::PreUpdate(float dt)
 		DeleteGameObjects();
 
 	ComponentTransform* t_trans = (ComponentTransform*)train->GetComponent(CMP_TRANSFORM);
-
+	ComponentAudioSource* as_train = (ComponentAudioSource*)train->GetComponent(CMP_A_SOURCE);
 	if (train_left)
 	{
-		t_trans->SetPosition({ t_trans->GetGlobalPosition().x - 40 * dt, 0, -20 });
-		if (t_trans->transform.pos.x <= -180)
+		t_trans->SetPosition({ t_trans->GetGlobalPosition().x - 20 * dt, 0, -20 });
+		if (t_trans->transform.pos.x <= -220)
 			train_left = false;
 	}
 	else
 	{
-		t_trans->SetPosition({ t_trans->GetGlobalPosition().x + 40 * dt, 0, -20 });
-		if (t_trans->transform.pos.x >= 180)
+		t_trans->SetPosition({ t_trans->GetGlobalPosition().x + 20 * dt, 0, -20 });
+		if (t_trans->transform.pos.x >= 220)
 			train_left = true;
 	}
+	if (IsTrainInsideReverbBox())
+	{
+		as_train->GetSoundObject()->ReverbAuxSend(0.75f, as_train->GetSoundObject()->getID());
+	}
+	else
+	{
+		as_train->GetSoundObject()->NullAuxSend(as_train->GetSoundObject()->getID());
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -534,6 +555,22 @@ GameObject * ModuleScene::GetClosestGO(LineSegment ray, list<GameObject*> list)
 	}
 
 	return ret;
+}
+
+bool ModuleScene::IsTrainInsideReverbBox()
+{
+	ComponentMesh* train_mesh = (ComponentMesh*)train->GetChild(0)->GetComponent(CMP_MESH);
+
+	ComponentMesh* box_mesh = (ComponentMesh*)reverb_zone->GetChild(0)->GetComponent(CMP_MESH);
+
+	if (train_mesh && box_mesh)
+	{
+		if (train_mesh->GetMesh()->bb.Intersects(box_mesh->GetMesh()->bb))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 

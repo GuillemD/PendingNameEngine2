@@ -21,6 +21,8 @@ namespace Wwise
 		void ev_Pause(ulong id);
 		void ev_Resume(ulong id);
 		void ev_Stop(ulong id);
+		void ReverbAuxSend(AkReal32 value, AkGameObjectID target);
+		void NullAuxSend(AkGameObjectID target);
 
 	private:
 		AkGameObjectID ID;
@@ -40,6 +42,7 @@ namespace Wwise
 
 	AkBankID LoadBank(const char* path);
 	WwiseGO* CreateObject(ulong _id, const char* _name, float x, float y, float z, bool listener);
+	
 }
 
 #endif // !__WISE__
